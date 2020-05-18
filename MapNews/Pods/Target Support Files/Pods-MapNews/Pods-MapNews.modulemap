@@ -1,0 +1,6 @@
+framework module Pods_MapNews {
+  umbrella header "Pods-MapNews-umbrella.h"
+
+  export *
+  module * { export * }
+}
