@@ -12,83 +12,66 @@ import GoogleMaps
 class MapViewController: UIViewController {
     var pickerView: UIPickerView!
     var mapView: MapView!
-    var selectedCountry: String? {
-        didSet {
-            selectedCountryLabel.text = selectedCountry ?? ""
-        }
-    }
-    @IBOutlet weak var selectedCountryLabel: UILabel!
-
-    var pickerData: [String] = ["test", "1", "2", "3"]
+    var locationSelector: MapNewsSelector!
+    var locationSelectorMask: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initMap()
+        initLocationSelector()
+        initLocationSelectorMask()
+
         view.addSubview(mapView)
-
-        initPicker()
-        view.addSubview(pickerView)
-
-        initSelectedCountryLabel()
+        view.addSubview(locationSelectorMask)
+        view.addSubview(locationSelector)
     }
 
     func initMap() {
-        let newMapView = MapView.createMapView(frame: self.view.bounds)
-        mapView = newMapView
+        mapView = MapView.createMapView(frame: self.view.bounds)
     }
 
-    func initSelectedCountryLabel() {
-        view.bringSubviewToFront(selectedCountryLabel)
-        selectedCountryLabel.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        selectedCountryLabel.text = "Singapore"
-        selectedCountryLabel.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(recognizer:)))
-        selectedCountryLabel.addGestureRecognizer(tap)
+    func initLocationSelector() {
+        let padding: CGFloat = 50
+        let selectorRect = CGRect(
+            x: padding,
+            y: padding,
+            width: view.bounds.width - (2 * padding),
+            height: view.bounds.height / 3)
+        locationSelector = MapNewsSelector(frame: selectorRect)
+        locationSelector.addObserver(observer: self)
     }
 
-    @objc func handleTap(recognizer: UITapGestureRecognizer) {
-        print("tapped")
+    func initLocationSelectorMask() {
+        let mask = UIView(frame: self.view.bounds)
+        mask.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        mask.alpha = 0.7
+        mask.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleMapTap(recognizer:)))
+        mask.addGestureRecognizer(tap)
+        mask.isHidden = true
+        locationSelectorMask = mask
+    }
+
+}
+
+extension MapViewController: MapNewsSelectorObserver {
+    func pickerDidReveal() {
+        locationSelectorMask.isHidden = false
+    }
+
+    func pickerDidHide() {
+        locationSelectorMask.isHidden = true
+    }
+    
+}
+
+extension MapViewController {
+    @objc func handleMapTap(recognizer: UITapGestureRecognizer) {
         if recognizer.state == .cancelled {
             return
         }
-        togglePickerVisibility()
-    }
-}
-
-extension MapViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func initPicker() {
-        let pickerHeight = self.view.bounds.height / 3
-        let newPickerView = UIPickerView(frame: CGRect(
-            x: 50,
-            y: 50 + selectedCountryLabel.bounds.height,
-            width: selectedCountryLabel.bounds.width,
-            height: pickerHeight)
-        )
-        newPickerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        pickerView = newPickerView
-        pickerView.delegate = self
-        pickerView.dataSource = self
-        pickerView.isHidden = true
-    }
-
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerData.count
-    }
-
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
-    }
-
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedCountry = pickerData[row]
-    }
-
-    func togglePickerVisibility() {
-        pickerView.isHidden = !pickerView.isHidden
+        locationSelector.pickerView.isHidden = true
+        locationSelectorMask.isHidden = true
     }
 }

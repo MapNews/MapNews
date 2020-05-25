@@ -17,6 +17,9 @@
 		371E5616247215EB00B9F4CB /* MapNewsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E5615247215EB00B9F4CB /* MapNewsUITests.swift */; };
 		3759921F2476029900F36806 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3759921E2476029900F36806 /* MapView.swift */; };
 		375992222476088B00F36806 /* NewsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375992212476088B00F36806 /* NewsClient.swift */; };
+		37A2D8EB247B8C6D00696F24 /* MapNewsSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A2D8EA247B8C6D00696F24 /* MapNewsSelector.swift */; };
+		37A2D8ED247B921000696F24 /* MapNewsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A2D8EC247B921000696F24 /* MapNewsConstants.swift */; };
+		37A2D8EF247B9F4700696F24 /* MapNewsSelectorObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A2D8EE247B9F4700696F24 /* MapNewsSelectorObserver.swift */; };
 		9F3FD826DC796C2DD8EA3431 /* Pods_MapNews_MapNewsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA990002AD934F464FDBF057 /* Pods_MapNews_MapNewsUITests.framework */; };
 		B181398627D730A9EED7952C /* Pods_MapNewsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D26964F414B1255CC75634A /* Pods_MapNewsTests.framework */; };
 /* End PBXBuildFile section */
@@ -57,6 +60,9 @@
 		371E5617247215EB00B9F4CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3759921E2476029900F36806 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		375992212476088B00F36806 /* NewsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsClient.swift; sourceTree = "<group>"; };
+		37A2D8EA247B8C6D00696F24 /* MapNewsSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsSelector.swift; sourceTree = "<group>"; };
+		37A2D8EC247B921000696F24 /* MapNewsConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsConstants.swift; sourceTree = "<group>"; };
+		37A2D8EE247B9F4700696F24 /* MapNewsSelectorObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsSelectorObserver.swift; sourceTree = "<group>"; };
 		40A5C6758D0A64AD48DA5AAD /* Pods-MapNews-MapNewsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapNews-MapNewsUITests.release.xcconfig"; path = "Target Support Files/Pods-MapNews-MapNewsUITests/Pods-MapNews-MapNewsUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4637BBD22D4975B2D12E6F11 /* Pods-MapNews-MapNewsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapNews-MapNewsUITests.debug.xcconfig"; path = "Target Support Files/Pods-MapNews-MapNewsUITests/Pods-MapNews-MapNewsUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		50C26E272D89183F234A779C /* Pods-MapNewsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapNewsTests.release.xcconfig"; path = "Target Support Files/Pods-MapNewsTests/Pods-MapNewsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -121,6 +127,9 @@
 				371E55F3247215EA00B9F4CB /* AppDelegate.swift */,
 				371E55F5247215EA00B9F4CB /* SceneDelegate.swift */,
 				371E55F7247215EA00B9F4CB /* MapViewController.swift */,
+				37A2D8EA247B8C6D00696F24 /* MapNewsSelector.swift */,
+				37A2D8EC247B921000696F24 /* MapNewsConstants.swift */,
+				37A2D8EE247B9F4700696F24 /* MapNewsSelectorObserver.swift */,
 				375992212476088B00F36806 /* NewsClient.swift */,
 				375992202476086A00F36806 /* Map */,
 				371E55F9247215EA00B9F4CB /* Main.storyboard */,
@@ -423,6 +432,9 @@
 				3759921F2476029900F36806 /* MapView.swift in Sources */,
 				375992222476088B00F36806 /* NewsClient.swift in Sources */,
 				371E55F4247215EA00B9F4CB /* AppDelegate.swift in Sources */,
+				37A2D8ED247B921000696F24 /* MapNewsConstants.swift in Sources */,
+				37A2D8EF247B9F4700696F24 /* MapNewsSelectorObserver.swift in Sources */,
+				37A2D8EB247B8C6D00696F24 /* MapNewsSelector.swift in Sources */,
 				371E55F6247215EA00B9F4CB /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
