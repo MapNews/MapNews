@@ -10,13 +10,6 @@ import XCTest
 
 class MapNewsUITests: XCTestCase {
 
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-    }
-
-    override func tearDownWithError() throws {
-    }
-
     func testExample() throws {
         let app = XCUIApplication()
         app.launch()
@@ -29,4 +22,31 @@ class MapNewsUITests: XCTestCase {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+
+    func testTogglePickerVisibility() {
+        let app = XCUIApplication()
+        let mask = app.children(matching: .window)
+            .element(boundBy: 0).children(matching: .other)
+            .element.children(matching: .other)
+            .element.children(matching: .other)
+            .element.children(matching: .other)
+            .element(boundBy: 0)
+
+        app.launch()
+
+        XCTAssertFalse(app.pickerWheels["Afghanistan"].exists)
+
+        app.buttons["Singapore"].tap()
+        XCTAssertTrue(app.pickerWheels["Afghanistan"].exists)
+
+        app.buttons["Singapore"].tap()
+        XCTAssertFalse(app.pickerWheels["Afghanistan"].exists)
+
+        app.buttons["Singapore"].tap()
+        XCTAssertTrue(app.pickerWheels["Afghanistan"].exists)
+
+        mask.tap()
+        XCTAssertFalse(app.pickerWheels["Afghanistan"].exists)
+    }
+
 }
