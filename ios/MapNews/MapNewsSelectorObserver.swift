@@ -10,4 +10,6 @@ protocol MapNewsSelectorObserver {
     func pickerDidReveal()
 
     func pickerDidHide()
+
+    func locationDidUpdate(to newCoordinates: Coordinates)
 }

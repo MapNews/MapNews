@@ -9,17 +9,20 @@
 import UIKit
 
 class MapNewsSelector: UIView {
-    var pickerData: [String] = MapNewsConstants.countries
+    var pickerData: [String]
     var selectedCountry: String = "Singapore" {
         didSet {
             selectedCountryLabel.text = selectedCountry
+            if let newCoordinates = SQLDatabase().queryLatLong(name: selectedCountry) {
+                observers.forEach { $0.locationDidUpdate(to: newCoordinates) }
+            }
         }
     }
     var pickerView: UIPickerView
     var selectedCountryLabel: UILabel
     var observers: [MapNewsSelectorObserver] = []
 
-    override init(frame: CGRect) {
+    init(frame: CGRect, pickerData: [String]) {
         // Create label
         let labelHeight: CGFloat = 30
         let labelPadding: CGFloat = 10
@@ -38,6 +41,7 @@ class MapNewsSelector: UIView {
 
         // Create label background
         let labelBackground = MapNewsSelector.createLabelBackground(width: frame.width, height: labelHeight)
+        self.pickerData = pickerData
 
         super.init(frame: frame)
 

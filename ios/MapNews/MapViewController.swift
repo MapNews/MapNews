@@ -14,13 +14,19 @@ class MapViewController: UIViewController {
     var mapView: MapView!
     var locationSelector: MapNewsSelector!
     var locationSelectorMask: UIView!
+    var database: Database!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        database = SQLDatabase()
+        
         initMap()
         initLocationSelector()
         initLocationSelectorMask()
+        if let location = database.queryLatLong(name: "Singapore") {
+            mapView.location = location
+        }
 
         view.addSubview(mapView)
         view.addSubview(locationSelectorMask)
@@ -38,7 +44,8 @@ class MapViewController: UIViewController {
             y: padding,
             width: view.bounds.width - (2 * padding),
             height: view.bounds.height / 3)
-        locationSelector = MapNewsSelector(frame: selectorRect)
+        let allCountries = database.queryAllCountries() ?? ["No data"]
+        locationSelector = MapNewsSelector(frame: selectorRect, pickerData: allCountries)
         locationSelector.addObserver(observer: self)
     }
 
@@ -56,6 +63,10 @@ class MapViewController: UIViewController {
 }
 
 extension MapViewController: MapNewsSelectorObserver {
+    func locationDidUpdate(to newCoordinates: Coordinates) {
+        mapView.location = newCoordinates
+    }
+
     func pickerDidReveal() {
         locationSelectorMask.isHidden = false
     }
@@ -63,7 +74,6 @@ extension MapViewController: MapNewsSelectorObserver {
     func pickerDidHide() {
         locationSelectorMask.isHidden = true
     }
-    
 }
 
 extension MapViewController {
