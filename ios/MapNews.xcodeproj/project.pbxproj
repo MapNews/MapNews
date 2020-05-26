@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		371CC150247CBA79008CF924 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371CC14F247CBA79008CF924 /* Keys.swift */; };
 		371E55F4247215EA00B9F4CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E55F3247215EA00B9F4CB /* AppDelegate.swift */; };
 		371E55F6247215EA00B9F4CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E55F5247215EA00B9F4CB /* SceneDelegate.swift */; };
 		371E55F8247215EA00B9F4CB /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E55F7247215EA00B9F4CB /* MapViewController.swift */; };
@@ -47,6 +48,7 @@
 /* Begin PBXFileReference section */
 		1A63A82DAAA82F40AA04CE64 /* Pods-MapNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapNews.release.xcconfig"; path = "Target Support Files/Pods-MapNews/Pods-MapNews.release.xcconfig"; sourceTree = "<group>"; };
 		1BC46CE06AFA9DB34AF5AD6E /* Pods_MapNews.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MapNews.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		371CC14F247CBA79008CF924 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		371E55F0247215EA00B9F4CB /* MapNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		371E55F3247215EA00B9F4CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		371E55F5247215EA00B9F4CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				371E55F3247215EA00B9F4CB /* AppDelegate.swift */,
+				371CC14F247CBA79008CF924 /* Keys.swift */,
 				371E55F5247215EA00B9F4CB /* SceneDelegate.swift */,
 				371E55F7247215EA00B9F4CB /* MapViewController.swift */,
 				37A8BC5E247CA75B00FFEBC5 /* View */,
@@ -458,6 +461,7 @@
 				3759921F2476029900F36806 /* MapView.swift in Sources */,
 				375992222476088B00F36806 /* NewsClient.swift in Sources */,
 				371E55F4247215EA00B9F4CB /* AppDelegate.swift in Sources */,
+				371CC150247CBA79008CF924 /* Keys.swift in Sources */,
 				37A2D8EF247B9F4700696F24 /* MapNewsSelectorObserver.swift in Sources */,
 				37A8BC54247BEAB200FFEBC5 /* SQLDatabase.swift in Sources */,
 				37A2D8EB247B8C6D00696F24 /* MapNewsSelector.swift in Sources */,
