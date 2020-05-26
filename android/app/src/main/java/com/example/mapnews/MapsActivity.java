@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -20,11 +21,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, AdapterView.OnItemSelectedListener {
+import java.util.Map;
 
-    private GoogleMap mMap;
-    Button toHome;
-    Spinner countryList;
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     // this feels like a very bad practice, will change if I find a different way to do it
     String[] countryData = {"Andorra", "42.546245 1.601554",
@@ -68,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             "Central African Republic", "6.611111 20.939444",
             "Congo [Republic]", "-0.228021 15.827659",
             "Switzerland", "46.818188 8.227512",
-            "CÃ´te d'Ivoire", "7.539989 -5.54708",
+            "CAte dIvoire", "7.539989 -5.54708",
             "Cook Islands", "-21.236736 -159.777671",
             "Chile", "-35.675147 -71.542969",
             "Cameroon", "7.369722 12.354722",
@@ -273,6 +272,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             "Zambia", "-13.133897 27.849332",
             "Zimbabwe", "-19.015438 29.154857"};
 
+    private GoogleMap mMap;
+    Button toHome;
+    Button done;
+    Spinner countryList;
+    String countrySelected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -283,6 +288,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         toHome = findViewById(R.id.toHome);
+        done = findViewById(R.id.done);
         toHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -291,11 +297,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MapsActivity.this, HomeActivity.class);
+                // sends the string value of the country selected to homeActivity
+                intent.putExtra("Country selected", countrySelected);
+                startActivityForResult(intent, 1);
+
+            }
+        });
+
+
+
         countryList = findViewById(R.id.countryList);
         countryList.setOnItemSelectedListener(this);
         ArrayAdapter<CharSequence> countryAdapter = ArrayAdapter.createFromResource(this, R.array.country_list, android.R.layout.simple_spinner_item);
         countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countryList.setAdapter(countryAdapter);
+
+
+        //To get the country selected from home page
+        // TODO: Improvements should be made to use sqlite to store data instead of throwing it everywhere
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String countrySelected = extras.getString("Country selected");
+            Log.i("yz maps", countrySelected);
+            // we skip the latitude and longitude values
+            for(int i=0; i < countryData.length; i+=2){
+                if(countrySelected.equals(countryData[i])){
+                    countryList.setSelection(i/2);
+                }
+            }
+        }
+
     }
 
 
@@ -329,7 +364,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // parent.getItemAtPosition(pos)
         mMap.clear();
         String country = parent.getItemAtPosition(position).toString();
-        Log.i("yz", country);
+        //Log.i("yz", country);
 
 
         String coordinates = "";
@@ -337,27 +372,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for(int i = 0; i < countryData.length; i++){
             if(country.equals(countryData[i])){
                 coordinates = countryData[i+1];
-                Log.i("yz", coordinates);
+                //Log.i("yz", coordinates);
                 break;
             }
         }
+        if(!coordinates.equals("")) {
+            String[] realCoords = coordinates.split(" ");
+            for (int i = 0; i < realCoords.length; i++) {
+                //Log.i("yz", realCoords[i]);
+            }
 
-        String[] realCoords = coordinates.split(" ");
-        for(int i=0; i < realCoords.length; i++){
-            Log.i("yz", realCoords[i]);
+            //Log.i("yz", "Here");
+
+            LatLng current = new LatLng(Double.parseDouble(realCoords[0]), Double.parseDouble(realCoords[1]));
+            mMap.addMarker(new MarkerOptions().position(current).title("Marker"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+            countrySelected = country;
         }
-
-        Log.i("yz", "Here");
-
-        LatLng current = new LatLng(Double.parseDouble(realCoords[0]), Double.parseDouble(realCoords[1]));
-        mMap.addMarker(new MarkerOptions().position(current).title("Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
-
+        Log.i("yz map", countrySelected);
         //Uri gmmIntentUri = Uri.parse("geo:"+realCoords[0] + "," + realCoords[1]);
         //Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         //mapIntent.setPackage("com.google.android.apps.maps");
         //startActivity(mapIntent);
-        Log.i("yz", "Passed");
+        //Log.i("yz", "Passed");
     }
 
     @Override

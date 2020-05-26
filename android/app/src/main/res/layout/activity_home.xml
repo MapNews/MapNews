@@ -7,5 +7,14 @@
         android:id="@+id/toMaps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Maps"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Maps >"/>
+
+    <TextView
+        android:id="@+id/countrySelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Select a country"/>
 </RelativeLayout>

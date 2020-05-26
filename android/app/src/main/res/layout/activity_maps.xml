@@ -20,11 +20,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#359c5e"
-        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:padding="8dp"
         android:layout_margin="5dp"
-        android:text="@string/Home"
+        android:text="Back"
+        android:textColor="#ffffff"/>
+
+    <Button
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#359c5e"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:padding="8dp"
+        android:layout_margin="5dp"
+        android:text="Done"
         android:textColor="#ffffff"/>
 
     <Spinner
@@ -33,6 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"/>
+        android:prompt="@string/selectCountry"
+        android:spinnerMode="dialog"
+        style="@style/Widget.AppCompat.Spinner.Underlined"/>
 
 </RelativeLayout>
