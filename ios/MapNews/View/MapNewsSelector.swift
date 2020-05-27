@@ -9,31 +9,31 @@
 import UIKit
 
 class MapNewsSelector: UIView {
-    var pickerData: [String]
+    var tableData: [String]
     var selectedCountry: String = "Singapore" {
         didSet {
-            selectedCountryLabel.text = selectedCountry
+            selectedCountryTextField.text = selectedCountry
             if let newCoordinates = SQLDatabase().queryLatLong(name: selectedCountry) {
                 observers.forEach { $0.locationDidUpdate(to: newCoordinates) }
             }
         }
     }
-    var pickerView: UIPickerView
-    var selectedCountryLabel: UILabel
+    var tableView: UITableView
+    var selectedCountryTextField: UITextField
     var observers: [MapNewsSelectorObserver] = []
 
-    init(frame: CGRect, pickerData: [String]) {
+    init(frame: CGRect, tableData: [String]) {
         // Create label
         let labelHeight: CGFloat = 30
         let labelPadding: CGFloat = 10
-        selectedCountryLabel = MapNewsSelector.createLabel(
+        selectedCountryTextField = MapNewsSelector.createTextField(
                 width: frame.width,
                 height: labelHeight,
                 padding: labelPadding
         )
 
         // Create picker
-        pickerView = MapNewsSelector.createPicker(
+        tableView = MapNewsSelector.createTableView(
             origin: CGPoint(x: 0, y: labelHeight),
             width: frame.width,
             height: frame.height - labelHeight
@@ -41,19 +41,17 @@ class MapNewsSelector: UIView {
 
         // Create label background
         let labelBackground = MapNewsSelector.createLabelBackground(width: frame.width, height: labelHeight)
-        self.pickerData = pickerData
+        self.tableData = tableData
 
         super.init(frame: frame)
 
         addSubview(labelBackground)
-        addSubview(selectedCountryLabel)
-        addSubview(pickerView)
+        addSubview(selectedCountryTextField)
+        addSubview(tableView)
 
-        bindAllGestureRecognizers()
-
-
-        pickerView.delegate = self
-        pickerView.dataSource = self
+        selectedCountryTextField.delegate = self
+        tableView.delegate = self
+        tableView.dataSource = self
     }
 
     required init?(coder: NSCoder) {
@@ -64,28 +62,25 @@ class MapNewsSelector: UIView {
         observers.append(observer)
     }
 
-    private func bindAllGestureRecognizers() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleLabelTap(recognizer:)))
-        selectedCountryLabel.addGestureRecognizer(tap)
-    }
-
-    static func createPicker(origin: CGPoint, width: CGFloat, height: CGFloat) -> UIPickerView {
-        let newPickerView = UIPickerView(
+    static func createTableView(origin: CGPoint, width: CGFloat, height: CGFloat) -> UITableView {
+        let tableView = UITableView(
             frame: CGRect(origin: origin, size: CGSize(width: width, height: height))
         )
-        newPickerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        newPickerView.isHidden = true
-        newPickerView.layer.cornerRadius = 5
-        newPickerView.layer.masksToBounds = true
-        return newPickerView
+        tableView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        tableView.isHidden = true
+        tableView.layer.cornerRadius = 5
+        tableView.layer.masksToBounds = true
+
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        return tableView
     }
 
-    static func createLabel(width: CGFloat, height: CGFloat, padding: CGFloat) -> UILabel {
-        let labelSize = CGSize(width: width - (2 * padding), height: height)
-        let label = UILabel(frame: CGRect(origin: CGPoint(x: padding, y: 0), size: labelSize))
-        label.text = "Singapore"
-        label.isUserInteractionEnabled = true
-        return label
+    static func createTextField(width: CGFloat, height: CGFloat, padding: CGFloat) -> UITextField {
+        let textFieldSize = CGSize(width: width - (2 * padding), height: height)
+        let textField = UITextField(frame: CGRect(origin: CGPoint(x: padding, y: 0), size: textFieldSize))
+        textField.text = "Singapore"
+        textField.isUserInteractionEnabled = true
+        return textField
     }
 
     static func createLabelBackground(width: CGFloat, height: CGFloat) -> UIView {
@@ -97,34 +92,35 @@ class MapNewsSelector: UIView {
 
         return labelBackground
     }
+}
 
-    @objc func handleLabelTap(recognizer: UITapGestureRecognizer) {
-        if recognizer.state == .cancelled {
-            return
-        }
-        togglePickerVisibility()
-        observers.forEach { pickerView.isHidden ? $0.pickerDidHide() : $0.pickerDidReveal() }
+extension MapNewsSelector: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        tableData.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel!.text = tableData[indexPath.row]
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedCountry = tableData[indexPath.row]
     }
 }
 
-extension MapNewsSelector: UIPickerViewDelegate, UIPickerViewDataSource {
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerData.count
+extension MapNewsSelector: UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        tableView.isHidden = false
+        observers.forEach { $0.pickerDidReveal() }
+        return true
     }
 
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        tableView.isHidden = true
+        observers.forEach { $0.pickerDidHide() }
+        return true
     }
 
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
-    }
-
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedCountry = pickerData[row]
-    }
-
-    func togglePickerVisibility() {
-        pickerView.isHidden = !pickerView.isHidden
-    }
 }

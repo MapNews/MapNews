@@ -24,6 +24,8 @@ class MapView: GMSMapView {
     }
 
     static func createMapView(frame: CGRect) -> MapView {
-        super.map(withFrame: frame, camera: MapView.singaporeCamera) as! MapView
+        let mapView = super.map(withFrame: frame, camera: MapView.singaporeCamera) as! MapView
+        mapView.location = defaultLocation
+        return mapView
     }
 }

@@ -45,7 +45,7 @@ class MapViewController: UIViewController {
             width: view.bounds.width - (2 * padding),
             height: view.bounds.height / 3)
         let allCountries = database.queryAllCountries() ?? ["No data"]
-        locationSelector = MapNewsSelector(frame: selectorRect, pickerData: allCountries)
+        locationSelector = MapNewsSelector(frame: selectorRect, tableData: allCountries)
         locationSelector.addObserver(observer: self)
     }
 
@@ -81,7 +81,8 @@ extension MapViewController {
         if recognizer.state == .cancelled {
             return
         }
-        locationSelector.pickerView.isHidden = true
+        locationSelector.selectedCountryTextField.resignFirstResponder()
+        locationSelector.tableView.isHidden = true
         locationSelectorMask.isHidden = true
     }
 }
