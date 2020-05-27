@@ -81,8 +81,7 @@ extension MapViewController {
         if recognizer.state == .cancelled {
             return
         }
-        locationSelector.selectedCountryTextField.resignFirstResponder()
-        locationSelector.tableView.isHidden = true
+        locationSelector.closeSelector()
         locationSelectorMask.isHidden = true
     }
 }

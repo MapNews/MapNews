@@ -9,7 +9,12 @@
 import UIKit
 
 class MapNewsSelector: UIView {
-    var tableData: [String]
+    var allCountries: [String]
+    var filteredCountries: [String] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     var selectedCountry: String = "Singapore" {
         didSet {
             selectedCountryTextField.text = selectedCountry
@@ -41,7 +46,8 @@ class MapNewsSelector: UIView {
 
         // Create label background
         let labelBackground = MapNewsSelector.createLabelBackground(width: frame.width, height: labelHeight)
-        self.tableData = tableData
+        self.allCountries = tableData
+        self.filteredCountries = tableData
 
         super.init(frame: frame)
 
@@ -92,21 +98,27 @@ class MapNewsSelector: UIView {
 
         return labelBackground
     }
+
+    func closeSelector() {
+        selectedCountryTextField.resignFirstResponder()
+        tableView.isHidden = true
+    }
 }
 
 extension MapNewsSelector: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tableData.count
+        filteredCountries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel!.text = tableData[indexPath.row]
+        cell.textLabel!.text = filteredCountries[indexPath.row]
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCountry = tableData[indexPath.row]
+        selectedCountry = filteredCountries[indexPath.row]
+        closeSelector()
     }
 }
 
@@ -123,4 +135,33 @@ extension MapNewsSelector: UITextFieldDelegate {
         return true
     }
 
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard var text = textField.text else {
+            return false
+        }
+        if string == "" {
+            text = String(text[..<text.index(before: text.endIndex)])
+        }
+        filteredCountries = allCountries.filter { $0.startsWith(substring: text + string) }
+        return true
+    }
+
+}
+
+extension String {
+    func startsWith(substring: String) -> Bool {
+        if substring.count > self.count {
+            return false
+        }
+        for i in 0..<substring.count {
+            if substring.charAt(offset: i) != self.charAt(offset: i) {
+                return false
+            }
+        }
+        return true
+    }
+
+    func charAt(offset: Int) -> Character {
+        self[index(startIndex, offsetBy: offset)]
+    }
 }
