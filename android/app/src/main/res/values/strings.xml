@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">MapNews</string>
     <string name="title_activity_maps">Map</string>
-    <string name="Home">Home</string>
-    <string name="home_activity">HOME</string>
-
+    <string name="title_activity_home">Home</string>
+    <string name="selectCountry">Select Country</string>
 
     <string-array name="country_list">
         <item>Andorra</item>
