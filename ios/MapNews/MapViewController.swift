@@ -20,7 +20,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
 
         database = SQLDatabase()
-        
+
         initMap()
         initLocationSelector()
         initLocationSelectorMask()
@@ -38,12 +38,13 @@ class MapViewController: UIViewController {
     }
 
     func initLocationSelector() {
-        let padding: CGFloat = 50
+        let selectorWidth = view.bounds.width - (2 * Constants.selectorPadding)
+        let selectorHeight = view.bounds.height / 3
         let selectorRect = CGRect(
-            x: padding,
-            y: padding,
-            width: view.bounds.width - (2 * padding),
-            height: view.bounds.height / 3)
+            x: Constants.selectorPadding,
+            y: Constants.selectorPadding,
+            width: selectorWidth,
+            height: selectorHeight)
         let allCountries = database.queryAllCountries() ?? ["No data"]
         locationSelector = MapNewsSelector(frame: selectorRect, tableData: allCountries)
         locationSelector.addObserver(observer: self)
@@ -54,7 +55,7 @@ class MapViewController: UIViewController {
         mask.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         mask.alpha = 0.7
         mask.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleMapTap(recognizer:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleMaskTap(recognizer:)))
         mask.addGestureRecognizer(tap)
         mask.isHidden = true
         locationSelectorMask = mask
@@ -63,7 +64,10 @@ class MapViewController: UIViewController {
 }
 
 extension MapViewController: MapNewsSelectorObserver {
-    func locationDidUpdate(to newCoordinates: Coordinates) {
+    func locationDidUpdate(to newLocation: String) {
+        guard let newCoordinates = database.queryLatLong(name: newLocation) else {
+            return
+        }
         mapView.location = newCoordinates
     }
 
@@ -77,11 +81,10 @@ extension MapViewController: MapNewsSelectorObserver {
 }
 
 extension MapViewController {
-    @objc func handleMapTap(recognizer: UITapGestureRecognizer) {
+    @objc func handleMaskTap(recognizer: UITapGestureRecognizer) {
         if recognizer.state == .cancelled {
             return
         }
         locationSelector.closeSelector()
-        locationSelectorMask.isHidden = true
     }
 }

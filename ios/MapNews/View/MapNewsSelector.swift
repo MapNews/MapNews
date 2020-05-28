@@ -9,8 +9,8 @@
 import UIKit
 
 class MapNewsSelector: UIView {
-    var allCountries: [String]
-    var filteredCountries: [String] {
+    private var allCountries: [String]
+    private var filteredCountries: [String] {
         didSet {
             tableView.reloadData()
         }
@@ -18,34 +18,34 @@ class MapNewsSelector: UIView {
     var selectedCountry: String = "Singapore" {
         didSet {
             selectedCountryTextField.text = selectedCountry
-            if let newCoordinates = SQLDatabase().queryLatLong(name: selectedCountry) {
-                observers.forEach { $0.locationDidUpdate(to: newCoordinates) }
-            }
         }
     }
-    var tableView: UITableView
-    var selectedCountryTextField: UITextField
-    var observers: [MapNewsSelectorObserver] = []
+    private var tableView: UITableView
+    private var selectedCountryTextField: UITextField
+    private var searchButton: UIImageView
+    private var observers: [MapNewsSelectorObserver] = []
 
     init(frame: CGRect, tableData: [String]) {
         // Create label
-        let labelHeight: CGFloat = 30
-        let labelPadding: CGFloat = 10
         selectedCountryTextField = MapNewsSelector.createTextField(
                 width: frame.width,
-                height: labelHeight,
-                padding: labelPadding
+                height: Constants.labelHeight,
+                padding: Constants.labelPadding
         )
 
         // Create picker
         tableView = MapNewsSelector.createTableView(
-            origin: CGPoint(x: 0, y: labelHeight),
+            origin: CGPoint(x: 0, y: Constants.labelHeight),
             width: frame.width,
-            height: frame.height - labelHeight
+            height: frame.height - Constants.labelHeight
         )
 
         // Create label background
-        let labelBackground = MapNewsSelector.createLabelBackground(width: frame.width, height: labelHeight)
+        let labelBackground = MapNewsSelector.createLabelBackground(width: frame.width, height: Constants.labelHeight)
+
+        // Create search button
+        searchButton = MapNewsSelector.createSearchButton(within: frame, padding: Constants.labelPadding)
+
         self.allCountries = tableData
         self.filteredCountries = tableData
 
@@ -54,54 +54,98 @@ class MapNewsSelector: UIView {
         addSubview(labelBackground)
         addSubview(selectedCountryTextField)
         addSubview(tableView)
+        addSubview(searchButton)
 
         selectedCountryTextField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+
+        bindAllGestureRecognizers()
     }
 
     required init?(coder: NSCoder) {
         return nil
     }
 
-    public func addObserver(observer: MapNewsSelectorObserver) {
+    func addObserver(observer: MapNewsSelectorObserver) {
         observers.append(observer)
     }
 
-    static func createTableView(origin: CGPoint, width: CGFloat, height: CGFloat) -> UITableView {
+    private static func createTableView(origin: CGPoint, width: CGFloat, height: CGFloat) -> UITableView {
         let tableView = UITableView(
             frame: CGRect(origin: origin, size: CGSize(width: width, height: height))
         )
         tableView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         tableView.isHidden = true
-        tableView.layer.cornerRadius = 5
+        tableView.layer.cornerRadius = Constants.selectorBorderRadius
         tableView.layer.masksToBounds = true
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         return tableView
     }
 
-    static func createTextField(width: CGFloat, height: CGFloat, padding: CGFloat) -> UITextField {
-        let textFieldSize = CGSize(width: width - (2 * padding), height: height)
-        let textField = UITextField(frame: CGRect(origin: CGPoint(x: padding, y: 0), size: textFieldSize))
+    private static func createTextField(width: CGFloat, height: CGFloat, padding: CGFloat) -> UITextField {
+        let textFieldWidth = width - (2 * padding) - Constants.searchIconWidth
+        let textFieldHeight = height - (2 * padding)
+        let textFieldSize = CGSize(width: textFieldWidth, height: textFieldHeight)
+        let textField = UITextField(frame: CGRect(origin: CGPoint(x: padding, y: padding), size: textFieldSize))
         textField.text = "Singapore"
         textField.isUserInteractionEnabled = true
         return textField
     }
 
-    static func createLabelBackground(width: CGFloat, height: CGFloat) -> UIView {
+    private static func createLabelBackground(width: CGFloat, height: CGFloat) -> UIView {
         let labelBackgroundSize = CGSize(width: width, height: height)
         let labelBackground = UIView(frame: CGRect(origin: CGPoint.zero, size: labelBackgroundSize))
         labelBackground.layer.cornerRadius = 5
         labelBackground.layer.masksToBounds = true;
         labelBackground.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-
         return labelBackground
     }
 
+    private static func createSearchButton(within frame: CGRect, padding: CGFloat) -> UIImageView {
+        let searchButtonSize = CGSize(width: Constants.searchIconWidth, height: Constants.searchIconHeight)
+        let searchButtonOrigin = CGPoint(x: frame.width - Constants.searchIconWidth - padding, y: padding)
+        let searchButton = UIImageView(frame: CGRect(origin: searchButtonOrigin, size: searchButtonSize))
+        searchButton.image = UIImage(named: "search")
+        searchButton.isUserInteractionEnabled = true
+        return searchButton
+    }
+    
     func closeSelector() {
         selectedCountryTextField.resignFirstResponder()
         tableView.isHidden = true
+        observers.forEach { $0.pickerDidHide() }
+    }
+
+    func openSelector() {
+        tableView.isHidden = false
+        observers.forEach { $0.pickerDidReveal() }
+    }
+
+    private func updateLocation() {
+        observers.forEach { $0.locationDidUpdate(to: selectedCountry) }
+    }
+}
+
+extension MapNewsSelector {
+    @objc func handleTap(sender: UITapGestureRecognizer) {
+        if tableView.isHidden {
+            // Selector is close
+            openSelector()
+            return
+        }
+        if !tableView.isHidden {
+            closeSelector()
+            selectedCountry = selectedCountryTextField.text ?? selectedCountry
+            updateLocation()
+            return
+        }
+    }
+
+    private func bindAllGestureRecognizers() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
+        searchButton.addGestureRecognizer(tap)
     }
 }
 
@@ -119,6 +163,7 @@ extension MapNewsSelector: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCountry = filteredCountries[indexPath.row]
         closeSelector()
+        updateLocation()
     }
 }
 
@@ -135,33 +180,11 @@ extension MapNewsSelector: UITextFieldDelegate {
         return true
     }
 
+
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard var text = textField.text else {
-            return false
-        }
-        if string == "" {
-            text = String(text[..<text.index(before: text.endIndex)])
-        }
-        filteredCountries = allCountries.filter { $0.startsWith(substring: text + string) }
+        let text = (textField.text as NSString?)?.replacingCharacters(in: range, with: string) ?? ""
+        filteredCountries = allCountries.filter { $0.startsWith(substring: text) }
         return true
     }
 
-}
-
-extension String {
-    func startsWith(substring: String) -> Bool {
-        if substring.count > self.count {
-            return false
-        }
-        for i in 0..<substring.count {
-            if substring.charAt(offset: i) != self.charAt(offset: i) {
-                return false
-            }
-        }
-        return true
-    }
-
-    func charAt(offset: Int) -> Character {
-        self[index(startIndex, offsetBy: offset)]
-    }
 }

@@ -11,5 +11,5 @@ protocol MapNewsSelectorObserver {
 
     func pickerDidHide()
 
-    func locationDidUpdate(to newCoordinates: Coordinates)
+    func locationDidUpdate(to newLocation: String)
 }
