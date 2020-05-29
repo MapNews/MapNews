@@ -31,6 +31,8 @@ class MapViewController: UIViewController {
         view.addSubview(mapView)
         view.addSubview(locationSelectorMask)
         view.addSubview(locationSelector)
+
+        NewsClient.queryNews(at: "SG", name: "Singapore")
     }
 
     func initMap() {
