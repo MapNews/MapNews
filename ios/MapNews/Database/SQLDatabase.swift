@@ -1,5 +1,5 @@
 //
-//  DatabaseClient.swift
+//  SQLDatabase.swift
 //  MapNews
 //
 //  Created by Hol Yin Ho on 25/5/20.
@@ -27,6 +27,11 @@ class SQLDatabase {
     """
     SELECT LAT, LONG FROM COUNTRIES
     WHERE NAME = ?;
+    """
+
+    private let queryCountryCoordinateDTOStatementString =
+    """
+    SELECT NAME, LAT, LONG FROM COUNTRIES
     """
 
     private let insertStatementString =

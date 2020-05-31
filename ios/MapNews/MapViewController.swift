@@ -14,29 +14,26 @@ class MapViewController: UIViewController {
     var mapView: MapView!
     var locationSelector: MapNewsSelector!
     var locationSelectorMask: UIView!
-    var database: Database!
+    var model: MapViewModel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        database = SQLDatabase()
-
+        model = MapViewModel()
         initMap()
         initLocationSelector()
         initLocationSelectorMask()
-        if let location = database.queryLatLong(name: "Singapore") {
-            mapView.location = location
-        }
 
         view.addSubview(mapView)
         view.addSubview(locationSelectorMask)
         view.addSubview(locationSelector)
-
-        NewsClient.queryNews(at: "SG", name: "Singapore")
     }
 
     func initMap() {
         mapView = MapView.createMapView(frame: self.view.bounds)
+        if let location = model.getLatLong(for: "Singapore") {
+            mapView.location = location
+        }
     }
 
     func initLocationSelector() {
@@ -47,7 +44,7 @@ class MapViewController: UIViewController {
             y: Constants.selectorPadding,
             width: selectorWidth,
             height: selectorHeight)
-        let allCountries = database.queryAllCountries() ?? ["No data"]
+        let allCountries = model.getAllCountries() ?? ["No data"]
         locationSelector = MapNewsSelector(frame: selectorRect, tableData: allCountries)
         locationSelector.addObserver(observer: self)
     }
@@ -67,7 +64,7 @@ class MapViewController: UIViewController {
 
 extension MapViewController: MapNewsSelectorObserver {
     func locationDidUpdate(to newLocation: String) {
-        guard let newCoordinates = database.queryLatLong(name: newLocation) else {
+        guard let newCoordinates = model.getLatLong(for: newLocation) else {
             return
         }
         mapView.location = newCoordinates
