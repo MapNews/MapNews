@@ -202,4 +202,30 @@ extension SQLDatabase: Database {
         return countries
     }
 
+    func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]? {
+        var countryCoordinatesDTOs: [CountryCoordinateDTO] = []
+        var queryCountryCoordinateDTOStatement: OpaquePointer?
+        if sqlite3_prepare_v2(
+            database,
+            queryCountryCoordinateDTOStatementString,
+            -1,
+            &queryCountryCoordinateDTOStatement,
+            nil) != SQLITE_OK {
+            print("Query not prepared")
+            return nil
+        }
+        while sqlite3_step(queryCountryCoordinateDTOStatement) == SQLITE_ROW {
+            guard let country = sqlite3_column_text(queryCountryCoordinateDTOStatement, 0) else {
+                return nil
+            }
+            let queryLat = sqlite3_column_double(queryCountryCoordinateDTOStatement, 1)
+            let queryLong = sqlite3_column_double(queryCountryCoordinateDTOStatement, 2)
+            let currentDTO = CountryCoordinateDTO(
+                name: String(cString: country),
+                coordinates: Coordinates(lat: queryLat, long: queryLong)
+            )
+            countryCoordinatesDTOs.append(currentDTO)
+        }
+        return countryCoordinatesDTOs
+    }
 }

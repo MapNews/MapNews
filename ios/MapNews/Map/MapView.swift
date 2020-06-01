@@ -10,21 +10,21 @@ import GoogleMaps
 
 class MapView: GMSMapView {
     static let singaporeCamera =
-        GMSCameraPosition.camera(withLatitude: 1.3521, longitude: 103.8198, zoom: 5)
-    static let defaultLocation = Coordinates(lat: 1.3521, long: 103.8198)
+        GMSCameraPosition.camera(withLatitude: 1.3521, longitude: 103.8198, zoom: 3)
+    static let defaultLocation = CLLocationCoordinate2D.from(coordinates: Coordinates(lat: 1.3521, long: 103.8198))
 
-    var location: Coordinates? {
+    var location: CLLocationCoordinate2D? {
         didSet {
-            camera = GMSCameraPosition.camera(
-                withLatitude: location?.lat ?? MapView.defaultLocation.lat,
-                longitude: location?.long ?? MapView.defaultLocation.long,
-                zoom: 5)
+            if let currentLocation = location {
+                camera = GMSCameraPosition.camera(withTarget: currentLocation, zoom: 3)
+            }
         }
     }
 
     static func createMapView(frame: CGRect) -> MapView {
         let mapView = super.map(withFrame: frame, camera: MapView.singaporeCamera) as! MapView
         mapView.location = defaultLocation
+        mapView.settings.zoomGestures = true
         return mapView
     }
 }

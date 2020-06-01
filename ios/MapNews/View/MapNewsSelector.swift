@@ -75,7 +75,8 @@ class MapNewsSelector: UIView {
         let tableView = UITableView(
             frame: CGRect(origin: origin, size: CGSize(width: width, height: height))
         )
-        tableView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        tableView.backgroundColor =
+            Constants.tableBackgroundColor[UIScreen.main.traitCollection.userInterfaceStyle]
         tableView.isHidden = true
         tableView.layer.cornerRadius = Constants.selectorBorderRadius
         tableView.layer.masksToBounds = true
@@ -89,6 +90,8 @@ class MapNewsSelector: UIView {
         let textFieldHeight = height - (2 * padding)
         let textFieldSize = CGSize(width: textFieldWidth, height: textFieldHeight)
         let textField = UITextField(frame: CGRect(origin: CGPoint(x: padding, y: padding), size: textFieldSize))
+        textField.textColor = Constants.textColor[UIScreen.main.traitCollection.userInterfaceStyle]
+        textField.overrideUserInterfaceStyle = .light
         textField.text = "Singapore"
         textField.isUserInteractionEnabled = true
         return textField
@@ -99,7 +102,8 @@ class MapNewsSelector: UIView {
         let labelBackground = UIView(frame: CGRect(origin: CGPoint.zero, size: labelBackgroundSize))
         labelBackground.layer.cornerRadius = 5
         labelBackground.layer.masksToBounds = true;
-        labelBackground.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        labelBackground.backgroundColor =
+            Constants.labelBackgroundColor[UIScreen.main.traitCollection.userInterfaceStyle]
         return labelBackground
     }
 
@@ -107,7 +111,7 @@ class MapNewsSelector: UIView {
         let searchButtonSize = CGSize(width: Constants.searchIconWidth, height: Constants.searchIconHeight)
         let searchButtonOrigin = CGPoint(x: frame.width - Constants.searchIconWidth - padding, y: padding)
         let searchButton = UIImageView(frame: CGRect(origin: searchButtonOrigin, size: searchButtonSize))
-        searchButton.image = UIImage(named: "search")
+        searchButton.image = Constants.searchIcon[UIScreen.main.traitCollection.userInterfaceStyle] as? UIImage
         searchButton.isUserInteractionEnabled = true
         return searchButton
     }
@@ -143,10 +147,19 @@ extension MapNewsSelector {
         }
     }
 
+    @objc func handleReturnButtonPress() {
+        closeSelector()
+        selectedCountry = selectedCountryTextField.text ?? selectedCountry
+        updateLocation()
+    }
+
     private func bindAllGestureRecognizers() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
         searchButton.addGestureRecognizer(tap)
+
+        selectedCountryTextField.addTarget(self, action: #selector(handleReturnButtonPress), for: .editingDidEndOnExit)
     }
+
 }
 
 extension MapNewsSelector: UITableViewDelegate, UITableViewDataSource {

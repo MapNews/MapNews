@@ -6,6 +6,8 @@
 //  Copyright © 2020 Hol Yin Ho. All rights reserved.
 //
 
+// To be used with database, reduce database and GMS coupling
+
 struct Coordinates: Equatable {
     let lat: Double
     let long: Double

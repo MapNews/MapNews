@@ -10,4 +10,6 @@ protocol Database {
     func queryLatLong(name: String) -> Coordinates?
 
     func queryAllCountries() -> [String]?
+
+    func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]?
 }

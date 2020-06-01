@@ -44,7 +44,7 @@ class MapViewController: UIViewController {
             y: Constants.selectorPadding,
             width: selectorWidth,
             height: selectorHeight)
-        let allCountries = model.getAllCountries() ?? ["No data"]
+        let allCountries = model.allCountries ?? ["No data"]
         locationSelector = MapNewsSelector(frame: selectorRect, tableData: allCountries)
         locationSelector.addObserver(observer: self)
     }
@@ -85,5 +85,10 @@ extension MapViewController {
             return
         }
         locationSelector.closeSelector()
+    }
+}
+
+extension MapViewController: GMSMapViewDelegate {
+    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
     }
 }
