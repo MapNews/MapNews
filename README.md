@@ -1,4 +1,4 @@
 # MapNews
 
 Screenshot for iOS
-![Screenshot for iOS](https://github.com/MapNews/MapNews/blob/master/ios/Screenshots/landingpage.png {width=40px height=400px})
+<a href="url"><img src="https://github.com/MapNews/MapNews/blob/master/ios/Screenshots/landingpage.png" align="left" height="400"></a>
