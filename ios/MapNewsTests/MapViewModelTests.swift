@@ -33,7 +33,7 @@ class MapViewModelTests: XCTestCase {
     }
 
     func testAllCountries() {
-        XCTAssertEqual(model.allCountries?.count ?? 0, 244)
+        XCTAssertEqual(model.allCountryNames?.count ?? 0, 244)
     }
 
     func testGetCountriesWithinBounds() {
@@ -53,7 +53,7 @@ class MapViewModelTests: XCTestCase {
 
 
         let bounds = GMSCoordinateBounds(coordinate: singaporeCoordinates, coordinate: japanCoordinates)
-        let countryWithinBounds = model.getCountries(within: bounds)
+        let countryWithinBounds = model.updateCountries(within: bounds)
         XCTAssertTrue(countryWithinBounds.contains(singaporeDTO))
         XCTAssertTrue(countryWithinBounds.contains(japanDTO))
         XCTAssertTrue(countryWithinBounds.contains(vietnamDTO))

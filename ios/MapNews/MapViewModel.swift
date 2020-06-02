@@ -10,13 +10,22 @@ import GoogleMaps
 class MapViewModel {
     var database: Database
     var allCountryCoordinateDTOs: [CountryCoordinateDTO]
-    var allCountries: [String]? {
+    var allCountriesInBounds: [CountryCoordinateDTO] = []
+    var currentBounds: GMSCoordinateBounds {
+        didSet {
+            allCountriesInBounds = allCountryCoordinateDTOs.filter {
+                currentBounds.contains(CLLocationCoordinate2D.from(coordinates: $0.coordinates))
+            }
+        }
+    }
+    var allCountryNames: [String]? {
         database.queryAllCountries()
     }
 
-    init() {
+    init(within bounds: GMSCoordinateBounds) {
         database = SQLDatabase()
         allCountryCoordinateDTOs = database.queryAllCountriesAndCoordinates() ?? []
+        currentBounds = bounds
     }
 }
 
@@ -26,11 +35,5 @@ extension MapViewModel {
             return nil
         }
         return CLLocationCoordinate2D.from(coordinates: coordinates)
-    }
-
-    func getCountries(within bounds: GMSCoordinateBounds) -> [CountryCoordinateDTO] {
-        return allCountryCoordinateDTOs.filter {
-            bounds.contains(CLLocationCoordinate2D.from(coordinates: $0.coordinates))
-        }
     }
 }

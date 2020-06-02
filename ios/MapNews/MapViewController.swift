@@ -11,7 +11,7 @@ import GoogleMaps
 
 class MapViewController: UIViewController {
     var pickerView: UIPickerView!
-    var mapView: MapView!
+    var mapView: MapNewsView!
     var locationSelector: MapNewsSelector!
     var locationSelectorMask: UIView!
     var model: MapViewModel!
@@ -19,21 +19,21 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        model = MapViewModel()
         initMap()
+        model = MapViewModel(within: mapView.mapBounds)
         initLocationSelector()
         initLocationSelectorMask()
 
         view.addSubview(mapView)
         view.addSubview(locationSelectorMask)
         view.addSubview(locationSelector)
+
+        updateMarkers()
     }
 
     func initMap() {
-        mapView = MapView.createMapView(frame: self.view.bounds)
-        if let location = model.getLatLong(for: "Singapore") {
-            mapView.location = location
-        }
+        mapView = MapNewsView(frame: self.view.bounds)
+        mapView.delegate = self
     }
 
     func initLocationSelector() {
@@ -44,7 +44,7 @@ class MapViewController: UIViewController {
             y: Constants.selectorPadding,
             width: selectorWidth,
             height: selectorHeight)
-        let allCountries = model.allCountries ?? ["No data"]
+        let allCountries = model.allCountryNames ?? ["No data"]
         locationSelector = MapNewsSelector(frame: selectorRect, tableData: allCountries)
         locationSelector.addObserver(observer: self)
     }
@@ -63,11 +63,12 @@ class MapViewController: UIViewController {
 }
 
 extension MapViewController: MapNewsSelectorObserver {
-    func locationDidUpdate(to newLocation: String) {
+    func locationDidUpdate(toLocation newLocation: String) {
         guard let newCoordinates = model.getLatLong(for: newLocation) else {
             return
         }
         mapView.location = newCoordinates
+        locationDidUpdate(toCoordinate: newCoordinates)
     }
 
     func pickerDidReveal() {
@@ -76,6 +77,21 @@ extension MapViewController: MapNewsSelectorObserver {
 
     func pickerDidHide() {
         locationSelectorMask.isHidden = true
+    }
+
+    private func locationDidUpdate(toCoordinate coordinate: CLLocationCoordinate2D) {
+        model.currentBounds = mapView.mapBounds
+        updateMarkers()
+    }
+
+    private func updateMarkers() {
+        model.allCountriesInBounds.forEach {
+            let position = CLLocationCoordinate2D.from(coordinates: $0.coordinates)
+            let marker = MapNewsMarker(at: $0.countryName, position: position)
+            marker.icon = UIImage(named: "news")
+            marker.title = $0.countryName
+            marker.map = mapView
+        }
     }
 }
 
@@ -90,5 +106,6 @@ extension MapViewController {
 
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        locationDidUpdate(toCoordinate: position.target)
     }
 }

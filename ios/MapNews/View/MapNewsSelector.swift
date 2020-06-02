@@ -128,7 +128,7 @@ class MapNewsSelector: UIView {
     }
 
     private func updateLocation() {
-        observers.forEach { $0.locationDidUpdate(to: selectedCountry) }
+        observers.forEach { $0.locationDidUpdate(toLocation: selectedCountry) }
     }
 }
 
