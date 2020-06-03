@@ -24,6 +24,8 @@ class MapNewsSelector: UIView {
     private var selectedCountryTextField: UITextField
     private var searchButton: UIImageView
     private var observers: [MapNewsSelectorObserver] = []
+    private var openedSelectorFrame: CGRect
+    private var closedSelectorFrame: CGRect
 
     init(frame: CGRect, tableData: [String]) {
         // Create label
@@ -49,16 +51,26 @@ class MapNewsSelector: UIView {
         self.allCountries = tableData
         self.filteredCountries = tableData
 
-        super.init(frame: frame)
+        openedSelectorFrame = frame
+        closedSelectorFrame = CGRect(
+            origin: frame.origin,
+            size: CGSize(width: frame.width, height: Constants.labelHeight)
+        )
+
+        super.init(frame: openedSelectorFrame)
 
         addSubview(labelBackground)
         addSubview(selectedCountryTextField)
         addSubview(tableView)
         addSubview(searchButton)
 
+        self.frame = closedSelectorFrame
+
         selectedCountryTextField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+
+        filteredCountries = allCountries.filter { $0.startsWith(substring: selectedCountryTextField.text ?? "") }
 
         bindAllGestureRecognizers()
     }
@@ -78,6 +90,7 @@ class MapNewsSelector: UIView {
         tableView.backgroundColor =
             Constants.tableBackgroundColor[UIScreen.main.traitCollection.userInterfaceStyle]
         tableView.isHidden = true
+        tableView.isUserInteractionEnabled = true
         tableView.layer.cornerRadius = Constants.selectorBorderRadius
         tableView.layer.masksToBounds = true
 
@@ -117,12 +130,14 @@ class MapNewsSelector: UIView {
     }
     
     func closeSelector() {
+        frame = closedSelectorFrame
         selectedCountryTextField.resignFirstResponder()
         tableView.isHidden = true
         observers.forEach { $0.pickerDidHide() }
     }
 
     func openSelector() {
+        frame = openedSelectorFrame
         tableView.isHidden = false
         observers.forEach { $0.pickerDidReveal() }
     }
@@ -174,6 +189,7 @@ extension MapNewsSelector: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("selected")
         selectedCountry = filteredCountries[indexPath.row]
         closeSelector()
         updateLocation()
