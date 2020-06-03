@@ -36,4 +36,9 @@ struct Constants {
         UIUserInterfaceStyle.light: UIImage(named: "search"),
         UIUserInterfaceStyle.dark: UIImage(named: "search_dark_mode")
     ]
+
+    static let statusBarStyle = [
+        UIUserInterfaceStyle.light: UIStatusBarStyle.darkContent,
+        UIUserInterfaceStyle.dark: UIStatusBarStyle.lightContent,
+    ]
 }
