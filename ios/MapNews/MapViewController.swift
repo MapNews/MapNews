@@ -45,7 +45,11 @@ class MapViewController: UIViewController {
             width: selectorWidth,
             height: selectorHeight)
         let allCountries = model.allCountryNames ?? ["No data"]
-        locationSelector = MapNewsSelector(frame: selectorRect, tableData: allCountries)
+        locationSelector = MapNewsSelectorFactory.with(
+            style: UIScreen.main.traitCollection.userInterfaceStyle,
+            in: selectorRect,
+            tableData: allCountries
+        )
         locationSelector.addObserver(observer: self)
     }
 
@@ -107,5 +111,11 @@ extension MapViewController {
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         locationDidUpdate(toCoordinate: position.target)
+    }
+}
+
+extension MapViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return Constants.statusBarStyle[UIScreen.main.traitCollection.userInterfaceStyle] ?? .darkContent
     }
 }
