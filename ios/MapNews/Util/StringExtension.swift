@@ -7,7 +7,7 @@
 //
 
 extension String {
-    func startsWith(substring: String) -> Bool {
+    public func startsWith(substring: String) -> Bool {
         if substring.count > self.count {
             return false
         }

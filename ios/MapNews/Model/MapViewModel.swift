@@ -14,12 +14,16 @@ class MapViewModel {
     var currentBounds: GMSCoordinateBounds {
         didSet {
             allCountriesInBounds = allCountryCoordinateDTOs.filter {
-                currentBounds.contains(CLLocationCoordinate2D.from(coordinates: $0.coordinates))
+                currentBounds.contains(CLLocationCoordinate2D.from($0.coordinates))
             }
         }
     }
     var allCountryNames: [String]? {
         database.queryAllCountries()
+    }
+
+    convenience init() {
+        self.init(within: MapConstants.defaultBounds)
     }
 
     init(within bounds: GMSCoordinateBounds) {
@@ -34,6 +38,6 @@ extension MapViewModel {
         guard let coordinates = database.queryLatLong(name: country) else {
             return nil
         }
-        return CLLocationCoordinate2D.from(coordinates: coordinates)
+        return CLLocationCoordinate2D.from(coordinates)
     }
 }

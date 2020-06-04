@@ -10,43 +10,27 @@ import XCTest
 
 class MapNewsUITests: XCTestCase {
 
-    func testExample() throws {
+    func testLandingPageElementsExists() throws {
         let app = XCUIApplication()
         app.launch()
 
-        let mapView = XCUIApplication()
-            .children(matching: .window).element(boundBy: 1)
+        let mapView = app.children(matching: .window).element(boundBy: 1)
             .children(matching: .other).element
 
         XCTAssertTrue(mapView.exists)
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
 
-    func testTogglePickerVisibility() {
-        let app = XCUIApplication()
-        let mask = app.children(matching: .window)
-            .element(boundBy: 0).children(matching: .other)
-            .element.children(matching: .other)
-            .element.children(matching: .other)
-            .element.children(matching: .other)
-            .element(boundBy: 0)
+        let selector = app.children(matching: .window).element(boundBy: 0)
+            .children(matching: .other).element
+            .children(matching: .other).element
+            .children(matching: .other).element
 
-        app.launch()
+        let textField = selector.children(matching: .other).element
+            .children(matching: .textField).element
 
-        XCTAssertFalse(app.pickerWheels["Afghanistan"].exists)
+        XCTAssertTrue(textField.exists)
 
-        app.buttons["Singapore"].tap()
-        XCTAssertTrue(app.pickerWheels["Afghanistan"].exists)
-
-        app.buttons["Singapore"].tap()
-        XCTAssertFalse(app.pickerWheels["Afghanistan"].exists)
-
-        app.buttons["Singapore"].tap()
-        XCTAssertTrue(app.pickerWheels["Afghanistan"].exists)
-
-        mask.tap()
-        XCTAssertFalse(app.pickerWheels["Afghanistan"].exists)
+        let searchButton = selector.children(matching: .other).element(boundBy: 0)
+        XCTAssertTrue(searchButton.exists)
     }
 
 }

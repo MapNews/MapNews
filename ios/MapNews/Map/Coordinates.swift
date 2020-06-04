@@ -7,13 +7,18 @@
 //
 
 // To be used with database, reduce database and GMS coupling
+import GoogleMaps
 
-struct Coordinates: Equatable {
-    let lat: Double
-    let long: Double
+public struct Coordinates: Equatable {
+    public let lat: Double
+    public let long: Double 
 
     init(lat: Double, long: Double) {
         self.lat = lat
         self.long = long
+    }
+
+    public static func from(_ coordinates: CLLocationCoordinate2D) -> Coordinates {
+        Coordinates(lat: Double(coordinates.latitude), long: Double(coordinates.longitude))
     }
 }

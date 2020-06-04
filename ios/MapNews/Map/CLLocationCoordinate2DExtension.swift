@@ -8,7 +8,7 @@
 import GoogleMaps
 
 extension CLLocationCoordinate2D {
-    static func from(coordinates: Coordinates) -> CLLocationCoordinate2D {
+    public static func from(_ coordinates: Coordinates) -> CLLocationCoordinate2D {
         CLLocationCoordinate2D(
             latitude: CLLocationDegrees(exactly: coordinates.lat) ?? 0,
             longitude: CLLocationDegrees(exactly: coordinates.long) ?? 0

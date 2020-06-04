@@ -9,10 +9,6 @@
 import GoogleMaps
 
 class MapNewsView: GMSMapView {
-    private let singaporeCamera =
-        GMSCameraPosition.camera(withLatitude: 1.3521, longitude: 103.8198, zoom: 3)
-    private let defaultLocation = CLLocationCoordinate2D.from(coordinates: Coordinates(lat: 1.3521, long: 103.8198))
-
     var location: CLLocationCoordinate2D? {
         didSet {
             if let currentLocation = location {
@@ -29,9 +25,9 @@ class MapNewsView: GMSMapView {
     }
 
     override init(frame: CGRect) {
-        location = defaultLocation
+        location = MapConstants.singaporeCoordinates
         super.init(frame: frame)
-        camera = singaporeCamera
+        camera = MapConstants.singaporeCamera
         settings.zoomGestures = true
     }
 

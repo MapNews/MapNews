@@ -90,7 +90,7 @@ extension MapViewController: MapNewsSelectorObserver {
 
     private func updateMarkers() {
         model.allCountriesInBounds.forEach {
-            let position = CLLocationCoordinate2D.from(coordinates: $0.coordinates)
+            let position = CLLocationCoordinate2D.from($0.coordinates)
             let marker = MapNewsMarker(at: $0.countryName, position: position)
             marker.icon = UIImage(named: "news")
             marker.title = $0.countryName
