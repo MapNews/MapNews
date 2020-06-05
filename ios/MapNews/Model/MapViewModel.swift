@@ -8,8 +8,12 @@
 import GoogleMaps
 
 class MapViewModel {
-    var database: Database
-    var allCountryCoordinateDTOs: [CountryCoordinateDTO]
+    var database: Database {
+        didSet {
+            allCountryCoordinateDTOs = database.queryAllCountriesAndCoordinates() ?? []
+        }
+    }
+    var allCountryCoordinateDTOs: [CountryCoordinateDTO] = []
     var allCountriesInBounds: [CountryCoordinateDTO] = []
     var currentBounds: GMSCoordinateBounds {
         didSet {

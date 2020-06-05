@@ -16,10 +16,11 @@ class MapViewModelTests: XCTestCase {
 
     override func setUp() {
         model = MapViewModel()
+        model.database = MockDatabase()
     }
 
     func testGetAllCountryCoordinateDTO_onInit() {
-        XCTAssertEqual(model.allCountryCoordinateDTOs.count, 244)
+        XCTAssertEqual(model.allCountryCoordinateDTOs.count, 2)
     }
 
     func testGetLatLong_CountryExists() {
@@ -39,6 +40,29 @@ class MapViewModelTests: XCTestCase {
     }
 
     func testAllCountries() {
-        XCTAssertEqual(model.allCountryNames?.count ?? 0, 244)
+        XCTAssertEqual(model.allCountryNames?.count ?? 0, 2)
+    }
+}
+
+class MockDatabase: Database {
+    func queryLatLong(name: String) -> Coordinates? {
+        if name == "Singapore" {
+            return Coordinates(lat: 1.352083, long: 103.819836)
+        }
+        if name == "China" {
+            return Coordinates(lat: 35.86166, long: 104.195397)
+        }
+        return nil
+    }
+
+    func queryAllCountries() -> [String]? {
+        return ["Singapore", "China"]
+    }
+
+    func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]? {
+        return [
+            CountryCoordinateDTO(name: "Singapore", coordinates: Coordinates(lat: 1.352083, long: 103.819836)),
+            CountryCoordinateDTO(name: "China", coordinates: Coordinates(lat: 35.86166, long: 104.195397))
+        ]
     }
 }

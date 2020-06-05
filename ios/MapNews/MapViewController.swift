@@ -45,10 +45,10 @@ class MapViewController: UIViewController {
             width: selectorWidth,
             height: selectorHeight)
         let allCountries = model.allCountryNames ?? ["No data"]
-        locationSelector = MapNewsSelectorFactory.with(
-            style: UIScreen.main.traitCollection.userInterfaceStyle,
-            in: selectorRect,
-            tableData: allCountries
+        locationSelector = MapNewsSelector(
+            frame: selectorRect,
+            tableData: allCountries,
+            mode: UIScreen.main.traitCollection.userInterfaceStyle
         )
         locationSelector.addObserver(observer: self)
     }
@@ -75,11 +75,11 @@ extension MapViewController: MapNewsSelectorObserver {
         locationDidUpdate(toCoordinate: newCoordinates)
     }
 
-    func pickerDidReveal() {
+    func tableDidReveal() {
         locationSelectorMask.isHidden = false
     }
 
-    func pickerDidHide() {
+    func tableDidHide() {
         locationSelectorMask.isHidden = true
     }
 

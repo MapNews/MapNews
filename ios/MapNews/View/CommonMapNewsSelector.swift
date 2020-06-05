@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CommonMapNewsSelector: UIView, MapNewsSelector {
+class MapNewsSelector: UIView, Selector {
     internal var allCountries: [String]
     internal var filteredCountries: [String] {
         didSet {
@@ -27,27 +27,35 @@ class CommonMapNewsSelector: UIView, MapNewsSelector {
     internal var observers: [MapNewsSelectorObserver] = []
     internal var openedSelectorFrame: CGRect
     internal var closedSelectorFrame: CGRect
+    var mode: UIUserInterfaceStyle {
+        didSet {
+            tableView.backgroundColor = Constants.tableBackgroundColor[mode]
+            selectedCountryTextField.textColor = Constants.textColor[mode]
+            labelBackground.backgroundColor = Constants.labelBackgroundColor[mode]
+            searchButton.image = Constants.searchIcon[mode] ?? nil
+        }
+    }
 
-    init(frame: CGRect, tableData: [String]) {
+    init(frame: CGRect, tableData: [String], mode: UIUserInterfaceStyle) {
         // Create label
-        selectedCountryTextField = CommonMapNewsSelector.createTextField(
+        selectedCountryTextField = MapNewsSelector.createTextField(
                 width: frame.width,
                 height: Constants.labelHeight,
                 padding: Constants.labelPadding
         )
 
         // Create picker
-        tableView = CommonMapNewsSelector.createTableView(
+        tableView = MapNewsSelector.createTableView(
             origin: CGPoint(x: 0, y: Constants.labelHeight),
             width: frame.width,
             height: frame.height - Constants.labelHeight
         )
 
         // Create label background
-        labelBackground = CommonMapNewsSelector.createLabelBackground(width: frame.width, height: Constants.labelHeight)
+        labelBackground = MapNewsSelector.createLabelBackground(width: frame.width, height: Constants.labelHeight)
 
         // Create search button
-        searchButton = CommonMapNewsSelector.createSearchButton(within: frame, padding: Constants.labelPadding)
+        searchButton = MapNewsSelector.createSearchButton(within: frame, padding: Constants.labelPadding)
 
         self.allCountries = tableData
         self.filteredCountries = tableData
@@ -57,6 +65,8 @@ class CommonMapNewsSelector: UIView, MapNewsSelector {
             origin: frame.origin,
             size: CGSize(width: frame.width, height: Constants.labelHeight)
         )
+
+        self.mode = mode
 
         super.init(frame: openedSelectorFrame)
 
@@ -88,7 +98,6 @@ class CommonMapNewsSelector: UIView, MapNewsSelector {
         let tableView = UITableView(
             frame: CGRect(origin: origin, size: CGSize(width: width, height: height))
         )
-        tableView.backgroundColor = Constants.tableBackgroundColor[.light]
         tableView.isHidden = true
         tableView.isUserInteractionEnabled = true
         tableView.layer.cornerRadius = Constants.selectorBorderRadius
@@ -103,7 +112,6 @@ class CommonMapNewsSelector: UIView, MapNewsSelector {
         let textFieldHeight = height - (2 * padding)
         let textFieldSize = CGSize(width: textFieldWidth, height: textFieldHeight)
         let textField = UITextField(frame: CGRect(origin: CGPoint(x: padding, y: padding), size: textFieldSize))
-        textField.textColor = Constants.textColor[.light]
         textField.overrideUserInterfaceStyle = .light
         textField.text = "Singapore"
         textField.isUserInteractionEnabled = true
@@ -115,8 +123,6 @@ class CommonMapNewsSelector: UIView, MapNewsSelector {
         let labelBackground = UIView(frame: CGRect(origin: CGPoint.zero, size: labelBackgroundSize))
         labelBackground.layer.cornerRadius = 5
         labelBackground.layer.masksToBounds = true;
-        labelBackground.backgroundColor =
-            Constants.labelBackgroundColor[.light]
         return labelBackground
     }
 
@@ -124,7 +130,6 @@ class CommonMapNewsSelector: UIView, MapNewsSelector {
         let searchButtonSize = CGSize(width: Constants.searchIconWidth, height: Constants.searchIconHeight)
         let searchButtonOrigin = CGPoint(x: frame.width - Constants.searchIconWidth - padding, y: padding)
         let searchButton = UIImageView(frame: CGRect(origin: searchButtonOrigin, size: searchButtonSize))
-        searchButton.image = Constants.searchIcon[.light] as? UIImage
         searchButton.isUserInteractionEnabled = true
         return searchButton
     }
@@ -147,7 +152,7 @@ class CommonMapNewsSelector: UIView, MapNewsSelector {
     }
 }
 
-extension CommonMapNewsSelector {
+extension MapNewsSelector {
     @objc func handleTap(sender: UITapGestureRecognizer) {
         if tableView.isHidden {
             // Selector is close
@@ -177,7 +182,7 @@ extension CommonMapNewsSelector {
 
 }
 
-extension CommonMapNewsSelector: UITableViewDelegate, UITableViewDataSource {
+extension MapNewsSelector: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         filteredCountries.count
     }
@@ -195,7 +200,7 @@ extension CommonMapNewsSelector: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension CommonMapNewsSelector: UITextFieldDelegate {
+extension MapNewsSelector: UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         openSelector()
         return true

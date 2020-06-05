@@ -7,9 +7,9 @@
 //
 
 protocol MapNewsSelectorObserver {
-    func pickerDidReveal()
+    func tableDidReveal()
 
-    func pickerDidHide()
+    func tableDidHide()
 
     func locationDidUpdate(toLocation newLocation: String)
 }
