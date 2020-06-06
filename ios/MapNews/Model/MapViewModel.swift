@@ -32,6 +32,7 @@ class MapViewModel {
 
     init(within bounds: GMSCoordinateBounds) {
         database = SQLDatabase()
+        database.populateDatabaseWithCountries()
         allCountryCoordinateDTOs = database.queryAllCountriesAndCoordinates() ?? []
         currentBounds = bounds
     }

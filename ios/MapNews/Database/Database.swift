@@ -12,4 +12,6 @@ protocol Database {
     func queryAllCountries() -> [String]?
 
     func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]?
+
+    func populateDatabaseWithCountries()
 }

@@ -65,4 +65,7 @@ class MockDatabase: Database {
             CountryCoordinateDTO(name: "China", coordinates: Coordinates(lat: 35.86166, long: 104.195397))
         ]
     }
+
+    func populateDatabaseWithCountries() {
+    }
 }
