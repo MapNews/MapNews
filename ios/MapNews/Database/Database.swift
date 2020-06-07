@@ -14,4 +14,6 @@ protocol Database {
     func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]?
 
     func populateDatabaseWithCountries()
+
+    func clearTable()
 }

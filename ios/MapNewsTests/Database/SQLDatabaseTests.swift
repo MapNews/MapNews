@@ -9,83 +9,70 @@
 import XCTest
 
 class SQLDatabaseTests: XCTestCase {
-    var database: SQLDatabase!
+    static var database: SQLDatabase!
 
-    override func setUp() {
+    override static func setUp() {
         database = SQLDatabase()
         Seed(database: database).deleteAll()
-    }
-
-    func testSeeding() {
-        XCTAssertNil(database.queryLatLong(name: "Hogwarts"))
         let seedCommandString =
-            """
-            INSERT INTO COUNTRIES (COUNTRY_CODE, LAT, LONG, NAME) VALUES ('HW', 1.1, 102.78, 'Hogwarts');
-            """
-        Seed(database: database).insert(seedCommandString)
-        assertCountryExists(name: "Hogwarts", at: Coordinates(lat: 1.1, long: 102.78))
-    }
-
-    func testClear() {
-        let seedCommandString =
-            """
-            INSERT INTO COUNTRIES (COUNTRY_CODE, LAT, LONG, NAME) VALUES
+        """
+            INSERT INTO COUNTRIES
+                (COUNTRY_CODE, LAT, LONG, NAME)
+            VALUES
                 ('HW', 1.1, 102.78, 'Hogwarts'),
                 ('AW', 1.0, 102.98, 'America');
             """
         Seed(database: database).insert(seedCommandString)
-        assertCountryExists(name: "Hogwarts", at: Coordinates(lat: 1.1, long: 102.78))
-        assertCountryExists(name: "America", at: Coordinates(lat: 1.0, long: 102.98))
-        let deleteCommandString =
-            """
-            DELETE FROM COUNTRIES WHERE COUNTRY_CODE = 'HW'
-            """
-        Seed(database: database).delete(deleteCommandString)
-        assertCountryDoesNotExist(name: "Hogwarts")
-        assertCountryExists(name: "America", at: Coordinates(lat: 1.0, long: 102.98))
     }
 
-    func testDeleteAll() {
-        let seedCommandString =
-            """
-            INSERT INTO COUNTRIES (COUNTRY_CODE, LAT, LONG, NAME) VALUES
-                ('HW', 1.1, 102.78, 'Hogwarts'),
-                ('AW', 1.0, 102.98, 'America');
-            """
-        Seed(database: database).insert(seedCommandString)
-        assertCountryExists(name: "Hogwarts", at: Coordinates(lat: 1.1, long: 102.78))
-        assertCountryExists(name: "America", at: Coordinates(lat: 1.0, long: 102.98))
-        Seed(database: database).deleteAll()
-        assertCountryDoesNotExist(name: "Hogwarts")
-        assertCountryDoesNotExist(name: "America")
+    override func tearDown() {
+        sleep(2)
     }
 
     func testQueryLatLong_locationNotInDatabase() {
-        XCTAssertNil(database.queryLatLong(name: "Singapore"))
+        XCTAssertNil(SQLDatabaseTests.database.queryLatLong(name: "Singapore"))
     }
 
     func testQueryLatLong_locationInDatabase() {
-        let seedCommandString =
-            """
-            INSERT INTO COUNTRIES (COUNTRY_CODE, LAT, LONG, NAME) VALUES
-                ('HW', 1.1, 102.78, 'Hogwarts'),
-                ('AW', 1.0, 102.98, 'America');
-            """
-        Seed(database: database).insert(seedCommandString)
         assertCountryExists(name: "Hogwarts", at: Coordinates(lat: 1.1, long: 102.78))
         assertCountryExists(name: "America", at: Coordinates(lat: 1.0, long: 102.98))
+    }
+
+    func testQueryAllCountries_twoCountries() {
+        let countCommandString =
+        """
+            SELECT COUNT(*) FROM COUNTRIES
+            """
+        let countCommand = SQLSelect(command: countCommandString, database: SQLDatabaseTests.database.database)
+        countCommand.execute()
+        let count = SQLInteger.extract(from: countCommand, index: 0)
+        XCTAssertEqual(count, 2)
+    }
+
+    func testQueryAllCountriesAndCoordinates() {
+        guard let allCountriesDTO = SQLDatabaseTests.database.queryAllCountriesAndCoordinates() else {
+            XCTFail("Should return 2 DTOs")
+            return
+        }
+        XCTAssertEqual(allCountriesDTO.count, 2)
+        XCTAssertTrue(allCountriesDTO.contains(
+            CountryCoordinateDTO(name: "Hogwarts", coordinates: Coordinates(lat: 1.1, long: 102.78)))
+        )
+        XCTAssertTrue(allCountriesDTO.contains(
+            CountryCoordinateDTO(name: "America", coordinates: Coordinates(lat: 1.0, long: 102.98)))
+        )
     }
 }
 
 extension SQLDatabaseTests {
     func assertCountryExists(name: String, at coordinates: Coordinates) {
         XCTAssertEqual(
-            database.queryLatLong(name: name) ?? Coordinates(lat: 0, long: 0),
+            SQLDatabaseTests.database.queryLatLong(name: name) ?? Coordinates(lat: 0, long: 0),
             coordinates
         )
     }
 
     func assertCountryDoesNotExist(name: String) {
-        XCTAssertNil(database.queryLatLong(name: name))
+        XCTAssertNil(SQLDatabaseTests.database.queryLatLong(name: name))
     }
 }

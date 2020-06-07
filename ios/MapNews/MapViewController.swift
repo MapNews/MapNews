@@ -10,11 +10,11 @@ import UIKit
 import GoogleMaps
 
 class MapViewController: UIViewController {
-    var pickerView: UIPickerView!
     var mapView: MapNewsView!
     var locationSelector: MapNewsSelector!
     var locationSelectorMask: UIView!
     var model: MapViewModel!
+    var mapNewsMarkers: [MapNewsMarker] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,12 +89,14 @@ extension MapViewController: MapNewsSelectorObserver {
     }
 
     private func updateMarkers() {
+        mapNewsMarkers = []
         model.allCountriesInBounds.forEach {
             let position = CLLocationCoordinate2D.from($0.coordinates)
             let marker = MapNewsMarker(at: $0.countryName, position: position)
             marker.icon = UIImage(named: "news")
             marker.title = $0.countryName
             marker.map = mapView
+            mapNewsMarkers.append(marker)
         }
     }
 }
@@ -111,6 +113,18 @@ extension MapViewController {
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         locationDidUpdate(toCoordinate: position.target)
+    }
+
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        marker.map = nil
+        mapNewsMarkers.forEach {
+            $0.zIndex = 0
+        }
+        marker.zIndex = 1
+        marker.map = mapView
+        mapView.animate(to: GMSCameraPosition(target: marker.position, zoom: mapView.camera.zoom))
+        mapView.selectedMarker = marker
+        return true
     }
 }
 

@@ -32,9 +32,11 @@ class MapViewModel {
 
     init(within bounds: GMSCoordinateBounds) {
         database = SQLDatabase()
+        database.clearTable()
         database.populateDatabaseWithCountries()
         allCountryCoordinateDTOs = database.queryAllCountriesAndCoordinates() ?? []
         currentBounds = bounds
+        NewsClient.queryNews(at: "SG", name: "Singapore", callback: handleNews(result:))
     }
 }
 
@@ -44,5 +46,9 @@ extension MapViewModel {
             return nil
         }
         return CLLocationCoordinate2D.from(coordinates)
+    }
+
+    func handleNews(result: Data) {
+        print(result)
     }
 }

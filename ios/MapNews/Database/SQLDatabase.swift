@@ -158,4 +158,9 @@ extension SQLDatabase: Database {
         populateTable(countries: countries)
     }
 
+    func clearTable() {
+        let deleteAllCommand = SQLDelete(command: "DELETE FROM COUNTRIES", database: database)
+        deleteAllCommand.execute()
+        deleteAllCommand.tearDown()
+    }
 }

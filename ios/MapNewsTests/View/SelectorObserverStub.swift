@@ -23,6 +23,4 @@ class SelectorObserverStub: MapNewsSelectorObserver {
     func locationDidUpdate(toLocation newLocation: String) {
         locationExpectation?.fulfill()
     }
-
-
 }
