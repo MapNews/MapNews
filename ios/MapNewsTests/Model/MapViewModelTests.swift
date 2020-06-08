@@ -55,7 +55,10 @@ class MapViewModelTests: XCTestCase {
         )
         model.currentBounds = newBounds
         XCTAssertTrue(model.allCountriesInBounds.contains(
-            CountryCoordinateDTO(name: "Montreal", coordinates: Coordinates(lat: 20.22, long: 103.988))
+            CountryCoordinateDTO(
+                name: "Montreal",
+                countryCode: "MN",
+                coordinates: Coordinates(lat: 20.22, long: 103.988))
         ))
     }
 
@@ -66,7 +69,10 @@ class MapViewModelTests: XCTestCase {
         )
         model.currentBounds = withoutChina
         XCTAssertFalse(model.allCountriesInBounds.contains(
-            CountryCoordinateDTO(name: "China", coordinates: Coordinates(lat: 35.86166, long: 104.195397))
+            CountryCoordinateDTO(
+                name: "China",
+                countryCode: "CN",
+                coordinates: Coordinates(lat: 35.86166, long: 104.195397))
         ))
     }
 }
@@ -91,9 +97,18 @@ class MockDatabase: Database {
 
     func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]? {
         return [
-            CountryCoordinateDTO(name: "Singapore", coordinates: Coordinates(lat: 1.352083, long: 103.819836)),
-            CountryCoordinateDTO(name: "China", coordinates: Coordinates(lat: 35.86166, long: 104.195397)),
-            CountryCoordinateDTO(name: "Montreal", coordinates: Coordinates(lat: 20.22, long: 103.988))
+            CountryCoordinateDTO(
+                name: "Singapore",
+                countryCode: "SG",
+                coordinates: Coordinates(lat: 1.352083, long: 103.819836)),
+            CountryCoordinateDTO(
+                name: "China",
+                countryCode: "CN",
+                coordinates: Coordinates(lat: 35.86166, long: 104.195397)),
+            CountryCoordinateDTO(
+                name: "Montreal",
+                countryCode: "MN",
+                coordinates: Coordinates(lat: 20.22, long: 103.988))
         ]
     }
 
@@ -107,7 +122,10 @@ class MockDatabase: Database {
 class MockDatabaseOneEntry: Database {
     func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]? {
         return [
-            CountryCoordinateDTO(name: "Hogwarts", coordinates: Coordinates(lat: 1.1, long: 102.78))
+            CountryCoordinateDTO(
+                name: "Hogwarts",
+                countryCode: "HW",
+                coordinates: Coordinates(lat: 1.1, long: 102.78))
         ]
     }
 

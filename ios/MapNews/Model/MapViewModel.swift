@@ -15,6 +15,7 @@ class MapViewModel {
     }
     var allCountryCoordinateDTOs: [CountryCoordinateDTO] = []
     var allCountriesInBounds: [CountryCoordinateDTO] = []
+    var countryToHeadlineMap: [CountryCoordinateDTO: ArticleDTO] = [:]
     var currentBounds: GMSCoordinateBounds {
         didSet {
             allCountriesInBounds = allCountryCoordinateDTOs.filter {
@@ -25,6 +26,7 @@ class MapViewModel {
     var allCountryNames: [String]? {
         database.queryAllCountries()
     }
+    var observers: [MapViewModelObserver] = []
 
     convenience init() {
         self.init(within: MapConstants.defaultBounds)
@@ -36,7 +38,14 @@ class MapViewModel {
         database.populateDatabaseWithCountries()
         allCountryCoordinateDTOs = database.queryAllCountriesAndCoordinates() ?? []
         currentBounds = bounds
-        NewsClient.queryNews(at: "SG", name: "Singapore", callback: handleNews(result:))
+    }
+
+    func updateNews(country: CountryCoordinateDTO) {
+        NewsClient.queryArticles(country: country, callback: getHeadline(articles:country:))
+    }
+
+    func addObserver(_ observer: MapViewModelObserver) {
+        observers.append(observer)
     }
 }
 
@@ -48,7 +57,11 @@ extension MapViewModel {
         return CLLocationCoordinate2D.from(coordinates)
     }
 
-    func handleNews(result: Data) {
-        print(result)
+    func getHeadline(articles: [ArticleDTO], country: CountryCoordinateDTO) {
+        if articles.count == 0 {
+            return
+        }
+        countryToHeadlineMap[country] = articles[0]
+        observers.forEach { $0.updateHeadlines(country: country, headline: articles[0].title) }
     }
 }

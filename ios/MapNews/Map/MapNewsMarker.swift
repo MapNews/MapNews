@@ -8,11 +8,11 @@
 import GoogleMaps
 
 class MapNewsMarker: GMSMarker {
-    let locationName: String
+    let location: CountryCoordinateDTO
 
-    init(at locationName: String, position: CLLocationCoordinate2D) {
-        self.locationName = locationName
+    init(at location: CountryCoordinateDTO) {
+        self.location = location
         super.init()
-        self.position = position
+        self.position = CLLocationCoordinate2D.from(location.coordinates)
     }
 }

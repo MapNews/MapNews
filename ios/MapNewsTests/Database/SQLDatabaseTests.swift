@@ -25,10 +25,6 @@ class SQLDatabaseTests: XCTestCase {
         Seed(database: database).insert(seedCommandString)
     }
 
-    override func tearDown() {
-        sleep(2)
-    }
-
     func testQueryLatLong_locationNotInDatabase() {
         XCTAssertNil(SQLDatabaseTests.database.queryLatLong(name: "Singapore"))
     }
@@ -56,10 +52,10 @@ class SQLDatabaseTests: XCTestCase {
         }
         XCTAssertEqual(allCountriesDTO.count, 2)
         XCTAssertTrue(allCountriesDTO.contains(
-            CountryCoordinateDTO(name: "Hogwarts", coordinates: Coordinates(lat: 1.1, long: 102.78)))
+            CountryCoordinateDTO(name: "Hogwarts", countryCode: "HW", coordinates: Coordinates(lat: 1.1, long: 102.78)))
         )
         XCTAssertTrue(allCountriesDTO.contains(
-            CountryCoordinateDTO(name: "America", coordinates: Coordinates(lat: 1.0, long: 102.98)))
+            CountryCoordinateDTO(name: "America", countryCode: "AW", coordinates: Coordinates(lat: 1.0, long: 102.98)))
         )
     }
 }

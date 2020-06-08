@@ -12,7 +12,6 @@ class SQLDatabase {
     static let filename = "coordinates"
     static let fileType = "txt"
 
-    static private let SqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
     var database: OpaquePointer?
 
@@ -140,10 +139,14 @@ extension SQLDatabase: Database {
         let command = SQLSelect(command: Commands.queryCountryCoordinateDTOStatementString, database: database)
         command.execute()
         while !command.isNullable {
-            let country = SQLString.extract(from: command, index: 0)
-            let lat = SQLDouble.extract(from: command, index: 1)
-            let long = SQLDouble.extract(from: command, index: 2)
-            let currentDTO = CountryCoordinateDTO(name: country, coordinates: Coordinates(lat: lat, long: long))
+            let countryCode = SQLString.extract(from: command, index: 0)
+            let country = SQLString.extract(from: command, index: 1)
+            let lat = SQLDouble.extract(from: command, index: 2)
+            let long = SQLDouble.extract(from: command, index: 3)
+            let currentDTO = CountryCoordinateDTO(
+                name: country,
+                countryCode: countryCode,
+                coordinates: Coordinates(lat: lat, long: long))
             countryCoordinatesDTOs.append(currentDTO)
             command.execute()
         }

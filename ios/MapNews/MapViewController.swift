@@ -14,13 +14,14 @@ class MapViewController: UIViewController {
     var locationSelector: MapNewsSelector!
     var locationSelectorMask: UIView!
     var model: MapViewModel!
-    var mapNewsMarkers: [MapNewsMarker] = []
+    var mapNewsMarkers: [CountryCoordinateDTO: MapNewsMarker] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initMap()
         model = MapViewModel(within: mapView.mapBounds)
+        model.addObserver(self)
         initLocationSelector()
         initLocationSelectorMask()
 
@@ -89,15 +90,26 @@ extension MapViewController: MapNewsSelectorObserver {
     }
 
     private func updateMarkers() {
-        mapNewsMarkers = []
+        mapNewsMarkers = [:]
         model.allCountriesInBounds.forEach {
-            let position = CLLocationCoordinate2D.from($0.coordinates)
-            let marker = MapNewsMarker(at: $0.countryName, position: position)
+            let marker = MapNewsMarker(at: $0)
             marker.icon = UIImage(named: "news")
             marker.title = $0.countryName
             marker.map = mapView
-            mapNewsMarkers.append(marker)
+            mapNewsMarkers[$0] = marker
         }
+    }
+}
+
+extension MapViewController: MapViewModelObserver {
+    func updateHeadlines(country: CountryCoordinateDTO, headline: String) {
+        print(country.countryName)
+        print(headline)
+        guard let selectedMarker = mapNewsMarkers[country] else {
+            return
+        }
+        selectedMarker.snippet = headline
+        mapView.selectedMarker = selectedMarker
     }
 }
 
@@ -116,14 +128,17 @@ extension MapViewController: GMSMapViewDelegate {
     }
 
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        marker.map = nil
-        mapNewsMarkers.forEach {
+        guard let mapNewsMarker = marker as? MapNewsMarker else {
+            return true
+        }
+        model.updateNews(country: mapNewsMarker.location)
+        mapNewsMarker.map = nil
+        mapNewsMarkers.values.forEach {
             $0.zIndex = 0
         }
-        marker.zIndex = 1
-        marker.map = mapView
-        mapView.animate(to: GMSCameraPosition(target: marker.position, zoom: mapView.camera.zoom))
-        mapView.selectedMarker = marker
+        mapNewsMarker.zIndex = 1
+        mapNewsMarker.map = mapView
+        mapView.animate(to: GMSCameraPosition(target: mapNewsMarker.position, zoom: mapView.camera.zoom))
         return true
     }
 }

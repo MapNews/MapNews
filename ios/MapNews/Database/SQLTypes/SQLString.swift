@@ -8,6 +8,7 @@
 import SQLite3
 
 class SQLString: SQLType {
+    static private let SqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
     let argument: String
 
     required init?(argument: Any) {
@@ -18,7 +19,7 @@ class SQLString: SQLType {
     }
 
     func bind(_ queryStatment: OpaquePointer?, index: Int32) {
-        sqlite3_bind_text(queryStatment, index, argument, -1, nil)
+        sqlite3_bind_text(queryStatment, index, argument, -1, SQLString.SqliteTransient)
     }
 
     static func extract(from command: SQLCommand, index: Int32) -> String {

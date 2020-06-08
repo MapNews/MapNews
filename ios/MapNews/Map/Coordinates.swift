@@ -9,7 +9,7 @@
 // To be used with database, reduce database and GMS coupling
 import GoogleMaps
 
-public struct Coordinates: Equatable {
+public struct Coordinates: Hashable {
     public let lat: Double
     public let long: Double 
 

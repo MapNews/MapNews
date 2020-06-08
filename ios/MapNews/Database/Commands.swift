@@ -24,7 +24,7 @@ struct Commands {
 
     static let queryCountryCoordinateDTOStatementString =
     """
-    SELECT NAME, LAT, LONG FROM COUNTRIES
+    SELECT COUNTRY_CODE, NAME, LAT, LONG FROM COUNTRIES
     """
 
     static let insertStatementString =
