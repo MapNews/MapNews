@@ -15,7 +15,7 @@ class SQLDatabaseTests: XCTestCase {
         database = SQLDatabase()
         Seed(database: database).deleteAll()
         let seedCommandString =
-        """
+            """
             INSERT INTO COUNTRIES
                 (COUNTRY_CODE, LAT, LONG, NAME)
             VALUES
@@ -36,7 +36,7 @@ class SQLDatabaseTests: XCTestCase {
 
     func testQueryAllCountries_twoCountries() {
         let countCommandString =
-        """
+            """
             SELECT COUNT(*) FROM COUNTRIES
             """
         let countCommand = SQLSelect(command: countCommandString, database: SQLDatabaseTests.database.database)
