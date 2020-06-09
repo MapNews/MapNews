@@ -103,13 +103,12 @@ extension MapViewController: MapNewsSelectorObserver {
 
 extension MapViewController: MapViewModelObserver {
     func updateHeadlines(country: CountryCoordinateDTO, headline: String) {
-        print(country.countryName)
-        print(headline)
         guard let selectedMarker = mapNewsMarkers[country] else {
             return
         }
         selectedMarker.snippet = headline
         mapView.selectedMarker = selectedMarker
+        selectedMarker.zIndex = 1
     }
 }
 
@@ -128,6 +127,7 @@ extension MapViewController: GMSMapViewDelegate {
     }
 
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        mapView.selectedMarker = nil
         guard let mapNewsMarker = marker as? MapNewsMarker else {
             return true
         }
@@ -136,10 +136,13 @@ extension MapViewController: GMSMapViewDelegate {
         mapNewsMarkers.values.forEach {
             $0.zIndex = 0
         }
-        mapNewsMarker.zIndex = 1
         mapNewsMarker.map = mapView
         mapView.animate(to: GMSCameraPosition(target: mapNewsMarker.position, zoom: mapView.camera.zoom))
         return true
+    }
+
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        mapView.selectedMarker = nil
     }
 }
 

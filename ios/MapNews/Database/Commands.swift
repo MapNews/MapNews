@@ -37,4 +37,9 @@ struct Commands {
     SELECT NAME FROM COUNTRIES
     ORDER BY NAME
     """
+
+    static let countCommandString =
+    """
+    SELECT COUNT(*) FROM COUNTRIES
+    """
 }

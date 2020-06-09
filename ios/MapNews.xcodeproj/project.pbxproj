@@ -232,7 +232,6 @@
 				37A8BC5E247CA75B00FFEBC5 /* View */,
 				37A8BC5D247CA71200FFEBC5 /* Database */,
 				377AB72E2487D94100C0F72E /* Client */,
-				375992202476086A00F36806 /* Map */,
 				371E55F9247215EA00B9F4CB /* Main.storyboard */,
 				371E55FC247215EB00B9F4CB /* Assets.xcassets */,
 				371E55FE247215EB00B9F4CB /* LaunchScreen.storyboard */,
@@ -387,6 +386,7 @@
 		37A8BC5E247CA75B00FFEBC5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				375992202476086A00F36806 /* Map */,
 				37A2D8EA247B8C6D00696F24 /* MapNewsSelector.swift */,
 				377AB7272487322A00C0F72E /* Selector.swift */,
 				37A2D8EE247B9F4700696F24 /* MapNewsSelectorObserver.swift */,

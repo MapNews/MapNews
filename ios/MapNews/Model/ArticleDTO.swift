@@ -38,7 +38,7 @@ struct ArticleDTO: Equatable {
             print("Unable to extract url object from " + title)
             return nil
         }
-        let urlToImage = JSONParser.getObject(from: jsonData, key: "urlToImage") as? String ?? "No Image"
+        let urlToImage = JSONParser.getObject(from: jsonData, key: "urlToImage") as? String ?? "No image"
         guard let publishedAt = JSONParser.getObject(from: jsonData, key: "publishedAt") as? String else {
             print("Unable to extract publishedAt object from " + title)
             return nil

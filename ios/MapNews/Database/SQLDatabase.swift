@@ -95,14 +95,12 @@ class SQLDatabase {
                 .execute()
             command.reset()
         }
-        print("Successfully saved all countries")
         command.tearDown()
     }
 
     private func createTable() {
         let command = SQLCreate(command: Commands.createTableString, database: database)
         command.execute()
-        print("Table created")
         command.tearDown()
     }
 }
@@ -158,6 +156,15 @@ extension SQLDatabase: Database {
         guard let countries = readCsvIntoArray(from: path!) else {
             return
         }
+        let countCommand = SQLSelect(command: Commands.countCommandString, database: database)
+        countCommand.execute()
+        let noOfEntries = SQLInteger.extract(from: countCommand, index: 0)
+        if noOfEntries == 244 {
+            // Already populated
+            print("Table already populated")
+            return
+        }
+        clearTable()
         populateTable(countries: countries)
     }
 
