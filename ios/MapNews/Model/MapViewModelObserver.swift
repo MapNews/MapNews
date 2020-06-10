@@ -7,5 +7,5 @@
 //
 
 protocol MapViewModelObserver {
-    func updateHeadlines(country: CountryCoordinateDTO, headline: String)
+    func updateHeadlines(country: CountryCoordinateDTO, article: ArticleDTO)
 }

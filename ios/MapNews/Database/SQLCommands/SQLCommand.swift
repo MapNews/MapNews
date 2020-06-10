@@ -13,7 +13,7 @@ protocol SQLCommand {
 
     init(command: String, database: OpaquePointer?)
 
-    func execute()
+    func execute() 
 }
 
 extension SQLCommand {

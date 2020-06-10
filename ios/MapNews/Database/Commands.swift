@@ -22,7 +22,7 @@ struct Commands {
     WHERE NAME = ?;
     """
 
-    static let queryCountryCoordinateDTOStatementString =
+    static let queryAllCountryCoordinateDTOStatementString =
     """
     SELECT COUNTRY_CODE, NAME, LAT, LONG FROM COUNTRIES
     """
@@ -41,5 +41,11 @@ struct Commands {
     static let countCommandString =
     """
     SELECT COUNT(*) FROM COUNTRIES
+    """
+
+    static let queryCountryCoordinateDTOStatementString =
+    """
+    SELECT COUNTRY_CODE, LAT, LONG FROM COUNTRIES
+    WHERE NAME = ?;
     """
 }

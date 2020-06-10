@@ -23,22 +23,6 @@ class MapViewModelTests: XCTestCase {
         XCTAssertEqual(model.allCountryCoordinateDTOs.count, 3)
     }
 
-    func testGetLatLong_CountryExists() {
-        guard let singaporeCoordinates = model.getLatLong(for: "Singapore") else {
-            return
-        }
-        XCTAssertEqual(Coordinates.from(singaporeCoordinates), Coordinates(lat: 1.352083, long: 103.819836))
-        guard let chinaCoordinates = model.getLatLong(for: "China") else {
-            return
-        }
-        XCTAssertEqual(Coordinates.from(chinaCoordinates), Coordinates(lat: 35.86166, long: 104.195397))
-    }
-
-    func testGetLatLong_CountryDoesNotExist() {
-        XCTAssertNil(model.getLatLong(for: "Hogwarts"))
-        XCTAssertNil(model.getLatLong(for: "🐌"))
-    }
-
     func testAllCountries() {
         XCTAssertEqual(model.allCountryNames?.count ?? 0, 3)
     }
@@ -78,15 +62,28 @@ class MapViewModelTests: XCTestCase {
 }
 
 class MockDatabase: Database {
+    let singaporeDTO = CountryCoordinateDTO(
+        name: "Singapore",
+        countryCode: "SG",
+        coordinates: Coordinates(lat: 1.352083, long: 103.819836))
+    let chinaDTO = CountryCoordinateDTO(
+        name: "China",
+        countryCode: "CN",
+        coordinates: Coordinates(lat: 35.86166, long: 104.195397))
+    let montrealDTO = CountryCoordinateDTO(
+        name: "Montreal",
+        countryCode: "MN",
+        coordinates: Coordinates(lat: 20.22, long: 103.988))
+
     func queryLatLong(name: String) -> Coordinates? {
         if name == "Singapore" {
-            return Coordinates(lat: 1.352083, long: 103.819836)
+            return singaporeDTO.coordinates
         }
         if name == "China" {
-            return Coordinates(lat: 35.86166, long: 104.195397)
+            return chinaDTO.coordinates
         }
         if name == "Montreal" {
-            return Coordinates(lat: 20.22, long: 103.988)
+            return montrealDTO.coordinates
         }
         return nil
     }
@@ -96,20 +93,7 @@ class MockDatabase: Database {
     }
 
     func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]? {
-        return [
-            CountryCoordinateDTO(
-                name: "Singapore",
-                countryCode: "SG",
-                coordinates: Coordinates(lat: 1.352083, long: 103.819836)),
-            CountryCoordinateDTO(
-                name: "China",
-                countryCode: "CN",
-                coordinates: Coordinates(lat: 35.86166, long: 104.195397)),
-            CountryCoordinateDTO(
-                name: "Montreal",
-                countryCode: "MN",
-                coordinates: Coordinates(lat: 20.22, long: 103.988))
-        ]
+        return [singaporeDTO, chinaDTO, montrealDTO]
     }
 
     func populateDatabaseWithCountries() {
@@ -117,21 +101,33 @@ class MockDatabase: Database {
 
     func clearTable() {
     }
+
+    func queryCountryDTO(name: String) -> CountryCoordinateDTO? {
+        if name == "Singapore" {
+            return singaporeDTO
+        }
+        if name == "China" {
+            return chinaDTO
+        }
+        if name == "Montreal" {
+            return montrealDTO
+        }
+        return nil
+    }
 }
 
 class MockDatabaseOneEntry: Database {
+    let hogwartsDTO = CountryCoordinateDTO(
+        name: "Hogwarts",
+        countryCode: "HW",
+        coordinates: Coordinates(lat: 1.1, long: 102.78))
     func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]? {
-        return [
-            CountryCoordinateDTO(
-                name: "Hogwarts",
-                countryCode: "HW",
-                coordinates: Coordinates(lat: 1.1, long: 102.78))
-        ]
+        return [ hogwartsDTO ]
     }
 
     func queryLatLong(name: String) -> Coordinates? {
         if name == "Hogwarts" {
-            return Coordinates(lat: 1.1, long: 102.78)
+            return hogwartsDTO.coordinates
         }
         return nil
     }
@@ -144,5 +140,12 @@ class MockDatabaseOneEntry: Database {
     }
 
     func clearTable() {
+    }
+
+    func queryCountryDTO(name: String) -> CountryCoordinateDTO? {
+        if name == "Hogwarts" {
+            return hogwartsDTO
+        }
+        return nil
     }
 }

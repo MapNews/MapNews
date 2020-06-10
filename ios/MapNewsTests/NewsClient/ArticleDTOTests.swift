@@ -76,6 +76,17 @@ class ArticleDTOTests: XCTestCase {
         "content": content
     ]
 
+    let dataNoDescription: Any = [
+        "source": ["id": nil, "name": "CNA"],
+        "author": author,
+        "title": title,
+        "description": nil,
+        "url": url,
+        "urlToImage": urlToImage,
+        "publishedAt": publishedAt,
+        "content": content
+    ]
+
     func testInit_withAuthor_withContent() {
         guard let sampleArticle = ArticleDTO(jsonData: dataWithAuthorWithContent) else {
             XCTFail("Should be able to create article DTO from jsonobject")
@@ -85,7 +96,6 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.urlToImage, ArticleDTOTests.urlToImage)
         XCTAssertEqual(sampleArticle.publishedAt, ArticleDTOTests.publishedAt)
         XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
     }
@@ -99,7 +109,6 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.urlToImage, ArticleDTOTests.urlToImage)
         XCTAssertEqual(sampleArticle.publishedAt, ArticleDTOTests.publishedAt)
         XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
     }
@@ -113,7 +122,6 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.urlToImage, ArticleDTOTests.urlToImage)
         XCTAssertEqual(sampleArticle.publishedAt, ArticleDTOTests.publishedAt)
         XCTAssertEqual(sampleArticle.content, "No content")
     }
@@ -127,7 +135,6 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.urlToImage, ArticleDTOTests.urlToImage)
         XCTAssertEqual(sampleArticle.publishedAt, ArticleDTOTests.publishedAt)
         XCTAssertEqual(sampleArticle.content, "No content")
     }
@@ -141,7 +148,19 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.urlToImage, "No image")
+        XCTAssertEqual(sampleArticle.publishedAt, ArticleDTOTests.publishedAt)
+        XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
+    }
+
+    func testInit_noDescription(){
+        guard let sampleArticle = ArticleDTO(jsonData: dataNoDescription) else {
+            XCTFail("Should be able to create article DTO from jsonobject")
+            return
+        }
+        XCTAssertEqual(sampleArticle.author, ArticleDTOTests.author)
+        XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
+        XCTAssertEqual(sampleArticle.desc, "No description")
+        XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
         XCTAssertEqual(sampleArticle.publishedAt, ArticleDTOTests.publishedAt)
         XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
     }

@@ -14,6 +14,7 @@ struct Seed {
 
     func deleteAll() {
         let deleteAllCommand = SQLDelete(command: "DELETE FROM COUNTRIES", database: database)
+        print("Deleting all entries...")
         deleteAllCommand.execute()
     }
 

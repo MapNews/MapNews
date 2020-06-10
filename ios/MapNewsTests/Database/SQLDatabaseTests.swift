@@ -10,10 +10,18 @@ import XCTest
 
 class SQLDatabaseTests: XCTestCase {
     static var database: SQLDatabase!
+    private let hogwartsDTO = CountryCoordinateDTO(
+        name: "Hogwarts",
+        countryCode: "HW",
+        coordinates: Coordinates(lat: 1.1, long: 102.78))
+    private let americaDTO = CountryCoordinateDTO(
+        name: "America",
+        countryCode: "AW",
+        coordinates: Coordinates(lat: 1.0, long: 102.98))
 
-    override static func setUp() {
-        database = SQLDatabase()
-        Seed(database: database).deleteAll()
+    override func setUp() {
+        SQLDatabaseTests.database = SQLDatabase()
+        Seed(database: SQLDatabaseTests.database).deleteAll()
         let seedCommandString =
             """
             INSERT INTO COUNTRIES
@@ -22,16 +30,16 @@ class SQLDatabaseTests: XCTestCase {
                 ('HW', 1.1, 102.78, 'Hogwarts'),
                 ('AW', 1.0, 102.98, 'America');
             """
-        Seed(database: database).insert(seedCommandString)
+        Seed(database: SQLDatabaseTests.database).insert(seedCommandString)
     }
 
     func testQueryLatLong_locationNotInDatabase() {
-        XCTAssertNil(SQLDatabaseTests.database.queryLatLong(name: "Singapore"))
+        XCTAssertNil(SQLDatabaseTests.database.queryLatLong(name: "Atlantis"))
     }
 
     func testQueryLatLong_locationInDatabase() {
-        assertCountryExists(name: "Hogwarts", at: Coordinates(lat: 1.1, long: 102.78))
-        assertCountryExists(name: "America", at: Coordinates(lat: 1.0, long: 102.98))
+        assertCountryExists(name: "Hogwarts", at: hogwartsDTO.coordinates)
+        assertCountryExists(name: "America", at: americaDTO.coordinates)
     }
 
     func testQueryAllCountries_twoCountries() {
@@ -51,12 +59,26 @@ class SQLDatabaseTests: XCTestCase {
             return
         }
         XCTAssertEqual(allCountriesDTO.count, 2)
-        XCTAssertTrue(allCountriesDTO.contains(
-            CountryCoordinateDTO(name: "Hogwarts", countryCode: "HW", coordinates: Coordinates(lat: 1.1, long: 102.78)))
-        )
-        XCTAssertTrue(allCountriesDTO.contains(
-            CountryCoordinateDTO(name: "America", countryCode: "AW", coordinates: Coordinates(lat: 1.0, long: 102.98)))
-        )
+        XCTAssertTrue(allCountriesDTO.contains(hogwartsDTO))
+        XCTAssertTrue(allCountriesDTO.contains(americaDTO))
+    }
+
+    func testQueryCountryAndCoordinates_countriesExists() {
+        guard let queryHogwartsDTO = SQLDatabaseTests.database.queryCountryDTO(name: "Hogwarts") else {
+            XCTFail("Should return hogwarts DTO")
+            return
+        }
+        XCTAssertEqual(queryHogwartsDTO, hogwartsDTO)
+        guard let queryAmericaDTO = SQLDatabaseTests.database.queryCountryDTO(name: "America") else {
+            XCTFail("Should return hogwarts DTO")
+            return
+        }
+        XCTAssertEqual(queryAmericaDTO, americaDTO)
+    }
+
+    func testQueryCountryAndCoordinates_countryDoesNotExists() {
+        let queryAtlantis = SQLDatabaseTests.database.queryCountryDTO(name: "Atlantis")
+        XCTAssertNil(queryAtlantis)
     }
 }
 

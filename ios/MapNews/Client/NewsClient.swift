@@ -6,10 +6,10 @@
 //  Copyright © 2020 Hol Yin Ho. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class NewsClient {
-    static let urlString = "https://newsapi.org/v2/top-headlines?country=COUNTRY_CODE&apiKey="
+    static let urlString = "https://newsapi.org/v2/top-headlines?country=COUNTRY_CODE&pageSize=1&language=EN&apiKey="
         + Keys.newsApiKey
 
     static func queryArticles(country: CountryCoordinateDTO,
@@ -29,8 +29,7 @@ class NewsClient {
             print("Url is invalid")
             return
         }
-        print("HTTP GET request to " + countryUrlString)
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+        getData(from: url) { (data, response, error) in
             guard let data = data else {
                 print("Unable to access url")
                 return
@@ -39,7 +38,23 @@ class NewsClient {
                 callback(data)
             }
         }
-        task.resume()
+    }
+
+    private static func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        print("HTTP GET request to " + url.absoluteString)
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+
+    static func downloadImage(from url: URL, callback: @escaping (UIImage) -> Void) {
+        getData(from: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+            DispatchQueue.main.async {
+                guard let image = UIImage(data: data) else {
+                    return
+                }
+                callback(image)
+            }
+        }
     }
 
     private static func convertDataToArticles(_ data: Data) -> [ArticleDTO]? {

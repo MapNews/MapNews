@@ -14,13 +14,13 @@ class NewsClientTests: XCTestCase {
     func testQueryData_countryCodeIsValid() {
         retrieveResultsExpectation = expectation(description: "results retrieved")
         NewsClient.queryData(countryCode: "SG", callback: fulfillExpectationCallback(_:))
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testQueryData_jsonFormatIsValid() {
         retrieveResultsExpectation = expectation(description: "results retrieved")
         NewsClient.queryData(countryCode: "SG", callback: createArticleDTOCallback(_:))
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testQueryArticles() {
@@ -29,7 +29,7 @@ class NewsClientTests: XCTestCase {
             country: CountryCoordinateDTO(name: "Canada", countryCode: "CA", coordinates:
                 Coordinates(lat: 0.5, long: 0.9)),
             callback: returnArticlesCallback(_:_:))
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 }
 

@@ -7,7 +7,7 @@
 //
 import GoogleMaps
 
-class MapViewModel {
+class MapViewModel: Model {
     var database: Database {
         didSet {
             allCountryCoordinateDTOs = database.queryAllCountriesAndCoordinates() ?? []
@@ -49,18 +49,15 @@ class MapViewModel {
 }
 
 extension MapViewModel {
-    func getLatLong(for country: String) -> CLLocationCoordinate2D? {
-        guard let coordinates = database.queryLatLong(name: country) else {
-            return nil
-        }
-        return CLLocationCoordinate2D.from(coordinates)
-    }
-
     func getHeadline(articles: [ArticleDTO], country: CountryCoordinateDTO) {
         if articles.count == 0 {
             return
         }
         countryToHeadlineMap[country] = articles[0]
-        observers.forEach { $0.updateHeadlines(country: country, headline: articles[0].title) }
+        observers.forEach { $0.updateHeadlines(country: country, article: articles[0]) }
+    }
+
+    func getCountryCoordinateDTO(for country: String) -> CountryCoordinateDTO? {
+        return database.queryCountryDTO(name: country)
     }
 }

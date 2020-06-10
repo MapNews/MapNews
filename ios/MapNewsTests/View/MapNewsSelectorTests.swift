@@ -10,12 +10,10 @@ import XCTest
 
 class MapNewsSelectorTests: XCTestCase {
     var selector: MapNewsSelector!
-    private let frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 300, height: 400))
     private let tableData = ["Test", "table", "data"]
 
     override func setUp() {
         selector = MapNewsSelector(
-            frame: frame,
             tableData: tableData,
             mode: .light)
     }
@@ -78,43 +76,45 @@ class MapNewsSelectorTests: XCTestCase {
     }
 
     func testCreateTableView() {
-        let tableView = MapNewsSelector.createTableView(origin: CGPoint.zero, width: frame.width, height: frame.height)
+        let tableView = MapNewsSelector.createTableView()
 
-        XCTAssertEqual(tableView.frame.origin, CGPoint.zero)
-        XCTAssertEqual(tableView.frame.width, frame.width)
-        XCTAssertEqual(tableView.frame.height, frame.height)
+        XCTAssertEqual(tableView.frame.origin, CGPoint(x: 0, y: 50))
+        XCTAssertEqual(tableView.frame.width, MapNewsSelector.tableWidth)
+        XCTAssertEqual(tableView.frame.height, MapNewsSelector.tableHeight)
         XCTAssertTrue(tableView.isHidden)
         XCTAssertTrue(tableView.isUserInteractionEnabled)
         XCTAssertTrue(tableView.layer.masksToBounds)
-        XCTAssertEqual(tableView.layer.cornerRadius, Constants.selectorBorderRadius)
+        XCTAssertEqual(tableView.layer.cornerRadius, MapNewsSelector.selectorBorderRadius)
     }
 
     func testCreateTextField() {
-        let textField =
-            MapNewsSelector.createTextField(width: frame.width, height: frame.height, padding: Constants.labelPadding)
+        let textField = MapNewsSelector.createTextField()
 
-        XCTAssertEqual(textField.frame.width, frame.width - (Constants.labelPadding * 2) - Constants.searchIconWidth)
-        XCTAssertEqual(textField.frame.height, frame.height - (Constants.labelPadding * 2))
-        XCTAssertEqual(textField.frame.origin, CGPoint(x: Constants.labelPadding, y: Constants.labelPadding))
+        XCTAssertEqual(textField.frame.width, MapNewsSelector.selectorWidth - MapNewsSelector.searchIconWidth)
+        XCTAssertEqual(textField.frame.height, MapNewsSelector.labelHeight - (MapNewsSelector.labelPadding * 2))
+        XCTAssertEqual(
+            textField.frame.origin,
+            CGPoint(x: MapNewsSelector.labelPadding, y: MapNewsSelector.labelPadding)
+        )
         XCTAssertEqual(textField.text, "Singapore")
         XCTAssertTrue(textField.isUserInteractionEnabled)
     }
 
     func testCreateLabelBackground() {
-        let labelBackground = MapNewsSelector.createLabelBackground(width: frame.width, height: frame.height)
+        let labelBackground = MapNewsSelector.createLabelBackground()
 
-        XCTAssertEqual(labelBackground.frame.width, frame.width)
-        XCTAssertEqual(labelBackground.frame.height, frame.height)
+        XCTAssertEqual(labelBackground.frame.width, MapNewsSelector.selectorWidth)
+        XCTAssertEqual(labelBackground.frame.height, MapNewsSelector.labelHeight)
         XCTAssertEqual(labelBackground.layer.cornerRadius, 5)
         XCTAssertTrue(labelBackground.layer.masksToBounds)
     }
 
     func testCreateSearchButton() {
-        let searchButton = MapNewsSelector.createSearchButton(within: frame, padding: Constants.labelPadding)
+        let searchButton = MapNewsSelector.createSearchButton()
         selector.mode = .light
 
-        XCTAssertEqual(searchButton.frame.width, Constants.searchIconWidth)
-        XCTAssertEqual(searchButton.frame.height, Constants.searchIconHeight)
+        XCTAssertEqual(searchButton.frame.width, MapNewsSelector.searchIconWidth)
+        XCTAssertEqual(searchButton.frame.height, MapNewsSelector.searchIconHeight)
         XCTAssertEqual(searchButton.image, Constants.searchIcon[.light])
         XCTAssertTrue(searchButton.isUserInteractionEnabled)
     }
@@ -270,14 +270,14 @@ extension MapNewsSelectorTests {
     }
 
     private func assertTableIsVisible() {
-        XCTAssertEqual(selector.frame.width, frame.width)
-        XCTAssertEqual(selector.frame.height, frame.height)
+        XCTAssertEqual(selector.frame.width, MapNewsSelector.selectorWidth)
+        XCTAssertEqual(selector.frame.height, MapNewsSelector.selectorHeight)
         XCTAssertFalse(selector.tableView.isHidden)
     }
 
     private func assertTableIsHidden() {
-        XCTAssertEqual(selector.frame.width, frame.width)
-        XCTAssertEqual(selector.frame.height, Constants.labelHeight)
+        XCTAssertEqual(selector.frame.width, MapNewsSelector.selectorWidth)
+        XCTAssertEqual(selector.frame.height, MapNewsSelector.labelHeight)
         XCTAssertTrue(selector.tableView.isHidden)
     }
 }

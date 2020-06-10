@@ -14,6 +14,7 @@ class SQLInsert: SQLCommand {
     required init(command: String, database: OpaquePointer?) {
         if sqlite3_prepare_v2(database, command, -1, &statement, nil) != SQLITE_OK {
             print("INSERT statement is not prepared")
+            return
         }
     }
 

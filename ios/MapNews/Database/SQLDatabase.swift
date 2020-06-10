@@ -110,6 +110,9 @@ extension SQLDatabase: Database {
         let command = SQLSelect(command: Commands.queryCountryStatementString, database: database)
             .with(argument: SQLString(argument: name)!, index: 1)
         command.execute()
+        if command.isNullable {
+            return nil
+        }
 
         let queryLat = SQLDouble.extract(from: command, index: 0)
         let queryLong = SQLDouble.extract(from: command, index: 1)
@@ -118,6 +121,29 @@ extension SQLDatabase: Database {
 
         command.tearDown()
         return invalidLatLong ? nil : Coordinates(lat: queryLat, long: queryLong)
+    }
+
+    func queryCountryDTO(name: String) -> CountryCoordinateDTO? {
+        let command = SQLSelect(command: Commands.queryCountryCoordinateDTOStatementString, database: database)
+            .with(argument: SQLString(argument: name)!, index: 1)
+        command.execute()
+        if command.isNullable {
+            return nil
+        }
+
+        let countryCode = SQLString.extract(from: command, index: 0)
+        let queryLat = SQLDouble.extract(from: command, index: 1)
+        let queryLong = SQLDouble.extract(from: command, index: 2)
+
+        let invalidLatLong = queryLat == 0 && queryLong == 0
+        command.tearDown()
+        return invalidLatLong
+            ? nil
+            : CountryCoordinateDTO(
+                name: name,
+                countryCode: countryCode,
+                coordinates: Coordinates(lat: queryLat, long: queryLong)
+            )
     }
 
     func queryAllCountries() -> [String]? {
@@ -134,7 +160,7 @@ extension SQLDatabase: Database {
 
     func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]? {
         var countryCoordinatesDTOs: [CountryCoordinateDTO] = []
-        let command = SQLSelect(command: Commands.queryCountryCoordinateDTOStatementString, database: database)
+        let command = SQLSelect(command: Commands.queryAllCountryCoordinateDTOStatementString, database: database)
         command.execute()
         while !command.isNullable {
             let countryCode = SQLString.extract(from: command, index: 0)
@@ -158,7 +184,11 @@ extension SQLDatabase: Database {
         }
         let countCommand = SQLSelect(command: Commands.countCommandString, database: database)
         countCommand.execute()
+        if countCommand.isNullable {
+            return
+        }
         let noOfEntries = SQLInteger.extract(from: countCommand, index: 0)
+        countCommand.tearDown()
         if noOfEntries == 244 {
             // Already populated
             print("Table already populated")

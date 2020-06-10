@@ -5,16 +5,19 @@
 //  Created by Hol Yin Ho on 8/6/20.
 //  Copyright © 2020 Hol Yin Ho. All rights reserved.
 //
+import UIKit
 
-struct ArticleDTO: Equatable {
+class ArticleDTO {
     let source: String
     let author: String
     let title: String
     let desc: String
     let url: String
-    let urlToImage: String
     let publishedAt: String
     let content: String
+    let urlToImage: String?
+    var image: UIImage?
+    var articleObserver: ArticleObserver?
 
     init?(jsonData: Any) {
         guard let title = JSONParser.getObject(from: jsonData, key: "title") as? String else {
@@ -30,15 +33,11 @@ struct ArticleDTO: Equatable {
             return nil
         }
         let author = JSONParser.getObject(from: jsonData, key: "author") as? String ?? "No author"
-        guard let desc = JSONParser.getObject(from: jsonData, key: "description") as? String else {
-            print("Unable to extract description object from " + title)
-            return nil
-        }
+        let desc = JSONParser.getObject(from: jsonData, key: "description") as? String ?? "No description"
         guard let url = JSONParser.getObject(from: jsonData, key: "url") as? String else {
             print("Unable to extract url object from " + title)
             return nil
         }
-        let urlToImage = JSONParser.getObject(from: jsonData, key: "urlToImage") as? String ?? "No image"
         guard let publishedAt = JSONParser.getObject(from: jsonData, key: "publishedAt") as? String else {
             print("Unable to extract publishedAt object from " + title)
             return nil
@@ -50,8 +49,32 @@ struct ArticleDTO: Equatable {
         self.title = title
         self.desc = desc
         self.url = url
-        self.urlToImage = urlToImage
+        self.urlToImage = JSONParser.getObject(from: jsonData, key: "urlToImage") as? String
         self.publishedAt = publishedAt
         self.content = content
+    }
+
+    func loadImage() {
+        if let url = urlToImage, let urlObject = URL(string: url) {
+            NewsClient.downloadImage(from: urlObject) { (image) in
+                self.image = image
+                self.articleObserver?.imageDidLoad(image: image)
+            }
+        } else {
+            print("No image")
+            articleObserver?.imageFailedToLoad()
+        }
+    }
+}
+
+extension ArticleDTO: Equatable {
+    static func == (lhs: ArticleDTO, rhs: ArticleDTO) -> Bool {
+        lhs.source == rhs.source
+            && lhs.author == rhs.author
+            && lhs.title == rhs.title
+            && lhs.desc == rhs.desc
+            && lhs.url == rhs.url
+            && lhs.publishedAt == rhs.publishedAt
+            && lhs.content == rhs.content
     }
 }
