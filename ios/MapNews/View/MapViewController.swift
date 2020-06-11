@@ -70,10 +70,13 @@ extension MapViewController: MapNewsSelectorObserver {
         let newCoordinates = CLLocationCoordinate2D.from(newLocationDTO.coordinates)
         locationDidUpdate(toCoordinate: newCoordinates)
 
-        guard let marker = mapNewsMarkers[newLocationDTO] else {
-            return
+        if let marker = mapNewsMarkers[newLocationDTO] {
+            select(marker: marker)
+        } else {
+            let newMarker = createMarker(at: newLocationDTO)
+            mapNewsMarkers[newLocationDTO] = newMarker
+            select(marker: newMarker)
         }
-        select(marker: marker)
     }
 
     func tableDidReveal() {
@@ -93,10 +96,7 @@ extension MapViewController: MapNewsSelectorObserver {
     private func updateMarkers() {
         mapNewsMarkers = [:]
         model.allCountriesInBounds.forEach {
-            let marker = MapNewsMarker(at: $0)
-            marker.icon = UIImage(named: "news")
-            marker.title = $0.countryName
-            marker.map = mapView
+            let marker = createMarker(at: $0)
             mapNewsMarkers[$0] = marker
         }
     }
@@ -104,6 +104,14 @@ extension MapViewController: MapNewsSelectorObserver {
     private func closeActiveInfoWindow() {
         currentDisplayingInfoWindow?.removeFromSuperview()
         currentDisplayingInfoWindow = nil
+    }
+
+    private func createMarker(at country: CountryCoordinateDTO) -> MapNewsMarker {
+        let marker = MapNewsMarker(at: country)
+        marker.icon = UIImage(named: "news")
+        marker.title = country.countryName
+        marker.map = mapView
+        return marker
     }
 }
 
@@ -117,6 +125,8 @@ extension MapViewController: MapViewModelObserver {
         let infoWindow = InfoWindow(countryName: country.countryName, article: article)
         view.addSubview(infoWindow)
         currentDisplayingInfoWindow = infoWindow
+
+        infoWindow.asyncLoadImage()
     }
 }
 
@@ -149,7 +159,14 @@ extension MapViewController: GMSMapViewDelegate {
         }
         moveMarkerUp(marker: mapNewsMarker)
         model.updateNews(country: mapNewsMarker.location)
-        mapView.animate(to: GMSCameraPosition(target: mapNewsMarker.position, zoom: mapView.camera.zoom))
+        if model.currentBounds.contains(mapNewsMarker.position) {
+            mapView.animate(to: GMSCameraPosition(target: mapNewsMarker.position, zoom: mapView.camera.zoom))
+        } else {
+            mapView.location = mapNewsMarker.position
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            self.dimAllMarkers(except: mapNewsMarker)
+        })
     }
 
     private func moveMarkerUp(marker: MapNewsMarker) {
@@ -171,6 +188,9 @@ extension MapViewController: GMSMapViewDelegate {
     }
 
     func dimAllMarkers(except marker: MapNewsMarker) {
+        mapNewsMarkers.values.forEach {
+            $0.opacity = $0 == marker ? 1 : 0.5
+        }
     }
 }
 

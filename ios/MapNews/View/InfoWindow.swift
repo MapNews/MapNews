@@ -11,18 +11,23 @@ import UIKit
 class InfoWindow: UIView {
     let countryName: String
     let headline: String
+    let article: ArticleDTO
+    let loadingBar: LoadingBar
 
     init(countryName: String, article: ArticleDTO) {
         self.countryName = countryName
         self.headline = article.title
+        self.article = article
+        self.loadingBar = LoadingBar(frame: InfoWindow.loadingBarRect)
+
         super.init(frame: CGRect(origin: InfoWindow.origin, size: InfoWindow.size))
 
         layer.cornerRadius = InfoWindow.borderRadius
 
         addBackground()
         addCountryNameLabel()
-        addHeadline(headline: article.title)
-        asyncLoadImage(for: article)
+        addHeadline()
+        addSubview(loadingBar)
     }
 
     required init?(coder: NSCoder) {
@@ -45,7 +50,7 @@ class InfoWindow: UIView {
         addSubview(countryNameLabel)
     }
 
-    internal func addHeadline(headline: String) {
+    internal func addHeadline() {
         let headlineLabel = UILabel(frame: InfoWindow.headlineRect)
         headlineLabel.text = headline
         headlineLabel.font = UIFont.systemFont(ofSize: 14)
@@ -54,10 +59,10 @@ class InfoWindow: UIView {
         addSubview(headlineLabel)
     }
 
-    private func asyncLoadImage(for article: ArticleDTO) {
+    func asyncLoadImage() {
         article.articleObserver = self
         DispatchQueue.main.async {
-            article.loadImage()
+            self.article.loadImage()
         }
     }
 }
@@ -67,6 +72,8 @@ extension InfoWindow: ArticleObserver {
     }
 
     func imageDidLoad(image: UIImage) {
+        loadingBar.removeFromSuperview()
+
         let headlineImage = UIImageView(frame: InfoWindow.imageRect)
         headlineImage.image = image
         headlineImage.alpha = 1
@@ -74,7 +81,6 @@ extension InfoWindow: ArticleObserver {
         headlineImage.layer.masksToBounds = true
         addSubview(headlineImage)
     }
-
 }
 
 extension InfoWindow {
@@ -95,13 +101,20 @@ extension InfoWindow {
 
     static let headlineWidth: CGFloat = width - (2 * insets)
     static let headlineHeight: CGFloat = 50
-    static let headlineOrigin = CGPoint(x: insets, y: insets + countryLabelHeight)
+    static let headlineOrigin = CGPoint(x: insets, y: countryLabelOrigin.y + countryLabelHeight)
     static let headlineSize = CGSize(width: headlineWidth, height: headlineHeight)
     static let headlineRect = CGRect(origin: headlineOrigin, size: headlineSize)
 
     static let imageWidth: CGFloat = width - (2 * insets)
     static var imageHeight: CGFloat = 150
-    static let imageOrigin = CGPoint(x: insets, y: insets + countryLabelHeight + headlineHeight)
+    static let imageOrigin = CGPoint(x: insets, y: headlineOrigin.y + headlineHeight)
     static let imageSize = CGSize(width: imageWidth, height: imageHeight)
     static let imageRect = CGRect(origin: imageOrigin, size: imageSize)
+
+    static let loadingBarWidth: CGFloat = width - (4 * insets)
+    static let loadingBarHeight: CGFloat = 10
+    static let loadingBarOrigin = CGPoint(x: 2 * insets, y: imageOrigin.y + (imageHeight / 2) - loadingBarHeight)
+    static let loadingBarSize = CGSize(width: loadingBarWidth, height: loadingBarHeight)
+    static let loadingBarRect = CGRect(origin: loadingBarOrigin, size: loadingBarSize)
+
 }
