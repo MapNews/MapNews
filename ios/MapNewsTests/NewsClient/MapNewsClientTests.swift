@@ -10,22 +10,23 @@ import XCTest
 
 class MapNewsClientTests: XCTestCase {
     var retrieveResultsExpectation: XCTestExpectation!
+    var newsClient = MapNewsClient()
 
     func testQueryData_countryCodeIsValid() {
         retrieveResultsExpectation = expectation(description: "results retrieved")
-        NewsClient.queryData(countryCode: "SG", callback: fulfillExpectationCallback(_:))
+        newsClient.queryData(countryCode: "SG", callback: fulfillExpectationCallback(_:))
         waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testQueryData_jsonFormatIsValid() {
         retrieveResultsExpectation = expectation(description: "results retrieved")
-        NewsClient.queryData(countryCode: "SG", callback: createArticleDTOCallback(_:))
+        newsClient.queryData(countryCode: "SG", callback: createArticleDTOCallback(_:))
         waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testQueryArticles() {
         retrieveResultsExpectation = expectation(description: "results received")
-        NewsClient.queryArticles(
+        newsClient.queryArticles(
             country: CountryCoordinateDTO(name: "Canada", countryCode: "CA", coordinates:
                 Coordinates(lat: 0.5, long: 0.9)),
             callback: returnArticlesCallback(_:_:))

@@ -16,8 +16,6 @@ class ArticleDTO {
     let publishedAt: String
     let content: String
     let urlToImage: String?
-    var image: UIImage?
-    var articleObserver: ArticleObserver?
 
     init?(jsonData: Any) {
         guard let title = JSONParser.getObject(from: jsonData, key: "title") as? String else {
@@ -54,17 +52,6 @@ class ArticleDTO {
         self.content = content
     }
 
-    func loadImage() {
-        if let url = urlToImage, let urlObject = URL(string: url) {
-            NewsClient.downloadImage(from: urlObject) { (image) in
-                self.image = image
-                self.articleObserver?.imageDidLoad(image: image)
-            }
-        } else {
-            print("No image")
-            articleObserver?.imageFailedToLoad()
-        }
-    }
 }
 
 extension ArticleDTO: Equatable {

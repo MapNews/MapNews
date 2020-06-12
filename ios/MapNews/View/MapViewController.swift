@@ -125,8 +125,16 @@ extension MapViewController: MapViewModelObserver {
         let infoWindow = InfoWindow(countryName: country.countryName, article: article)
         view.addSubview(infoWindow)
         currentDisplayingInfoWindow = infoWindow
+        guard let urlObject = article.urlToImage else {
+            infoWindow.imageFailedToLoad()
+            return
+        }
 
-        infoWindow.asyncLoadImage()
+        model.loadImage(
+            url: urlObject,
+            withImageCallback: infoWindow.imageDidLoad(image:),
+            noImageCallback: infoWindow.imageFailedToLoad
+        )
     }
 }
 
@@ -159,6 +167,8 @@ extension MapViewController: GMSMapViewDelegate {
         }
         moveMarkerUp(marker: mapNewsMarker)
         model.updateNews(country: mapNewsMarker.location)
+        locationSelector.selectedValue = mapNewsMarker.location.countryName
+
         if model.currentBounds.contains(mapNewsMarker.position) {
             mapView.animate(to: GMSCameraPosition(target: mapNewsMarker.position, zoom: mapView.camera.zoom))
         } else {

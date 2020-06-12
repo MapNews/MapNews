@@ -29,7 +29,7 @@ class MapViewControllerTests: XCTestCase {
 
     func testLocationDidUpdate_locationDoesNotExists() {
         let originalBounds = viewController.model.currentBounds
-        viewController.locationDidUpdate(toLocation: "Singapore")
+        viewController.locationDidUpdate(toLocation: "HegHeg")
         let currentBounds = viewController.model.currentBounds
         XCTAssertEqual(
             originalBounds,
@@ -40,6 +40,7 @@ class MapViewControllerTests: XCTestCase {
             viewController.currentDisplayingInfoWindow,
             "No marker should be selected"
         )
+        XCTAssertNotEqual(viewController.locationSelector.selectedValue, "HegHeg")
     }
 
     func testLocationDidUpdate_locationExists() {
@@ -55,6 +56,7 @@ class MapViewControllerTests: XCTestCase {
 
         viewController.locationDidUpdate(toLocation: "Hogwarts")
         XCTAssertEqual(viewController.currentDisplayingInfoWindow?.countryName, "Hogwarts")
+        XCTAssertEqual(viewController.locationSelector.selectedValue, "Hogwarts")
     }
 
     func testTableDidReveal_noInfoWindowDisplayed() {
@@ -94,6 +96,7 @@ class MapViewControllerTests: XCTestCase {
         }
         viewController.updateHeadlines(country: ModelStub.hogwartsDTO, article: article)
         XCTAssertEqual(viewController.currentDisplayingInfoWindow?.countryName, "Hogwarts")
+        viewController.currentDisplayingInfoWindow?.loadingBar.removeFromSuperview()
     }
 }
 
@@ -149,8 +152,11 @@ class ModelStub: Model {
         }
         return nil
     }
-}
 
+    func loadImage(url: String, withImageCallback: @escaping (UIImage) -> Void, noImageCallback: () -> Void) {
+        
+    }
+}
 extension ModelStub {
     static let author = "Michael Yong"
     static let title = "Doctors in Singapore advised to look out for blood, heart problems in COVID-19 patients - CNA"

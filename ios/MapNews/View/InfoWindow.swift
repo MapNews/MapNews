@@ -58,17 +58,18 @@ class InfoWindow: UIView {
         headlineLabel.lineBreakMode = .byWordWrapping
         addSubview(headlineLabel)
     }
-
-    func asyncLoadImage() {
-        article.articleObserver = self
-        DispatchQueue.main.async {
-            self.article.loadImage()
-        }
-    }
 }
 
-extension InfoWindow: ArticleObserver {
+extension InfoWindow {
+    // Image functions
     func imageFailedToLoad() {
+        loadingBar.removeFromSuperview()
+
+        let noImageLabel = UILabel(frame: InfoWindow.imageRect)
+        noImageLabel.text = "No image :("
+        noImageLabel.textAlignment = .center
+
+        addSubview(noImageLabel)
     }
 
     func imageDidLoad(image: UIImage) {

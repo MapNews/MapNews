@@ -116,6 +116,7 @@ class MapNewsSelector: UIView, Selector {
 
     func openSelector() {
         frame = MapNewsSelector.selectorRect
+        filteredCountries = allCountries.filter { $0.startsWith(substring: selectedValue) }
         tableView.isHidden = false
         observers.forEach { $0.tableDidReveal() }
     }

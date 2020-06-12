@@ -21,4 +21,6 @@ protocol Model {
     func updateNews(country: CountryCoordinateDTO)
 
     func getCountryCoordinateDTO(for country: String) -> CountryCoordinateDTO?
+
+    func loadImage(url: String, withImageCallback: @escaping (UIImage) -> Void, noImageCallback: () -> Void)
 }
