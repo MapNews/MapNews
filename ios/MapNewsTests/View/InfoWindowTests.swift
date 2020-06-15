@@ -49,6 +49,3 @@ class InfoWindowTests: XCTestCase {
         XCTAssertEqual(uiLabelCount, 2)
     }
 }
-
-
-

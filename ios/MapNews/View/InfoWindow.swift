@@ -117,5 +117,4 @@ extension InfoWindow {
     static let loadingBarOrigin = CGPoint(x: 2 * insets, y: imageOrigin.y + (imageHeight / 2) - loadingBarHeight)
     static let loadingBarSize = CGSize(width: loadingBarWidth, height: loadingBarHeight)
     static let loadingBarRect = CGRect(origin: loadingBarOrigin, size: loadingBarSize)
-
 }
