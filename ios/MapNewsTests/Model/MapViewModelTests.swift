@@ -37,29 +37,29 @@ class MapViewModelTests: XCTestCase {
 
     func testCurrentBounds_countryInBounds() {
         let newBounds = GMSCoordinateBounds(
-            coordinate: CLLocationCoordinate2D.from(Coordinates(lat: 1.352083, long: 103.819836)),
-            coordinate: CLLocationCoordinate2D.from(Coordinates(lat: 35.86166, long: 104.195397))
+            coordinate: CLLocationCoordinate2D.from(Coordinates(lat: 1.352083, long: 103.819836)!)!,
+            coordinate: CLLocationCoordinate2D.from(Coordinates(lat: 35.86166, long: 104.195397)!)!
         )
         model.currentBounds = newBounds
         XCTAssertTrue(model.allCountriesInBounds.contains(
             CountryCoordinateDTO(
                 name: "Montreal",
                 countryCode: "MN",
-                coordinates: Coordinates(lat: 20.22, long: 103.988))
+                coordinates: Coordinates(lat: 20.22, long: 103.988)!)
         ))
     }
 
     func testCurrentBounds_countryOutOfBounds() {
         let withoutChina = GMSCoordinateBounds(
-            coordinate: CLLocationCoordinate2D.from(Coordinates(lat: 1.352083, long: 103.819836)),
-            coordinate: CLLocationCoordinate2D.from(Coordinates(lat: 20.22, long: 103.988))
+            coordinate: CLLocationCoordinate2D.from(Coordinates(lat: 1.352083, long: 103.819836)!)!,
+            coordinate: CLLocationCoordinate2D.from(Coordinates(lat: 20.22, long: 103.988)!)!
         )
         model.currentBounds = withoutChina
         XCTAssertFalse(model.allCountriesInBounds.contains(
             CountryCoordinateDTO(
                 name: "China",
                 countryCode: "CN",
-                coordinates: Coordinates(lat: 35.86166, long: 104.195397))
+                coordinates: Coordinates(lat: 35.86166, long: 104.195397)!)
         ))
     }
 
@@ -69,7 +69,10 @@ class MapViewModelTests: XCTestCase {
         model.addObserver(mockObserver)
         model.newsClient = MockNewsClient()
 
-        let atlantisDto = CountryCoordinateDTO(name: "Atlantis", countryCode: "AT", coordinates: Coordinates(lat: 0.4, long: 0.2))
+        let atlantisDto = CountryCoordinateDTO(
+            name: "Atlantis",
+            countryCode: "AT",
+            coordinates: Coordinates(lat: 0.4, long: 0.2)!)
 
         model.updateNews(country: atlantisDto)
         waitForExpectations(timeout: 5, handler: nil)
@@ -84,7 +87,7 @@ class MapViewModelTests: XCTestCase {
         let singaporeDTO = CountryCoordinateDTO(
             name: "Singapore",
             countryCode: "SG",
-            coordinates: Coordinates(lat: 1.352083, long: 103.819836))
+            coordinates: Coordinates(lat: 1.352083, long: 103.819836)!)
 
         model.updateNews(country: singaporeDTO)
 
@@ -107,15 +110,15 @@ class MapViewModelTests: XCTestCase {
         let singaporeDTO = CountryCoordinateDTO(
             name: "Singapore",
             countryCode: "SG",
-            coordinates: Coordinates(lat: 1.352083, long: 103.819836))
+            coordinates: Coordinates(lat: 1.352083, long: 103.819836)!)
         let chinaDTO = CountryCoordinateDTO(
             name: "China",
             countryCode: "CN",
-            coordinates: Coordinates(lat: 35.86166, long: 104.195397))
+            coordinates: Coordinates(lat: 35.86166, long: 104.195397)!)
         let montrealDTO = CountryCoordinateDTO(
             name: "Montreal",
             countryCode: "MN",
-            coordinates: Coordinates(lat: 20.22, long: 103.988))
+            coordinates: Coordinates(lat: 20.22, long: 103.988)!)
         XCTAssertEqual(
             model.getCountryCoordinateDTO(for: "Singapore"),
             singaporeDTO
@@ -203,15 +206,15 @@ class MockDatabase: Database {
     let singaporeDTO = CountryCoordinateDTO(
         name: "Singapore",
         countryCode: "SG",
-        coordinates: Coordinates(lat: 1.352083, long: 103.819836))
+        coordinates: Coordinates(lat: 1.352083, long: 103.819836)!)
     let chinaDTO = CountryCoordinateDTO(
         name: "China",
         countryCode: "CN",
-        coordinates: Coordinates(lat: 35.86166, long: 104.195397))
+        coordinates: Coordinates(lat: 35.86166, long: 104.195397)!)
     let montrealDTO = CountryCoordinateDTO(
         name: "Montreal",
         countryCode: "MN",
-        coordinates: Coordinates(lat: 20.22, long: 103.988))
+        coordinates: Coordinates(lat: 20.22, long: 103.988)!)
 
     func queryLatLong(name: String) -> Coordinates? {
         if name == "Singapore" {
@@ -258,7 +261,7 @@ class MockDatabaseOneEntry: Database {
     let hogwartsDTO = CountryCoordinateDTO(
         name: "Hogwarts",
         countryCode: "HW",
-        coordinates: Coordinates(lat: 1.1, long: 102.78))
+        coordinates: Coordinates(lat: 1.1, long: 102.78)!)
     func queryAllCountriesAndCoordinates() -> [CountryCoordinateDTO]? {
         return [ hogwartsDTO ]
     }

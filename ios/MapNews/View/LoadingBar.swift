@@ -30,7 +30,7 @@ class LoadingBar: UIView {
         }
     }
 
-    static var advanceFactor: CGFloat = 2
+    var advanceFactor: CGFloat = 2
 
     override init(frame: CGRect) {
         loadingBar = LoadingBar.createLoadingBar(width: frame.width, height: frame.height)
@@ -63,20 +63,20 @@ class LoadingBar: UIView {
     }
 
     private func getNextSliderFrame() -> CGRect {
-        let newX = sliderFrameExceedLimit() ? -slider.frame.width : slider.frame.origin.x + LoadingBar.advanceFactor
+        let newX = sliderFrameExceedLimit() ? -slider.frame.width : slider.frame.origin.x + advanceFactor
         return CGRect(origin: CGPoint(x: newX, y: slider.frame.origin.y), size: slider.frame.size)
     }
 
     private func sliderFrameExceedLimit() -> Bool {
-        return slider.frame.origin.x + LoadingBar.advanceFactor > frame.width
+        return slider.frame.origin.x + advanceFactor > frame.width
     }
 
-    static func createLoadingBar(width: CGFloat, height: CGFloat) -> UIView {
+    private static func createLoadingBar(width: CGFloat, height: CGFloat) -> UIView {
         let loadingBar = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: width, height: height)))
         return loadingBar
     }
 
-    static func createSlider(width: CGFloat, height: CGFloat) -> UIView {
+    private static func createSlider(width: CGFloat, height: CGFloat) -> UIView {
         let slider = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: width, height: height)))
         return slider
     }

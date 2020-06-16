@@ -14,7 +14,7 @@ class MapNewsMarkerTests: XCTestCase {
         let locationName = "Hogwarts"
         let marker = MapNewsMarker(at: CountryCoordinateDTO(name: "Hogwarts",
                                                             countryCode: "HW",
-                                                            coordinates: Coordinates(lat: 1.03, long: 2.04)))
+                                                            coordinates: Coordinates(lat: 1.03, long: 2.04)!))
         XCTAssertEqual(marker.location.countryName, locationName)
         XCTAssertEqual(Coordinates.from(marker.position), Coordinates(lat: 1.03, long: 2.04))
     }

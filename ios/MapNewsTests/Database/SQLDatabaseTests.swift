@@ -13,11 +13,11 @@ class SQLDatabaseTests: XCTestCase {
     private let hogwartsDTO = CountryCoordinateDTO(
         name: "Hogwarts",
         countryCode: "HW",
-        coordinates: Coordinates(lat: 1.1, long: 102.78))
+        coordinates: Coordinates(lat: 1.1, long: 102.78)!)
     private let americaDTO = CountryCoordinateDTO(
         name: "America",
         countryCode: "AW",
-        coordinates: Coordinates(lat: 1.0, long: 102.98))
+        coordinates: Coordinates(lat: 1.0, long: 102.98)!)
 
     override func setUp() {
         SQLDatabaseTests.database = SQLDatabase()

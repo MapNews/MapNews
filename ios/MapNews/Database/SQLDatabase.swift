@@ -137,13 +137,12 @@ extension SQLDatabase: Database {
 
         let invalidLatLong = queryLat == 0 && queryLong == 0
         command.tearDown()
+        guard let coordinates = Coordinates(lat: queryLat, long: queryLong) else {
+            return nil
+        }
         return invalidLatLong
             ? nil
-            : CountryCoordinateDTO(
-                name: name,
-                countryCode: countryCode,
-                coordinates: Coordinates(lat: queryLat, long: queryLong)
-            )
+            : CountryCoordinateDTO(name: name, countryCode: countryCode, coordinates: coordinates)
     }
 
     func queryAllCountries() -> [String]? {
@@ -167,10 +166,10 @@ extension SQLDatabase: Database {
             let country = SQLString.extract(from: command, index: 1)
             let lat = SQLDouble.extract(from: command, index: 2)
             let long = SQLDouble.extract(from: command, index: 3)
-            let currentDTO = CountryCoordinateDTO(
-                name: country,
-                countryCode: countryCode,
-                coordinates: Coordinates(lat: lat, long: long))
+            guard let coordinates = Coordinates(lat: lat, long: long) else {
+                return nil
+            }
+            let currentDTO = CountryCoordinateDTO(name: country, countryCode: countryCode, coordinates: coordinates)
             countryCoordinatesDTOs.append(currentDTO)
             command.execute()
         }

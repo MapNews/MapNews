@@ -15,7 +15,7 @@ class MapViewControllerTests: XCTestCase {
         viewController = MapViewController()
         viewController.viewDidLoad()
         viewController.mapView.location
-            = CLLocationCoordinate2D.from(Coordinates(lat: 1.1, long: 102.78))
+            = CLLocationCoordinate2D.from(Coordinates(lat: 1.1, long: 102.78)!)
         viewController.model = ModelStub()
         viewController.model.addObserver(viewController)
     }
@@ -85,7 +85,7 @@ class MapViewControllerTests: XCTestCase {
         let singaporeDTO = CountryCoordinateDTO(
             name: "Singapore",
             countryCode: "SG",
-            coordinates: Coordinates(lat: 0.3, long: 0.4))
+            coordinates: Coordinates(lat: 0.3, long: 0.4)!)
         viewController.updateHeadlines(country: singaporeDTO, article: article)
         XCTAssertNil(viewController.currentDisplayingInfoWindow)
     }
@@ -109,11 +109,11 @@ class ModelStub: Model {
     static let hogwartsDTO = CountryCoordinateDTO(
         name: "Hogwarts",
         countryCode: "HW",
-        coordinates: Coordinates(lat: 1.1, long: 102.78))
+        coordinates: Coordinates(lat: 1.1, long: 102.78)!)
     static let atlantisDTO = CountryCoordinateDTO(
         name: "Atlantis",
         countryCode: "AT",
-        coordinates: Coordinates(lat: 1.0, long: 102.98))
+        coordinates: Coordinates(lat: 1.0, long: 102.98)!)
     static let sampleArticle = ArticleDTO(jsonData:
         [
             "source": ["id": nil, "name": "CNA"],
@@ -130,8 +130,8 @@ class ModelStub: Model {
     var allCountryNames: [String]? = ["Hogwarts", "Atlantis"]
 
     var currentBounds = GMSCoordinateBounds(
-        coordinate: CLLocationCoordinate2D.from(ModelStub.hogwartsDTO.coordinates),
-        coordinate: CLLocationCoordinate2D.from(ModelStub.atlantisDTO.coordinates)
+        coordinate: CLLocationCoordinate2D.from(ModelStub.hogwartsDTO.coordinates)!,
+        coordinate: CLLocationCoordinate2D.from(ModelStub.atlantisDTO.coordinates)!
     )
 
     var allCountriesInBounds = [ModelStub.hogwartsDTO, ModelStub.atlantisDTO]

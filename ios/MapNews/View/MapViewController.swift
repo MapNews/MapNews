@@ -67,7 +67,9 @@ extension MapViewController: MapNewsSelectorObserver {
         guard let newLocationDTO = model.getCountryCoordinateDTO(for: newLocation) else {
             return
         }
-        let newCoordinates = CLLocationCoordinate2D.from(newLocationDTO.coordinates)
+        guard let newCoordinates = CLLocationCoordinate2D.from(newLocationDTO.coordinates) else {
+            return
+        }
         locationDidUpdate(toCoordinate: newCoordinates)
 
         if let marker = mapNewsMarkers[newLocationDTO] {

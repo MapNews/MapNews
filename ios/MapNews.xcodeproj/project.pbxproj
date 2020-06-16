@@ -99,6 +99,8 @@
 		37B97A7E248CC5C500D0C655 /* MapNewsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375992212476088B00F36806 /* MapNewsClient.swift */; };
 		37B9CBDE248DF3880050C82D /* MapViewModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B9CBDD248DF3880050C82D /* MapViewModelObserver.swift */; };
 		37B9CBDF248E0E6E0050C82D /* MapViewModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B9CBDD248DF3880050C82D /* MapViewModelObserver.swift */; };
+		37EFFBF724985016006F0EA1 /* CLLocationCoordinate2DExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EFFBF624985016006F0EA1 /* CLLocationCoordinate2DExtensionTests.swift */; };
+		37EFFBF924985451006F0EA1 /* CoordinatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EFFBF824985451006F0EA1 /* CoordinatesTests.swift */; };
 		9F3FD826DC796C2DD8EA3431 /* Pods_MapNews_MapNewsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA990002AD934F464FDBF057 /* Pods_MapNews_MapNewsUITests.framework */; };
 		B181398627D730A9EED7952C /* Pods_MapNewsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D26964F414B1255CC75634A /* Pods_MapNewsTests.framework */; };
 /* End PBXBuildFile section */
@@ -185,6 +187,8 @@
 		37B97A7A248C9FC800D0C655 /* MapNewsMarkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsMarkerTests.swift; sourceTree = "<group>"; };
 		37B97A7C248CC5A100D0C655 /* MapNewsClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsClientTests.swift; sourceTree = "<group>"; };
 		37B9CBDD248DF3880050C82D /* MapViewModelObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModelObserver.swift; sourceTree = "<group>"; };
+		37EFFBF624985016006F0EA1 /* CLLocationCoordinate2DExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtensionTests.swift; sourceTree = "<group>"; };
+		37EFFBF824985451006F0EA1 /* CoordinatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesTests.swift; sourceTree = "<group>"; };
 		40A5C6758D0A64AD48DA5AAD /* Pods-MapNews-MapNewsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapNews-MapNewsUITests.release.xcconfig"; path = "Target Support Files/Pods-MapNews-MapNewsUITests/Pods-MapNews-MapNewsUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4637BBD22D4975B2D12E6F11 /* Pods-MapNews-MapNewsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapNews-MapNewsUITests.debug.xcconfig"; path = "Target Support Files/Pods-MapNews-MapNewsUITests/Pods-MapNews-MapNewsUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		50C26E272D89183F234A779C /* Pods-MapNewsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapNewsTests.release.xcconfig"; path = "Target Support Files/Pods-MapNewsTests/Pods-MapNewsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -322,6 +326,7 @@
 				377AB73024887EC600C0F72E /* MapConstants.swift */,
 				377AB7232485E21800C0F72E /* MapNewsMarker.swift */,
 				37A8BC57247C2A2B00FFEBC5 /* Coordinates.swift */,
+				37EFFBF824985451006F0EA1 /* CoordinatesTests.swift */,
 				370F775124848AC80043D964 /* CLLocationCoordinate2DExtension.swift */,
 			);
 			path = Map;
@@ -332,6 +337,7 @@
 			children = (
 				37B97A7A248C9FC800D0C655 /* MapNewsMarkerTests.swift */,
 				37B97A78248C9C8F00D0C655 /* MapNewsViewTests.swift */,
+				37EFFBF624985016006F0EA1 /* CLLocationCoordinate2DExtensionTests.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -774,6 +780,7 @@
 				37509FE3248BD856006E4D36 /* SQLCommand.swift in Sources */,
 				377AB7462489D0A600C0F72E /* MapNewsSelectorTests.swift in Sources */,
 				37B97A7D248CC5A100D0C655 /* MapNewsClientTests.swift in Sources */,
+				37EFFBF924985451006F0EA1 /* CoordinatesTests.swift in Sources */,
 				37627408249323BC00149179 /* ArticleBuilderTests.swift in Sources */,
 				377AB7352488A89800C0F72E /* Database.swift in Sources */,
 				37B97A7B248C9FC800D0C655 /* MapNewsMarkerTests.swift in Sources */,
@@ -790,6 +797,7 @@
 				377E563C248D2EF700ED58F2 /* JSONParser.swift in Sources */,
 				377AB7372488A89E00C0F72E /* SQLDatabase.swift in Sources */,
 				377AB7472489E86500C0F72E /* MapViewController.swift in Sources */,
+				37EFFBF724985016006F0EA1 /* CLLocationCoordinate2DExtensionTests.swift in Sources */,
 				37509FE7248BD85F006E4D36 /* SQLDelete.swift in Sources */,
 				37509FE5248BD85B006E4D36 /* SQLInsert.swift in Sources */,
 			);

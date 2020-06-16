@@ -18,7 +18,7 @@ class MapViewModel: Model {
     var currentBounds: GMSCoordinateBounds {
         didSet {
             allCountriesInBounds = allCountryCoordinateDTOs.filter {
-                currentBounds.contains(CLLocationCoordinate2D.from($0.coordinates))
+                currentBounds.contains(CLLocationCoordinate2D.from($0.coordinates)!)
             }
         }
     }

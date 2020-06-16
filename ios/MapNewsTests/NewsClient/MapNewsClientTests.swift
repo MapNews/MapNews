@@ -28,7 +28,7 @@ class MapNewsClientTests: XCTestCase {
         retrieveResultsExpectation = expectation(description: "results received")
         newsClient.queryArticles(
             country: CountryCoordinateDTO(name: "Canada", countryCode: "CA", coordinates:
-                Coordinates(lat: 0.5, long: 0.9)),
+                Coordinates(lat: 0.5, long: 0.9)!),
             callback: returnArticlesCallback(_:_:))
         waitForExpectations(timeout: 30, handler: nil)
     }

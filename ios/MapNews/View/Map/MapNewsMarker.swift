@@ -13,6 +13,6 @@ class MapNewsMarker: GMSMarker {
     init(at location: CountryCoordinateDTO) {
         self.location = location
         super.init()
-        self.position = CLLocationCoordinate2D.from(location.coordinates)
+        self.position = CLLocationCoordinate2D.from(location.coordinates)!
     }
 }
