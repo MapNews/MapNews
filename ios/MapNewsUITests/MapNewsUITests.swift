@@ -14,23 +14,23 @@ class MapNewsUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
 
-        let mapView = app.children(matching: .window).element(boundBy: 1)
-            .children(matching: .other).element
-
+        let mapView = app.otherElements["MapNewsView"]
         XCTAssertTrue(mapView.exists)
+        
+        let selector = app.otherElements["MapNewsSelector"]
+        XCTAssertTrue(selector.exists)
 
-        let selector = app.children(matching: .window).element(boundBy: 0)
-            .children(matching: .other).element
-            .children(matching: .other).element
-            .children(matching: .other).element
-
-        let textField = selector.children(matching: .other).element
-            .children(matching: .textField).element
-
+        let textField = selector.otherElements["selectedCountryTextField"]
         XCTAssertTrue(textField.exists)
 
-        let searchButton = selector.children(matching: .other).element(boundBy: 0)
+        let labelBackground = selector.otherElements["labelBackground"]
+        XCTAssertTrue(labelBackground.exists)
+
+        let searchButton = selector.buttons["searchButton"]
         XCTAssertTrue(searchButton.exists)
+
+        let tableView = selector.tables["tableView"]
+        XCTAssertTrue(tableView.exists)
     }
 
 }

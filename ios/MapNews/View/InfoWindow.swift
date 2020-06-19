@@ -23,6 +23,7 @@ class InfoWindow: UIView {
         super.init(frame: CGRect(origin: InfoWindow.origin, size: InfoWindow.size))
 
         layer.cornerRadius = InfoWindow.borderRadius
+        accessibilityLabel = "InfoWindow"
 
         addBackground()
         addCountryNameLabel()
