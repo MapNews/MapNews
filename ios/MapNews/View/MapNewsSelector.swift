@@ -34,19 +34,15 @@ class MapNewsSelector: UIView, Selector {
     init(tableData: [String], mode: UIUserInterfaceStyle) {
         // Create label
         selectedCountryTextField = MapNewsSelector.createTextField()
-        AccessibilityIdentifierUtil.setIdentifier(view: selectedCountryTextField, to: "selectedCountryTextField")
 
         // Create picker
         tableView = MapNewsSelector.createTableView()
-        AccessibilityIdentifierUtil.setIdentifier(view: tableView, to: "tableView")
 
         // Create label background
         labelBackground = MapNewsSelector.createLabelBackground()
-        AccessibilityIdentifierUtil.setIdentifier(view: labelBackground, to: "labelBackground")
 
         // Create search button
         searchButton = MapNewsSelector.createSearchButton()
-        AccessibilityIdentifierUtil.setIdentifier(view: searchButton, to: "searchButton")
 
         self.allCountries = tableData
         self.filteredCountries = tableData
@@ -68,7 +64,12 @@ class MapNewsSelector: UIView, Selector {
         filteredCountries = allCountries.filter { $0.startsWith(substring: selectedCountryTextField.text ?? "") }
 
         bindAllGestureRecognizers()
-        AccessibilityIdentifierUtil.setIdentifier(view: self, to: "MapNewsSelector")
+        
+        AccessibilityIdentifierUtil.setIdentifierForContainer(view: self, to: Identifiers.selectorIdentifier)
+        AccessibilityIdentifierUtil.setIdentifier(view: selectedCountryTextField, to: Identifiers.textFieldIdentifier)
+        AccessibilityIdentifierUtil.setIdentifier(view: tableView, to: Identifiers.tableIdentifier)
+        AccessibilityIdentifierUtil.setIdentifier(view: labelBackground, to: Identifiers.labelBackgroundIdentifier)
+        AccessibilityIdentifierUtil.setIdentifier(view: searchButton, to: Identifiers.searchButtonIdentifier)
     }
 
     required init?(coder: NSCoder) {

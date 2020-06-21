@@ -33,6 +33,8 @@ class MapViewController: UIViewController {
         view.addSubview(mapView)
         view.addSubview(locationSelectorMask)
         view.addSubview(locationSelector)
+
+        AccessibilityIdentifierUtil.setIdentifierForContainer(view: view, to: "MapViewController")
     }
 
     private func initMap() {

@@ -14,6 +14,11 @@ struct AccessibilityIdentifierUtil {
         view.isAccessibilityElement = true
     }
 
+    static func setIdentifierForContainer(view: UIView, to identifier: String) {
+        view.accessibilityIdentifier = identifier
+        view.isAccessibilityElement = false
+    }
+
     static func setIdentifier(map: MapNewsView, to identifier: String) {
         map.accessibilityElementsHidden = false
         map.accessibilityIdentifier = identifier

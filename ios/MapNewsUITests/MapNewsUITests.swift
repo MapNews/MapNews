@@ -9,28 +9,39 @@
 import XCTest
 
 class MapNewsUITests: XCTestCase {
+    var app: XCUIApplication!
+
+    override func setUp() {
+        app = XCUIApplication()
+        app.launch()
+    }
 
     func testLandingPageElementsExists() throws {
-        let app = XCUIApplication()
-        app.launch()
-
         let mapView = app.otherElements["MapNewsView"]
         XCTAssertTrue(mapView.exists)
         
-        let selector = app.otherElements["MapNewsSelector"]
+        let selector = app.otherElements[Identifiers.selectorIdentifier]
         XCTAssertTrue(selector.exists)
 
-        let textField = selector.otherElements["selectedCountryTextField"]
+        let textField = selector.textFields[Identifiers.textFieldIdentifier]
         XCTAssertTrue(textField.exists)
 
-        let labelBackground = selector.otherElements["labelBackground"]
+        let labelBackground = selector.otherElements[Identifiers.labelBackgroundIdentifier]
         XCTAssertTrue(labelBackground.exists)
 
-        let searchButton = selector.buttons["searchButton"]
+        let searchButton = selector.images[Identifiers.searchButtonIdentifier]
         XCTAssertTrue(searchButton.exists)
 
-        let tableView = selector.tables["tableView"]
-        XCTAssertTrue(tableView.exists)
+        let tableView = app.tables[Identifiers.tableIdentifier]
+        XCTAssertFalse(tableView.exists)
     }
 
+    func testTapOnTextField_tableReveal() {
+        let selector = app.otherElements[Identifiers.selectorIdentifier]
+        let textField = selector.textFields[Identifiers.textFieldIdentifier]
+        textField.tap()
+
+        let tableView = app.tables[Identifiers.tableIdentifier]
+        XCTAssertTrue(tableView.exists)
+    }
 }
