@@ -22,6 +22,6 @@ struct AccessibilityIdentifierUtil {
     static func setIdentifier(map: MapNewsView, to identifier: String) {
         map.accessibilityElementsHidden = false
         map.accessibilityIdentifier = identifier
-        map.isAccessibilityElement = true
+        map.isAccessibilityElement = false
     }
 }

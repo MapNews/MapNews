@@ -178,6 +178,10 @@ extension MapNewsSelector: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel!.text = filteredCountries[indexPath.row]
+        AccessibilityIdentifierUtil.setIdentifier(
+            view: cell,
+            to: Identifiers.generateCellIdentifier(index: indexPath.row)
+        )
         return cell
     }
 

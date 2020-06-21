@@ -29,6 +29,8 @@ class InfoWindow: UIView {
         addCountryNameLabel()
         addHeadline()
         addSubview(loadingBar)
+        let identifier = Identifiers.generateInfoWindowIdentifier(country: countryName)
+        AccessibilityIdentifierUtil.setIdentifier(view: self, to: identifier)
     }
 
     required init?(coder: NSCoder) {

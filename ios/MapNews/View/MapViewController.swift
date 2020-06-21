@@ -34,7 +34,7 @@ class MapViewController: UIViewController {
         view.addSubview(locationSelectorMask)
         view.addSubview(locationSelector)
 
-        AccessibilityIdentifierUtil.setIdentifierForContainer(view: view, to: "MapViewController")
+        AccessibilityIdentifierUtil.setIdentifierForContainer(view: view, to: Identifiers.mapViewControllerIdentifier)
     }
 
     private func initMap() {
@@ -60,6 +60,7 @@ class MapViewController: UIViewController {
         mask.addGestureRecognizer(tap)
         mask.isHidden = true
         locationSelectorMask = mask
+        AccessibilityIdentifierUtil.setIdentifier(view: mask, to: Identifiers.locationMaskIdentifier)
     }
 
 }
@@ -99,6 +100,7 @@ extension MapViewController: MapNewsSelectorObserver {
 
     private func updateMarkers() {
         mapNewsMarkers = [:]
+        mapView.clear()
         model.allCountriesInBounds.forEach {
             let marker = createMarker(at: $0)
             mapNewsMarkers[$0] = marker
@@ -115,6 +117,7 @@ extension MapViewController: MapNewsSelectorObserver {
         marker.icon = UIImage(named: "news")
         marker.title = country.countryName
         marker.map = mapView
+        marker.accessibilityLabel = Identifiers.generateMarkerIdentifer(country: country.countryName)
         return marker
     }
 }
@@ -169,16 +172,15 @@ extension MapViewController: GMSMapViewDelegate {
         guard let mapNewsMarker = marker as? MapNewsMarker else {
             return
         }
-        moveMarkerUp(marker: mapNewsMarker)
-        model.updateNews(country: mapNewsMarker.location)
-        locationSelector.selectedValue = mapNewsMarker.location.countryName
-
         if model.currentBounds.contains(mapNewsMarker.position) {
             mapView.animate(to: GMSCameraPosition(target: mapNewsMarker.position, zoom: mapView.camera.zoom))
         } else {
             mapView.location = mapNewsMarker.position
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+        moveMarkerUp(marker: mapNewsMarker)
+        model.updateNews(country: mapNewsMarker.location)
+        locationSelector.selectedValue = mapNewsMarker.location.countryName
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             self.dimAllMarkers(except: mapNewsMarker)
         })
     }
@@ -193,17 +195,25 @@ extension MapViewController: GMSMapViewDelegate {
 
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         closeActiveInfoWindow()
+        lightUpAllMarkers()
     }
 
     func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
         if gesture {
             closeActiveInfoWindow()
+            lightUpAllMarkers()
         }
     }
 
     func dimAllMarkers(except marker: MapNewsMarker) {
         mapNewsMarkers.values.forEach {
-            $0.opacity = $0 == marker ? 1 : 0.5
+            $0.opacity = $0.location.countryName == marker.location.countryName ? 1 : 0.5
+        }
+    }
+
+    func lightUpAllMarkers() {
+        mapNewsMarkers.values.forEach {
+            $0.opacity = 1
         }
     }
 }

@@ -29,7 +29,7 @@ class MapNewsView: GMSMapView {
         super.init(frame: frame)
         camera = MapConstants.singaporeCamera
         settings.zoomGestures = true
-        AccessibilityIdentifierUtil.setIdentifier(map: self, to: "MapNewsView")
+        AccessibilityIdentifierUtil.setIdentifier(map: self, to: Identifiers.mapNewsIdentifier)
     }
 
     required init?(coder: NSCoder) {
