@@ -110,6 +110,7 @@ extension MapViewController: MapNewsSelectorObserver {
     private func closeActiveInfoWindow() {
         currentDisplayingInfoWindow?.removeFromSuperview()
         currentDisplayingInfoWindow = nil
+        lightUpAllMarkers()
     }
 
     private func createMarker(at country: CountryCoordinateDTO) -> MapNewsMarker {
@@ -195,13 +196,11 @@ extension MapViewController: GMSMapViewDelegate {
 
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         closeActiveInfoWindow()
-        lightUpAllMarkers()
     }
 
     func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
         if gesture {
             closeActiveInfoWindow()
-            lightUpAllMarkers()
         }
     }
 

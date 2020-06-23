@@ -125,11 +125,17 @@ class MapNewsUITests: XCTestCase {
 
         let canadaInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
 
+        XCTAssertEqual(textField.value as? String, sampleCountry)
         XCTAssertTrue(canadaInfoWindow.exists)
     }
 
     func testDefaultLocation_Singapore() {
-        XCTAssertEqual(textField.value as? String, "Singapore")
+        let defaultCountry = "Singapore"
+        XCTAssertEqual(textField.value as? String, defaultCountry)
+        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
+        let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: defaultCountry)]
+
+        XCTAssertTrue(singaporeMarker.exists)
     }
 
     func testClickOnMarker_InfoWindowDisplayed() {
@@ -158,10 +164,29 @@ class MapNewsUITests: XCTestCase {
         let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
         performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
 
-        performActionAndWait(action: { () -> Void in mapView.tap() }, timeout: 3)
+        performActionAndWait(action: tap, timeout: 3)
+        mapView.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
 
         let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
         XCTAssertFalse(singaporeInfoWindow.exists)
+    }
+
+    func tap() {
+        mapView.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
+
+    }
+
+    func testInfoWindowDisplayed_clickOnSearchButton_infoWindowDismissed_tableRevealed() {
+        let sampleCountry = "Singapore"
+        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
+        let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
+
+        performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
+        performActionAndWait(action: { () -> Void in searchButton.tap() }, timeout: 3)
+
+        let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
+        XCTAssertFalse(singaporeInfoWindow.exists)
+        XCTAssertTrue(tableView.exists)
     }
 }
 

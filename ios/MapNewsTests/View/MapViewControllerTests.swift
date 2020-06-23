@@ -157,6 +157,7 @@ class ModelStub: Model {
         
     }
 }
+
 extension ModelStub {
     static let author = "Michael Yong"
     static let title = "Doctors in Singapore advised to look out for blood, heart problems in COVID-19 patients - CNA"
