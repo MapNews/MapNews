@@ -163,17 +163,13 @@ class MapNewsUITests: XCTestCase {
         let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
         let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
         performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
-
-        performActionAndWait(action: tap, timeout: 3)
-        mapView.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
-
         let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
+
+        performActionAndWait(action: { () -> Void in
+            tap(on: mapView, offsetX: UIScreen.main.bounds.width * 0.5, offsetY: UIScreen.main.bounds.height * 0.75)
+        }, timeout: 3)
+
         XCTAssertFalse(singaporeInfoWindow.exists)
-    }
-
-    func tap() {
-        mapView.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
-
     }
 
     func testInfoWindowDisplayed_clickOnSearchButton_infoWindowDismissed_tableRevealed() {
@@ -211,5 +207,10 @@ extension MapNewsUITests {
     func performActionAndWait(action: () -> Void, timeout: UInt32) {
         action()
         sleep(timeout)
+    }
+
+    func tap(on element: XCUIElement, offsetX: CGFloat, offsetY: CGFloat) {
+        let coordinate = element.coordinate(withNormalizedOffset: CGVector(dx: offsetX, dy: offsetY))
+        coordinate.tap()
     }
 }
