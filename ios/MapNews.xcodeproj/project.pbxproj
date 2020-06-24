@@ -92,6 +92,7 @@
 		37A8BC58247C2A2B00FFEBC5 /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A8BC57247C2A2B00FFEBC5 /* Coordinates.swift */; };
 		37A8BC5C247CA46000FFEBC5 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A8BC5B247CA46000FFEBC5 /* Database.swift */; };
 		37AAD42C247F460E008CD404 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AAD42B247F460E008CD404 /* Constants.swift */; };
+		37B3025C24A2DC8F0047EF6E /* JsonParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B3025B24A2DC8F0047EF6E /* JsonParserTests.swift */; };
 		37B97A72248BD8CD00D0C655 /* SQLType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37463CB2248B7D1100AA53C5 /* SQLType.swift */; };
 		37B97A73248BD8CF00D0C655 /* SQLString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37463CB4248B7DC900AA53C5 /* SQLString.swift */; };
 		37B97A74248BD8D100D0C655 /* SQLDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37463CB8248B873400AA53C5 /* SQLDouble.swift */; };
@@ -189,6 +190,7 @@
 		37A8BC57247C2A2B00FFEBC5 /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
 		37A8BC5B247CA46000FFEBC5 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		37AAD42B247F460E008CD404 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		37B3025B24A2DC8F0047EF6E /* JsonParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonParserTests.swift; sourceTree = "<group>"; };
 		37B97A75248BF62900D0C655 /* SQLInteger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLInteger.swift; sourceTree = "<group>"; };
 		37B97A78248C9C8F00D0C655 /* MapNewsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsViewTests.swift; sourceTree = "<group>"; };
 		37B97A7A248C9FC800D0C655 /* MapNewsMarkerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsMarkerTests.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 			isa = PBXGroup;
 			children = (
 				376C8488247E0C1C0049D811 /* StringExtensionTests.swift */,
+				37B3025B24A2DC8F0047EF6E /* JsonParserTests.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -798,6 +801,7 @@
 				377AB7352488A89800C0F72E /* Database.swift in Sources */,
 				37B97A7B248C9FC800D0C655 /* MapNewsMarkerTests.swift in Sources */,
 				3787BC49248CC6510090CE8C /* Keys.swift in Sources */,
+				37B3025C24A2DC8F0047EF6E /* JsonParserTests.swift in Sources */,
 				377AB73C2488A8AA00C0F72E /* MapNewsSelector.swift in Sources */,
 				37B97A74248BD8D100D0C655 /* SQLDouble.swift in Sources */,
 				37B97A77248BF6DE00D0C655 /* SQLInteger.swift in Sources */,
