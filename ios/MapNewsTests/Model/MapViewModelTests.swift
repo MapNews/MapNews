@@ -157,7 +157,7 @@ class MapViewModelTests: XCTestCase {
             withImageCallback: withImageCallback(_:),
             noImageCallback: noImageCallback)
 
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 15, handler: nil)
     }
 }
 

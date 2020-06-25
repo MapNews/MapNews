@@ -8,8 +8,8 @@
 import UIKit
 
 class LoadingBar: UIView {
-    private let loadingBar: UIView
-    private let slider: UIView
+    internal let loadingBar: UIView
+    internal let slider: UIView
     private var displayLink: CADisplayLink?
     var loadingBarColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1) {
         didSet {

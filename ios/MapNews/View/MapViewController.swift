@@ -15,11 +15,13 @@ class MapViewController: UIViewController {
     var locationSelectorMask: UIView!
     var model: Model! {
         didSet {
+            initLocationSelector()
             updateMarkers()
         }
     }
     var mapNewsMarkers: [CountryCoordinateDTO: MapNewsMarker] = [:]
     var currentDisplayingInfoWindow: InfoWindow?
+    internal var allCountries: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +45,7 @@ class MapViewController: UIViewController {
     }
 
     private func initLocationSelector() {
-        let allCountries = model.allCountryNames ?? ["No data"]
+        allCountries = model.allCountryNames ?? ["No data"]
         locationSelector = MapNewsSelector(
             tableData: allCountries,
             mode: UIScreen.main.traitCollection.userInterfaceStyle

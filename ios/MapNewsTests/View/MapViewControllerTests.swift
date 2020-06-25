@@ -78,25 +78,56 @@ class MapViewControllerTests: XCTestCase {
         XCTAssertTrue(viewController.locationSelectorMask.isHidden)
     }
 
-    func testUpdateHeadlines_countryExisDoesNotExist() {
-        guard let article = ModelStub.sampleArticle else {
-            return
-        }
+    func testUpdateHeadlines_countryDoesNotExist() {
         let singaporeDTO = CountryCoordinateDTO(
             name: "Singapore",
             countryCode: "SG",
             coordinates: Coordinates(lat: 0.3, long: 0.4)!)
-        viewController.updateHeadlines(country: singaporeDTO, article: article)
+        viewController.updateHeadlines(country: singaporeDTO, article: ModelStub.sampleArticle)
         XCTAssertNil(viewController.currentDisplayingInfoWindow)
     }
 
     func testUpdateHeadlines_countryExist() {
-        guard let article = ModelStub.sampleArticle else {
-            return
-        }
-        viewController.updateHeadlines(country: ModelStub.hogwartsDTO, article: article)
+        viewController.updateHeadlines(country: ModelStub.hogwartsDTO, article: ModelStub.sampleArticle)
         XCTAssertEqual(viewController.currentDisplayingInfoWindow?.countryName, "Hogwarts")
         viewController.currentDisplayingInfoWindow?.loadingBar.removeFromSuperview()
+    }
+
+    func testUpdateHeadlines_noImageInArticle() {
+        let sampleArticleNoImage = ArticleBuilder.from(article: ModelStub.sampleArticle).withUrlToImage(url: nil).build()
+        viewController.updateHeadlines(country: ModelStub.hogwartsDTO, article: sampleArticleNoImage)
+        XCTAssertEqual(viewController.currentDisplayingInfoWindow?.countryName, "Hogwarts")
+    }
+
+    func testNoCountries_noData() {
+        viewController.model = NoCountriesModelStub()
+        XCTAssertEqual(viewController.allCountries, ["No data"])
+    }
+}
+
+class NoCountriesModelStub: Model {
+    func addObserver(_ observer: MapViewModelObserver) {
+    }
+
+    var allCountryNames: [String]? = nil
+
+    var observers: [MapViewModelObserver] = []
+
+    var currentBounds = GMSCoordinateBounds(
+        coordinate: CLLocationCoordinate2D.from(ModelStub.hogwartsDTO.coordinates)!,
+        coordinate: CLLocationCoordinate2D.from(ModelStub.atlantisDTO.coordinates)!
+    )
+
+    var allCountriesInBounds: [CountryCoordinateDTO] = []
+
+    func updateNews(country: CountryCoordinateDTO) {
+    }
+
+    func getCountryCoordinateDTO(for country: String) -> CountryCoordinateDTO? {
+        return nil
+    }
+
+    func loadImage(url: String, withImageCallback: @escaping (UIImage) -> Void, noImageCallback: () -> Void) {
     }
 }
 
@@ -114,18 +145,16 @@ class ModelStub: Model {
         name: "Atlantis",
         countryCode: "AT",
         coordinates: Coordinates(lat: 1.0, long: 102.98)!)
-    static let sampleArticle = ArticleDTO(jsonData:
-        [
-            "source": ["id": nil, "name": "CNA"],
-            "author": author,
-            "title": title,
-            "description": desc,
-            "url": url,
-            "urlToImage": urlToImage,
-            "publishedAt": publishedAt,
-            "content": content
-        ]
-    )
+    static let sampleArticle = ArticleBuilder()
+        .withSource(source: "CNA")
+        .withAuthor(author: author)
+        .withTitle(title: title)
+        .withDesc(desc: desc)
+        .withUrl(url: url)
+        .withUrlToImage(url: urlToImage)
+        .withPublishedTime(time: publishedAt)
+        .withContent(content: content)
+        .build()
 
     var allCountryNames: [String]? = ["Hogwarts", "Atlantis"]
 
@@ -137,10 +166,7 @@ class ModelStub: Model {
     var allCountriesInBounds = [ModelStub.hogwartsDTO, ModelStub.atlantisDTO]
 
     func updateNews(country: CountryCoordinateDTO) {
-        guard let article = ModelStub.sampleArticle else {
-            return
-        }
-        observers.forEach { $0.updateHeadlines(country: country, article: article) }
+        observers.forEach { $0.updateHeadlines(country: country, article: ModelStub.sampleArticle) }
     }
 
     func getCountryCoordinateDTO(for country: String) -> CountryCoordinateDTO? {
@@ -154,7 +180,6 @@ class ModelStub: Model {
     }
 
     func loadImage(url: String, withImageCallback: @escaping (UIImage) -> Void, noImageCallback: () -> Void) {
-        
     }
 }
 

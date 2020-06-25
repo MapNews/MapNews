@@ -17,6 +17,19 @@ class ArticleBuilder {
     var content = ""
     var urlToImage: String?
 
+    static func from(article: ArticleDTO) -> ArticleBuilder {
+        let articleBuilder = ArticleBuilder()
+            .withSource(source: article.source)
+            .withAuthor(author: article.author)
+            .withTitle(title: article.title)
+            .withDesc(desc: article.desc)
+            .withUrl(url: article.url)
+            .withPublishedTime(time: article.publishedAt)
+            .withContent(content: article.content)
+            .withUrlToImage(url: article.urlToImage)
+        return articleBuilder
+    }
+
     func withSource(source: String) -> ArticleBuilder {
         self.source = source
         return self
@@ -52,7 +65,7 @@ class ArticleBuilder {
         return self
     }
 
-    func withUrlToImage(url: String) -> ArticleBuilder {
+    func withUrlToImage(url: String?) -> ArticleBuilder {
         self.urlToImage = url
         return self
     }

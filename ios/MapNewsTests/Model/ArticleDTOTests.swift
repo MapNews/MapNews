@@ -87,6 +87,59 @@ class ArticleDTOTests: XCTestCase {
         "content": content
     ]
 
+    func testInit_noTitleObject() {
+        let jsonData: Any = "Test"
+        let article = ArticleDTO(jsonData: jsonData)
+        XCTAssertNil(article)
+    }
+
+    func testInit_noSourceObject() {
+        let jsonData: Any = [
+            "title": "sampleTitle"
+        ]
+        let article = ArticleDTO(jsonData: jsonData)
+        XCTAssertNil(article)
+    }
+
+    func testInit_noSourceNameObject() {
+        let jsonData: Any = [
+            "title": "sampleTitle",
+            "source": "no name"
+        ]
+        let article = ArticleDTO(jsonData: jsonData)
+        XCTAssertNil(article)
+    }
+
+    func testInit_noUrlObject() {
+        let jsonData: Any = [
+            "title": "sampleTitle",
+            "source": ["name": "CNA"]
+        ]
+        let article = ArticleDTO(jsonData: jsonData)
+        XCTAssertNil(article)
+    }
+
+    func testInit_noPublishedTimeObject() {
+        let jsonData: Any = [
+            "title": "sampleTitle",
+            "source": ["name": "CNA"],
+            "url": "www.google.com"
+        ]
+        let article = ArticleDTO(jsonData: jsonData)
+        XCTAssertNil(article)
+    }
+
+    func testInit_nonNullElements_allPresent() {
+        let jsonData: Any = [
+            "title": "sampleTitle",
+            "source": ["name": "CNA"],
+            "url": "www.google.com",
+            "publishedAt": "today"
+        ]
+        let article = ArticleDTO(jsonData: jsonData)
+        XCTAssertNotNil(article)
+    }
+
     func testInit_withAuthor_withContent() {
         guard let sampleArticle = ArticleDTO(jsonData: dataWithAuthorWithContent) else {
             XCTFail("Should be able to create article DTO from jsonobject")
@@ -163,5 +216,23 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
         XCTAssertEqual(sampleArticle.publishedAt, ArticleDTOTests.publishedAt)
         XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
+    }
+
+    func testEqual() {
+        let jsonData1: Any = [
+            "title": "sampleTitle",
+            "source": ["name": "CNA"],
+            "url": "www.google.com",
+            "publishedAt": "today"
+        ]
+        let jsonData2: Any = [
+            "title": "sampleTitle",
+            "source": ["name": "CNA"],
+            "url": "www.google.com",
+            "publishedAt": "today"
+        ]
+        let article1 = ArticleDTO(jsonData: jsonData1)
+        let article2 = ArticleDTO(jsonData: jsonData2)
+        XCTAssertEqual(article1, article2)
     }
 }

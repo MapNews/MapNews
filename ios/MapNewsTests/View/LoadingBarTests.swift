@@ -36,4 +36,29 @@ class LoadingBarTests: XCTestCase {
         XCTAssertEqual(loadingBar.advanceFactor, 2)
         XCTAssertEqual(loadingBar.sliderFactor, 5)
     }
+
+    func testSetLoadingBarColor() {
+        let newColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+        loadingBar.loadingBarColor = newColor
+        XCTAssertEqual(loadingBar.loadingBar.backgroundColor, newColor)
+    }
+
+    func testSetSliderColor() {
+        let newColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+        loadingBar.sliderColor = newColor
+        XCTAssertEqual(loadingBar.slider.backgroundColor, newColor)
+    }
+
+    func testSetSliderFactor() {
+        let newFactor: CGFloat = 10
+        loadingBar.sliderFactor = newFactor
+        XCTAssertEqual(
+            loadingBar.slider.bounds.width,
+            loadingBar.bounds.width / newFactor
+        )
+        XCTAssertEqual(
+            loadingBar.slider.bounds.height,
+            loadingBar.bounds.height
+        )
+    }
 }
