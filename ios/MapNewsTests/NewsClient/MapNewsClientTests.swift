@@ -46,7 +46,37 @@ class MapNewsClientTests: XCTestCase {
     }
 
     func testDownloadImage_invalidUrl() {
-        
+        retrieveResultsExpectation.isInverted = true
+        guard let url = URL(string: "https://news.com") else {
+            XCTFail("Should be able to create url")
+            return
+        }
+        newsClient.downloadImage(from: url, callback: imageCallback(_:))
+        waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func testDownloadImage_validUrl_imageExist() {
+        let validUrl = "https://gamepedia.cursecdn"
+            + ".com/minecraft_gamepedia/thumb/8/82/Duncan_Geere_Mojang_avatar"
+            + ".png/64px-Duncan_Geere_Mojang_avatar"
+            + ".png?version=48ddfefae25053fb7b140c6eec865641"
+        guard let url = URL(string: validUrl) else {
+            XCTFail("Should be able to create url")
+            return
+        }
+        newsClient.downloadImage(from: url, callback: imageCallback(_:))
+        waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func testDownloadImage_validUrl_imageDoesNotExist() {
+        retrieveResultsExpectation.isInverted = true
+        let validUrl = "https://google.com"
+        guard let url = URL(string: validUrl) else {
+            XCTFail("Should be able to create url")
+            return
+        }
+        newsClient.downloadImage(from: url, callback: imageCallback(_:))
+        waitForExpectations(timeout: 10, handler: nil)
     }
 }
 
@@ -74,6 +104,11 @@ extension MapNewsClientTests {
             return
         }
         XCTAssertEqual(articles.count, 0)
+        retrieveResultsExpectation.fulfill()
+    }
+
+    func imageCallback(_ image: UIImage) {
+        XCTAssertNotNil(image)
         retrieveResultsExpectation.fulfill()
     }
 
