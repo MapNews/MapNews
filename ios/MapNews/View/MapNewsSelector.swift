@@ -20,10 +20,40 @@ class MapNewsSelector: UIView, Selector {
             selectedCountryTextField.text = selectedValue
         }
     }
-    internal var tableView: UITableView
-    internal var selectedCountryTextField: UITextField
-    internal var labelBackground: UIView
-    internal var searchButton: UIImageView
+
+    internal lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: MapNewsSelector.tableRect)
+        tableView.isHidden = true
+        tableView.isUserInteractionEnabled = true
+        tableView.layer.cornerRadius = MapNewsSelector.selectorBorderRadius
+        tableView.layer.masksToBounds = true
+
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        return tableView
+    }()
+
+    internal var selectedCountryTextField: UITextField = {
+        let textField =
+            UITextField(frame: CGRect(origin: MapNewsSelector.textFieldOrigin, size: MapNewsSelector.textFieldSize))
+        textField.text = "Singapore"
+        textField.isUserInteractionEnabled = true
+        return textField
+    }()
+
+    internal lazy var labelBackground: UIView = {
+        let labelBackground = UIView(frame: MapNewsSelector.labelBackgroundRect)
+        labelBackground.layer.cornerRadius = 5
+        labelBackground.layer.masksToBounds = true;
+        return labelBackground
+    }()
+
+    internal lazy var searchButton: UIImageView = {
+        let searchButton = UIImageView(frame: MapNewsSelector.searchIconRect)
+        searchButton.image = Constants.searchIcon[.light] ?? nil
+        searchButton.isUserInteractionEnabled = true
+        return searchButton
+    }()
+
     internal var observers: [MapNewsSelectorObserver] = []
     var mode: UIUserInterfaceStyle = .light {
         didSet {
@@ -32,20 +62,8 @@ class MapNewsSelector: UIView, Selector {
     }
 
     init(tableData: [String], mode: UIUserInterfaceStyle) {
-        // Create label
-        selectedCountryTextField = MapNewsSelector.createTextField()
-
-        // Create picker
-        tableView = MapNewsSelector.createTableView()
-
-        // Create label background
-        labelBackground = MapNewsSelector.createLabelBackground()
-
-        // Create search button
-        searchButton = MapNewsSelector.createSearchButton()
-
-        self.allCountries = tableData
-        self.filteredCountries = tableData
+        allCountries = tableData
+        filteredCountries = tableData
 
         super.init(frame: MapNewsSelector.selectorRect)
         toggleMode(to: mode)
@@ -55,7 +73,7 @@ class MapNewsSelector: UIView, Selector {
         addSubview(tableView)
         addSubview(searchButton)
 
-        self.frame = MapNewsSelector.closedSelectorRect
+        frame = MapNewsSelector.closedSelectorRect
 
         selectedCountryTextField.delegate = self
         tableView.delegate = self
@@ -64,7 +82,7 @@ class MapNewsSelector: UIView, Selector {
         filteredCountries = allCountries.filter { $0.startsWith(substring: selectedCountryTextField.text ?? "") }
 
         bindAllGestureRecognizers()
-        
+
         AccessibilityIdentifierUtil.setIdentifierForContainer(view: self, to: Identifiers.selectorIdentifier)
         AccessibilityIdentifierUtil.setIdentifier(view: selectedCountryTextField, to: Identifiers.textFieldIdentifier)
         AccessibilityIdentifierUtil.setIdentifier(view: tableView, to: Identifiers.tableIdentifier)
@@ -80,44 +98,13 @@ class MapNewsSelector: UIView, Selector {
         observers.append(observer)
     }
 
-    internal static func createTableView() -> UITableView {
-        let tableView = UITableView(frame: MapNewsSelector.tableRect)
-        tableView.isHidden = true
-        tableView.isUserInteractionEnabled = true
-        tableView.layer.cornerRadius = MapNewsSelector.selectorBorderRadius
-        tableView.layer.masksToBounds = true
-
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        return tableView
-    }
-
-    internal static func createTextField() -> UITextField {
-        let textField =
-            UITextField(frame: CGRect(origin: MapNewsSelector.textFieldOrigin, size: MapNewsSelector.textFieldSize))
-        textField.text = "Singapore"
-        textField.isUserInteractionEnabled = true
-        return textField
-    }
-
-    internal static func createLabelBackground() -> UIView {
-        let labelBackground = UIView(frame: MapNewsSelector.labelBackgroundRect)
-        labelBackground.layer.cornerRadius = 5
-        labelBackground.layer.masksToBounds = true;
-        return labelBackground
-    }
-
-    internal static func createSearchButton() -> UIImageView {
-        let searchButton = UIImageView(frame: MapNewsSelector.searchIconRect)
-        searchButton.image = Constants.searchIcon[.light] ?? nil
-        searchButton.isUserInteractionEnabled = true
-        return searchButton
-    }
-    
     func closeSelector() {
         frame = MapNewsSelector.closedSelectorRect
-        selectedCountryTextField.resignFirstResponder()
         tableView.isHidden = true
+        selectedCountryTextField.resignFirstResponder()
         observers.forEach { $0.tableDidHide() }
+        layer.borderColor = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
+        layer.borderWidth = 2
     }
 
     func openSelector() {
@@ -125,6 +112,8 @@ class MapNewsSelector: UIView, Selector {
         filteredCountries = allCountries.filter { $0.startsWith(substring: selectedValue) }
         tableView.isHidden = false
         observers.forEach { $0.tableDidReveal() }
+        layer.borderColor = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
+        layer.borderWidth = 2
     }
 
     internal func updateLocation() {
@@ -145,13 +134,11 @@ extension MapNewsSelector {
         if tableView.isHidden {
             // Selector is close
             openSelector()
-            return
         } else {
             // Selector is open
             closeSelector()
             selectedValue = selectedCountryTextField.text ?? selectedValue
             updateLocation()
-            return
         }
     }
 

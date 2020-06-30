@@ -254,6 +254,33 @@ class MapNewsSelectorTests: XCTestCase {
         waitForExpectations(timeout: 0, handler: nil)
         assertTableIsHidden()
     }
+
+    func testTypeQuery_tapReturnKey_tableShouldHide() {
+        selector.closeSelector()
+        assertTableIsHidden()
+        let observer = SelectorObserverStub()
+        selector.addObserver(observer: observer)
+
+        selector.selectedCountryTextField.sendActions(for: .touchUpInside)
+        selector.selectedCountryTextField.text = "Canada"
+        selector.handleReturnButtonPress()
+        assertTableIsHidden()
+    }
+
+    func testTextFieldNil_tapReturnKey_tableShouldHide() {
+        selector.closeSelector()
+        assertTableIsHidden()
+        let observer = SelectorObserverStub()
+        selector.addObserver(observer: observer)
+
+
+        selector.selectedCountryTextField.sendActions(for: .touchUpInside)
+        selector.selectedValue = "Test value"
+        selector.selectedCountryTextField.text = nil
+        selector.handleReturnButtonPress()
+        assertTableIsHidden()
+        XCTAssertEqual(selector.selectedValue, "")
+    }
 }
 
 
