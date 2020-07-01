@@ -9,6 +9,7 @@
 import UIKit
 
 class MapNewsSelector: UIView, Selector {
+    private static var theSelector: MapNewsSelector?
     internal var allCountries: [String]
     internal var filteredCountries: [String] {
         didSet {
@@ -54,14 +55,32 @@ class MapNewsSelector: UIView, Selector {
         return searchButton
     }()
 
-    internal var observers: [MapNewsSelectorObserver] = []
+    var observer: MapNewsSelectorObserver?
     var mode: UIUserInterfaceStyle = .light {
         didSet {
             toggleMode(to: mode)
         }
     }
 
-    init(tableData: [String], mode: UIUserInterfaceStyle) {
+    static func getSelector(tableData: [String], mode: UIUserInterfaceStyle) -> MapNewsSelector {
+        if let selector = MapNewsSelector.theSelector {
+            selector.allCountries = tableData
+            selector.filteredCountries = selector.allCountries.filter {
+                $0.startsWith(substring: selector.selectedCountryTextField.text ?? "")
+            }
+            selector.selectedCountryTextField.text = "Singapore"
+            selector.toggleMode(to: mode)
+            selector.frame = closedSelectorRect
+            return selector
+        } else {
+            let singleton = MapNewsSelector(tableData: tableData, mode: mode)
+            theSelector = singleton
+            return singleton
+        }
+    }
+
+    private init(tableData: [String], mode: UIUserInterfaceStyle) {
+
         allCountries = tableData
         filteredCountries = tableData
 
@@ -94,30 +113,22 @@ class MapNewsSelector: UIView, Selector {
         return nil
     }
 
-    func addObserver(observer: MapNewsSelectorObserver) {
-        observers.append(observer)
-    }
-
     func closeSelector() {
         frame = MapNewsSelector.closedSelectorRect
         tableView.isHidden = true
         selectedCountryTextField.resignFirstResponder()
-        observers.forEach { $0.tableDidHide() }
-        layer.borderColor = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
-        layer.borderWidth = 2
+        observer?.tableDidHide()
     }
 
     func openSelector() {
         frame = MapNewsSelector.selectorRect
         filteredCountries = allCountries.filter { $0.startsWith(substring: selectedValue) }
         tableView.isHidden = false
-        observers.forEach { $0.tableDidReveal() }
-        layer.borderColor = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
-        layer.borderWidth = 2
+        observer?.tableDidReveal()
     }
 
     internal func updateLocation() {
-        observers.forEach { $0.locationDidUpdate(toLocation: selectedValue) }
+        observer?.locationDidUpdate(toLocation: selectedValue)
     }
 
     private func toggleMode(to mode: UIUserInterfaceStyle) {

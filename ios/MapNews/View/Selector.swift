@@ -12,7 +12,7 @@ protocol Selector: UIView {
 
     var mode: UIUserInterfaceStyle { get set }
 
-    func addObserver(observer: MapNewsSelectorObserver)
+    var observer: MapNewsSelectorObserver? { get set }
 
     func closeSelector()
 

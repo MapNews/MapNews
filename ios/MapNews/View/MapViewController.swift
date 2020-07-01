@@ -15,8 +15,8 @@ class MapViewController: UIViewController {
     var locationSelectorMask: UIView!
     var model: Model! {
         didSet {
-            initLocationSelector()
             updateMarkers()
+            allCountries = model.allCountryNames ?? ["No data"]
         }
     }
     var mapNewsMarkers: [CountryCoordinateDTO: MapNewsMarker] = [:]
@@ -45,12 +45,11 @@ class MapViewController: UIViewController {
     }
 
     private func initLocationSelector() {
-        allCountries = model.allCountryNames ?? ["No data"]
-        locationSelector = MapNewsSelector(
+        locationSelector = MapNewsSelector.getSelector(
             tableData: allCountries,
             mode: UIScreen.main.traitCollection.userInterfaceStyle
         )
-        locationSelector.addObserver(observer: self)
+        locationSelector.observer = self
     }
 
     private func initLocationSelectorMask() {

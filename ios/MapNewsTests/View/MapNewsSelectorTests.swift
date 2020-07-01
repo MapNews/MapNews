@@ -13,9 +13,10 @@ class MapNewsSelectorTests: XCTestCase {
     private let tableData = ["Test", "table", "data"]
 
     override func setUp() {
-        selector = MapNewsSelector(
+        selector = MapNewsSelector.getSelector(
             tableData: tableData,
             mode: .light)
+        selector.observer = nil
     }
 
     override func tearDown() {
@@ -69,14 +70,14 @@ class MapNewsSelectorTests: XCTestCase {
 
     func testAddObserver() {
         let sampleObserver = SelectorObserverStub()
-        XCTAssertEqual(selector.observers.count, 0)
+        XCTAssertNil(selector.observer)
 
-        selector.addObserver(observer: sampleObserver)
-        XCTAssertEqual(selector.observers.count, 1)
+        selector.observer = sampleObserver
+        XCTAssertNotNil(selector.observer)
     }
 
     func testCreateTableView() {
-        let tableView = MapNewsSelector.createTableView()
+        let tableView = selector.tableView
 
         XCTAssertEqual(tableView.frame.origin, CGPoint(x: 0, y: 50))
         XCTAssertEqual(tableView.frame.width, MapNewsSelector.tableWidth)
@@ -88,7 +89,7 @@ class MapNewsSelectorTests: XCTestCase {
     }
 
     func testCreateTextField() {
-        let textField = MapNewsSelector.createTextField()
+        let textField = selector.selectedCountryTextField
 
         XCTAssertEqual(textField.frame.width, MapNewsSelector.selectorWidth - MapNewsSelector.searchIconWidth)
         XCTAssertEqual(textField.frame.height, MapNewsSelector.labelHeight - (MapNewsSelector.labelPadding * 2))
@@ -101,7 +102,7 @@ class MapNewsSelectorTests: XCTestCase {
     }
 
     func testCreateLabelBackground() {
-        let labelBackground = MapNewsSelector.createLabelBackground()
+        let labelBackground = selector.labelBackground
 
         XCTAssertEqual(labelBackground.frame.width, MapNewsSelector.selectorWidth)
         XCTAssertEqual(labelBackground.frame.height, MapNewsSelector.labelHeight)
@@ -110,7 +111,7 @@ class MapNewsSelectorTests: XCTestCase {
     }
 
     func testCreateSearchButton() {
-        let searchButton = MapNewsSelector.createSearchButton()
+        let searchButton = selector.searchButton
         selector.mode = .light
 
         XCTAssertEqual(searchButton.frame.width, MapNewsSelector.searchIconWidth)
@@ -123,7 +124,7 @@ class MapNewsSelectorTests: XCTestCase {
         let closeSelectorExpectation = expectation(description: "close selector")
         let observer = SelectorObserverStub()
         observer.closeExpectation = closeSelectorExpectation
-        selector.addObserver(observer: observer)
+        selector.observer = observer
 
         selector.closeSelector()
         waitForExpectations(timeout: 0, handler: nil)
@@ -134,7 +135,7 @@ class MapNewsSelectorTests: XCTestCase {
         let openSelectorExpectation = expectation(description: "open selector")
         let observer = SelectorObserverStub()
         observer.openExpectation = openSelectorExpectation
-        selector.addObserver(observer: observer)
+        selector.observer = observer
 
         selector.openSelector()
         waitForExpectations(timeout: 0, handler: nil)
@@ -147,7 +148,7 @@ class MapNewsSelectorTests: XCTestCase {
 
         let observer = SelectorObserverStub()
         observer.openExpectation = openSelectorExpectation
-        selector.addObserver(observer: observer)
+        selector.observer = observer
 
         selector.openSelector()
         assertTableIsVisible()
@@ -168,7 +169,7 @@ class MapNewsSelectorTests: XCTestCase {
 
         let observer = SelectorObserverStub()
         observer.locationExpectation = locationExpectation
-        selector.addObserver(observer: observer)
+        selector.observer = observer
 
         selector.updateLocation()
         waitForExpectations(timeout: 0, handler: nil)
@@ -196,7 +197,7 @@ class MapNewsSelectorTests: XCTestCase {
         let touchTextFieldExpectation = expectation(description: "tap on text field")
         let observer = SelectorObserverStub()
         observer.openExpectation = touchTextFieldExpectation
-        selector.addObserver(observer: observer)
+        selector.observer = observer
 
         XCTAssertTrue(selector.selectedCountryTextField.canBecomeFirstResponder)
         selector.selectedCountryTextField.sendActions(for: .touchUpInside)
@@ -217,7 +218,7 @@ class MapNewsSelectorTests: XCTestCase {
         let touchSearchIconExpectation = expectation(description: "tap on search icon")
         let observer = SelectorObserverStub()
         observer.openExpectation = touchSearchIconExpectation
-        selector.addObserver(observer: observer)
+        selector.observer = observer
 
         guard let gestureRecognizers = selector.searchButton.gestureRecognizers else {
             XCTFail("Should have a tap gesture recognizer")
@@ -239,7 +240,7 @@ class MapNewsSelectorTests: XCTestCase {
         let touchSearchIconExpectation = expectation(description: "tap on search icon")
         let observer = SelectorObserverStub()
         observer.closeExpectation = touchSearchIconExpectation
-        selector.addObserver(observer: observer)
+        selector.observer = observer
 
         guard let gestureRecognizers = selector.searchButton.gestureRecognizers else {
             XCTFail("Should have a tap gesture recognizer")
@@ -259,7 +260,7 @@ class MapNewsSelectorTests: XCTestCase {
         selector.closeSelector()
         assertTableIsHidden()
         let observer = SelectorObserverStub()
-        selector.addObserver(observer: observer)
+        selector.observer = observer
 
         selector.selectedCountryTextField.sendActions(for: .touchUpInside)
         selector.selectedCountryTextField.text = "Canada"
@@ -271,8 +272,7 @@ class MapNewsSelectorTests: XCTestCase {
         selector.closeSelector()
         assertTableIsHidden()
         let observer = SelectorObserverStub()
-        selector.addObserver(observer: observer)
-
+        selector.observer = observer
 
         selector.selectedCountryTextField.sendActions(for: .touchUpInside)
         selector.selectedValue = "Test value"
