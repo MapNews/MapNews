@@ -9,10 +9,17 @@
 import UIKit
 
 class InfoWindow: UIView {
-    let countryName: String
-    let headline: String
-    let article: ArticleDTO
-    let loadingBar: LoadingBar
+    internal let countryName: String
+    internal let headline: String
+    internal let article: ArticleDTO
+    internal let loadingBar: LoadingBar
+    internal var observer: InfoWindowObserver?
+    lazy internal var crossButton: UIButton = {
+        let crossButton = UIButton(frame: InfoWindow.crossButtonRect)
+        crossButton.setImage(UIImage(named: "cross"), for: .normal)
+        crossButton.isUserInteractionEnabled = true
+        return crossButton
+    }()
 
     init(countryName: String, article: ArticleDTO) {
         self.countryName = countryName
@@ -28,16 +35,20 @@ class InfoWindow: UIView {
         addBackground()
         addCountryNameLabel()
         addHeadline()
+        addSubview(crossButton)
         addSubview(loadingBar)
+
+        bindAllGestureRecognizer()
         let identifier = Identifiers.generateInfoWindowIdentifier(country: countryName)
-        AccessibilityIdentifierUtil.setIdentifier(view: self, to: identifier)
+        AccessibilityIdentifierUtil.setIdentifierForContainer(view: self, to: identifier)
+        AccessibilityIdentifierUtil.setIdentifier(view: crossButton, to: Identifiers.infoWindowCrossButtonIdentifier)
     }
 
     required init?(coder: NSCoder) {
         nil
     }
 
-    internal func addBackground() {
+    private func addBackground() {
         let background = UIView(frame: CGRect(origin: CGPoint.zero, size: InfoWindow.size))
         background.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         background.layer.cornerRadius = InfoWindow.borderRadius
@@ -46,14 +57,14 @@ class InfoWindow: UIView {
         addSubview(background)
     }
 
-    internal func addCountryNameLabel() {
+    private func addCountryNameLabel() {
         let countryNameLabel = UILabel(frame: InfoWindow.countryLabelRect)
         countryNameLabel.text = countryName
         countryNameLabel.font = UIFont.boldSystemFont(ofSize: 28.0)
         addSubview(countryNameLabel)
     }
 
-    internal func addHeadline() {
+    private func addHeadline() {
         let headlineLabel = UILabel(frame: InfoWindow.headlineRect)
         headlineLabel.text = headline
         headlineLabel.font = UIFont.systemFont(ofSize: 14)
@@ -88,6 +99,16 @@ extension InfoWindow {
 }
 
 extension InfoWindow {
+    @objc func handleCrossTap(_ gesture: UITapGestureRecognizer) {
+        observer?.infoWindowDidClose()
+    }
+
+    func bindAllGestureRecognizer() {
+        crossButton.addTarget(self, action: #selector(handleCrossTap(_:)), for: .touchUpInside)
+    }
+}
+
+extension InfoWindow {
     // Info window constants
     static let width: CGFloat = UIScreen.main.bounds.width - 100
     static var height: CGFloat = (2 * insets) + countryLabelHeight + headlineHeight + imageHeight
@@ -97,11 +118,17 @@ extension InfoWindow {
     static let padding: CGFloat = 50
     static let insets: CGFloat = 20
 
-    static let countryLabelWidth: CGFloat = width - (2 * insets)
+    static let countryLabelWidth: CGFloat = width - (2 * insets) - crossButtonWidth
     static let countryLabelHeight: CGFloat = 30
     static let countryLabelOrigin = CGPoint(x: insets, y: insets)
     static let countryLabelSize = CGSize(width: countryLabelWidth, height: countryLabelHeight)
     static let countryLabelRect = CGRect(origin: countryLabelOrigin, size: countryLabelSize)
+
+    static let crossButtonWidth: CGFloat = 15
+    static let crossButtonHeight: CGFloat = 15
+    static let crossButtonOrigin = CGPoint(x: width - insets - crossButtonWidth, y: insets)
+    static let crossButtonSize = CGSize(width: crossButtonWidth, height: crossButtonHeight)
+    static let crossButtonRect = CGRect(origin: crossButtonOrigin, size: crossButtonSize)
 
     static let headlineWidth: CGFloat = width - (2 * insets)
     static let headlineHeight: CGFloat = 50

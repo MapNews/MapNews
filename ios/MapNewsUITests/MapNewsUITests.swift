@@ -25,7 +25,7 @@ class MapNewsUITests: XCTestCase {
         selector = app.otherElements[Identifiers.selectorIdentifier]
         textField = selector.textFields[Identifiers.textFieldIdentifier]
         labelBackground = selector.otherElements[Identifiers.labelBackgroundIdentifier]
-        searchButton = selector.images[Identifiers.searchButtonIdentifier]
+        searchButton = selector.buttons[Identifiers.searchButtonIdentifier]
         tableView = app.tables[Identifiers.tableIdentifier]
         locationMask = app.otherElements[Identifiers.locationMaskIdentifier]
     }
@@ -177,12 +177,24 @@ class MapNewsUITests: XCTestCase {
         let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
         let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
 
-        performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
+        performActionAndWait(action: {() -> Void in singaporeMarker.tap() }, timeout: 3)
         performActionAndWait(action: { () -> Void in searchButton.tap() }, timeout: 3)
 
         let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
         XCTAssertFalse(singaporeInfoWindow.exists)
         XCTAssertTrue(tableView.exists)
+    }
+
+    func testInfoWindowDisplayed_clickOnCross_InfoWindowDismissed() {
+        let sampleCountry = "Singapore"
+        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
+        let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
+        performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
+        let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
+        let crossButton = singaporeInfoWindow.buttons[Identifiers.infoWindowCrossButtonIdentifier]
+        performActionAndWait(action: { () -> Void in crossButton.tap() }, timeout: 3)
+
+        XCTAssertFalse(singaporeInfoWindow.exists)
     }
 }
 

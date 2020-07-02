@@ -57,6 +57,11 @@
 		376374C52490B046001A8A6C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376374C32490ADE0001A8A6C /* Model.swift */; };
 		376C8487247E0BFE0049D811 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376C8486247E0BFE0049D811 /* StringExtension.swift */; };
 		376C8489247E0C1C0049D811 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376C8488247E0C1C0049D811 /* StringExtensionTests.swift */; };
+		37742EA424AC472300433AEF /* WebsiteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37742EA324AC472300433AEF /* WebsiteViewController.swift */; };
+		37742EA624AD68AA00433AEF /* InfoWindowObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37742EA524AD68AA00433AEF /* InfoWindowObserver.swift */; };
+		37742EA724AD723100433AEF /* InfoWindowObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37742EA524AD68AA00433AEF /* InfoWindowObserver.swift */; };
+		37742EA824AD723400433AEF /* InfoWindowObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37742EA524AD68AA00433AEF /* InfoWindowObserver.swift */; };
+		37742EAA24ADB69B00433AEF /* XCTestCaseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37742EA924ADB69B00433AEF /* XCTestCaseExtension.swift */; };
 		37770C84248287B400B85B95 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37770C83248287B400B85B95 /* MapViewModel.swift */; };
 		377AB7242485E21800C0F72E /* MapNewsMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AB7232485E21800C0F72E /* MapNewsMarker.swift */; };
 		377AB7282487322A00C0F72E /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377AB7272487322A00C0F72E /* Selector.swift */; };
@@ -173,6 +178,9 @@
 		376374C32490ADE0001A8A6C /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		376C8486247E0BFE0049D811 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		376C8488247E0C1C0049D811 /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
+		37742EA324AC472300433AEF /* WebsiteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteViewController.swift; sourceTree = "<group>"; };
+		37742EA524AD68AA00433AEF /* InfoWindowObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindowObserver.swift; sourceTree = "<group>"; };
+		37742EA924ADB69B00433AEF /* XCTestCaseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseExtension.swift; sourceTree = "<group>"; };
 		37770C83248287B400B85B95 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		377AB7232485E21800C0F72E /* MapNewsMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsMarker.swift; sourceTree = "<group>"; };
 		377AB7272487322A00C0F72E /* Selector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
@@ -278,6 +286,7 @@
 		371E5609247215EB00B9F4CB /* MapNewsTests */ = {
 			isa = PBXGroup;
 			children = (
+				37742EA924ADB69B00433AEF /* XCTestCaseExtension.swift */,
 				377AB7442489D02200C0F72E /* Model */,
 				377AB7432489D01700C0F72E /* Util */,
 				371E560C247215EB00B9F4CB /* Info.plist */,
@@ -442,6 +451,8 @@
 			isa = PBXGroup;
 			children = (
 				371E55F7247215EA00B9F4CB /* MapViewController.swift */,
+				37742EA524AD68AA00433AEF /* InfoWindowObserver.swift */,
+				37742EA324AC472300433AEF /* WebsiteViewController.swift */,
 				37A2D8EA247B8C6D00696F24 /* MapNewsSelector.swift */,
 				376374BB248FCDA2001A8A6C /* InfoWindow.swift */,
 				376273FC2491C26700149179 /* LoadingBar.swift */,
@@ -724,6 +735,7 @@
 				370F775224848AC80043D964 /* CLLocationCoordinate2DExtension.swift in Sources */,
 				371E55F4247215EA00B9F4CB /* AppDelegate.swift in Sources */,
 				371CC150247CBA79008CF924 /* Keys.swift in Sources */,
+				37742EA424AC472300433AEF /* WebsiteViewController.swift in Sources */,
 				37A2D8EF247B9F4700696F24 /* MapNewsSelectorObserver.swift in Sources */,
 				37463CB9248B873400AA53C5 /* SQLDouble.swift in Sources */,
 				37463CBE248BCA3500AA53C5 /* SQLCommand.swift in Sources */,
@@ -732,6 +744,7 @@
 				37463CB3248B7D1100AA53C5 /* SQLType.swift in Sources */,
 				377AB7242485E21800C0F72E /* MapNewsMarker.swift in Sources */,
 				37463CB1248B7ACF00AA53C5 /* SQLSelect.swift in Sources */,
+				37742EA624AD68AA00433AEF /* InfoWindowObserver.swift in Sources */,
 				370F77502483FA4D0043D964 /* CountryCoordinateDTO.swift in Sources */,
 				37B9CBDE248DF3880050C82D /* MapViewModelObserver.swift in Sources */,
 				375E11FE249F0A3A00618F41 /* Identifiers.swift in Sources */,
@@ -787,6 +800,7 @@
 				37B97A73248BD8CF00D0C655 /* SQLString.swift in Sources */,
 				376374C52490B046001A8A6C /* Model.swift in Sources */,
 				377AB7482489EE1400C0F72E /* MapNewsMarker.swift in Sources */,
+				37742EAA24ADB69B00433AEF /* XCTestCaseExtension.swift in Sources */,
 				377AB7392488A8A300C0F72E /* MapNewsSelectorObserver.swift in Sources */,
 				3762740B2493276000149179 /* InfoWindowTests.swift in Sources */,
 				37509FE6248BD85C006E4D36 /* SQLCreate.swift in Sources */,
@@ -802,6 +816,7 @@
 				37B97A7B248C9FC800D0C655 /* MapNewsMarkerTests.swift in Sources */,
 				3787BC49248CC6510090CE8C /* Keys.swift in Sources */,
 				37B3025C24A2DC8F0047EF6E /* JsonParserTests.swift in Sources */,
+				37742EA724AD723100433AEF /* InfoWindowObserver.swift in Sources */,
 				377AB73C2488A8AA00C0F72E /* MapNewsSelector.swift in Sources */,
 				37B97A74248BD8D100D0C655 /* SQLDouble.swift in Sources */,
 				37B97A77248BF6DE00D0C655 /* SQLInteger.swift in Sources */,
@@ -826,6 +841,7 @@
 			files = (
 				375E11FF249F0A7900618F41 /* Identifiers.swift in Sources */,
 				371E5616247215EB00B9F4CB /* MapNewsUITests.swift in Sources */,
+				37742EA824AD723400433AEF /* InfoWindowObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

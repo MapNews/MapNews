@@ -48,9 +48,9 @@ class MapNewsSelector: UIView, Selector {
         return labelBackground
     }()
 
-    internal lazy var searchButton: UIImageView = {
-        let searchButton = UIImageView(frame: MapNewsSelector.searchIconRect)
-        searchButton.image = Constants.searchIcon[.light] ?? nil
+    internal lazy var searchButton: UIButton = {
+        let searchButton = UIButton(frame: MapNewsSelector.searchIconRect)
+        searchButton.setImage(Constants.searchIcon[.light] ?? nil, for: .normal)
         searchButton.isUserInteractionEnabled = true
         return searchButton
     }()
@@ -135,7 +135,7 @@ class MapNewsSelector: UIView, Selector {
         tableView.backgroundColor = Constants.tableBackgroundColor[mode]
         selectedCountryTextField.textColor = Constants.textColor[mode]
         labelBackground.backgroundColor = Constants.labelBackgroundColor[mode]
-        searchButton.image = Constants.searchIcon[mode] ?? nil
+        searchButton.setImage(Constants.searchIcon[mode] ?? nil, for: .normal)
         selectedCountryTextField.overrideUserInterfaceStyle = mode
     }
 }
@@ -160,9 +160,7 @@ extension MapNewsSelector {
     }
 
     internal func bindAllGestureRecognizers() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(sender:)))
-        searchButton.addGestureRecognizer(tap)
-
+        searchButton.addTarget(self, action: #selector(handleTap(sender:)), for: .touchUpInside)
         selectedCountryTextField.addTarget(self, action: #selector(handleReturnButtonPress), for: .editingDidEndOnExit)
     }
 

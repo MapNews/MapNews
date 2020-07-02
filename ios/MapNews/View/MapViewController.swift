@@ -124,6 +124,12 @@ extension MapViewController: MapNewsSelectorObserver {
     }
 }
 
+extension MapViewController: InfoWindowObserver {
+    func infoWindowDidClose() {
+        closeActiveInfoWindow()
+    }
+}
+
 extension MapViewController: MapViewModelObserver {
     func updateHeadlines(country: CountryCoordinateDTO, article: ArticleDTO) {
         guard let selectedMarker = mapNewsMarkers[country] else {
@@ -132,6 +138,7 @@ extension MapViewController: MapViewModelObserver {
         selectedMarker.zIndex = 1
 
         let infoWindow = InfoWindow(countryName: country.countryName, article: article)
+        infoWindow.observer = self
         view.addSubview(infoWindow)
         currentDisplayingInfoWindow = infoWindow
         guard let urlObject = article.urlToImage else {

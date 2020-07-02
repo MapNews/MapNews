@@ -40,7 +40,7 @@ class MapNewsSelectorTests: XCTestCase {
         XCTAssertEqual(selector.tableView.backgroundColor, Constants.tableBackgroundColor[.light])
         XCTAssertEqual(selector.selectedCountryTextField.textColor, Constants.textColor[.light])
         XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.labelBackgroundColor[.light])
-        XCTAssertEqual(selector.searchButton.image, Constants.searchIcon[.light])
+        XCTAssertEqual(selector.searchButton.image(for: .normal), Constants.searchIcon[.light])
         XCTAssertEqual(selector.selectedCountryTextField.overrideUserInterfaceStyle, .light)
     }
 
@@ -49,7 +49,7 @@ class MapNewsSelectorTests: XCTestCase {
         XCTAssertEqual(selector.tableView.backgroundColor, Constants.tableBackgroundColor[.dark])
         XCTAssertEqual(selector.selectedCountryTextField.textColor, Constants.textColor[.dark])
         XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.labelBackgroundColor[.dark])
-        XCTAssertEqual(selector.searchButton.image, Constants.searchIcon[.dark])
+        XCTAssertEqual(selector.searchButton.image(for: .normal), Constants.searchIcon[.dark])
         XCTAssertEqual(selector.selectedCountryTextField.overrideUserInterfaceStyle, .dark)
     }
 
@@ -116,7 +116,7 @@ class MapNewsSelectorTests: XCTestCase {
 
         XCTAssertEqual(searchButton.frame.width, MapNewsSelector.searchIconWidth)
         XCTAssertEqual(searchButton.frame.height, MapNewsSelector.searchIconHeight)
-        XCTAssertEqual(searchButton.image, Constants.searchIcon[.light])
+        XCTAssertEqual(searchButton.image(for: .normal), Constants.searchIcon[.light])
         XCTAssertTrue(searchButton.isUserInteractionEnabled)
     }
 
@@ -180,14 +180,14 @@ class MapNewsSelectorTests: XCTestCase {
         XCTAssertEqual(selector.tableView.backgroundColor, Constants.tableBackgroundColor[.light])
         XCTAssertEqual(selector.selectedCountryTextField.textColor, Constants.textColor[.light])
         XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.labelBackgroundColor[.light])
-        XCTAssertEqual(selector.searchButton.image, Constants.searchIcon[.light])
+        XCTAssertEqual(selector.searchButton.image(for: .normal), Constants.searchIcon[.light])
         XCTAssertEqual(selector.selectedCountryTextField.overrideUserInterfaceStyle, .light)
         
         selector.mode = .dark
         XCTAssertEqual(selector.tableView.backgroundColor, Constants.tableBackgroundColor[.dark])
         XCTAssertEqual(selector.selectedCountryTextField.textColor, Constants.textColor[.dark])
         XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.labelBackgroundColor[.dark])
-        XCTAssertEqual(selector.searchButton.image, Constants.searchIcon[.dark])
+        XCTAssertEqual(selector.searchButton.image(for: .normal), Constants.searchIcon[.dark])
         XCTAssertEqual(selector.selectedCountryTextField.overrideUserInterfaceStyle, .dark)
     }
 
@@ -200,7 +200,7 @@ class MapNewsSelectorTests: XCTestCase {
         selector.observer = observer
 
         XCTAssertTrue(selector.selectedCountryTextField.canBecomeFirstResponder)
-        selector.selectedCountryTextField.sendActions(for: .touchUpInside)
+        tap(textField: selector.selectedCountryTextField)
         waitForExpectations(timeout: 0, handler: nil)
         assertTableIsVisible()
     }
@@ -208,7 +208,7 @@ class MapNewsSelectorTests: XCTestCase {
     func testTextFieldTap_whenTableIsVisible_tableShouldRemainVisible() {
         selector.openSelector()
         assertTableIsVisible()
-        selector.selectedCountryTextField.sendActions(for: .touchUpInside)
+        tap(textField: selector.selectedCountryTextField)
         assertTableIsVisible()
     }
 
@@ -220,16 +220,7 @@ class MapNewsSelectorTests: XCTestCase {
         observer.openExpectation = touchSearchIconExpectation
         selector.observer = observer
 
-        guard let gestureRecognizers = selector.searchButton.gestureRecognizers else {
-            XCTFail("Should have a tap gesture recognizer")
-            return
-        }
-        XCTAssertEqual(gestureRecognizers.count, 1)
-        guard let tap = gestureRecognizers[0] as? UITapGestureRecognizer else {
-            XCTFail("Should be a tap gesture recgonizer")
-            return
-        }
-        selector.handleTap(sender: tap)
+        tap(button: selector.searchButton)
         waitForExpectations(timeout: 0, handler: nil)
         assertTableIsVisible()
     }
@@ -242,16 +233,7 @@ class MapNewsSelectorTests: XCTestCase {
         observer.closeExpectation = touchSearchIconExpectation
         selector.observer = observer
 
-        guard let gestureRecognizers = selector.searchButton.gestureRecognizers else {
-            XCTFail("Should have a tap gesture recognizer")
-            return
-        }
-        XCTAssertEqual(gestureRecognizers.count, 1)
-        guard let tap = gestureRecognizers[0] as? UITapGestureRecognizer else {
-            XCTFail("Should be a tap gesture recgonizer")
-            return
-        }
-        selector.handleTap(sender: tap)
+        tap(button: selector.searchButton)
         waitForExpectations(timeout: 0, handler: nil)
         assertTableIsHidden()
     }
@@ -262,7 +244,7 @@ class MapNewsSelectorTests: XCTestCase {
         let observer = SelectorObserverStub()
         selector.observer = observer
 
-        selector.selectedCountryTextField.sendActions(for: .touchUpInside)
+        tap(textField: selector.selectedCountryTextField)
         selector.selectedCountryTextField.text = "Canada"
         selector.handleReturnButtonPress()
         assertTableIsHidden()
@@ -274,7 +256,7 @@ class MapNewsSelectorTests: XCTestCase {
         let observer = SelectorObserverStub()
         selector.observer = observer
 
-        selector.selectedCountryTextField.sendActions(for: .touchUpInside)
+        tap(textField: selector.selectedCountryTextField)
         selector.selectedValue = "Test value"
         selector.selectedCountryTextField.text = nil
         selector.handleReturnButtonPress()

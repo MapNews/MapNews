@@ -31,6 +31,14 @@ class InfoWindowTests: XCTestCase {
         )
     }
 
+    func testTapCrossIcon() {
+        let observer = MockInfoWindowObserver()
+        observer.windowClosedExpectation = expectation(description: "window closed")
+        infoWindow.observer = observer
+        tap(button: infoWindow.crossButton)
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
     func testImageFailedToLoad() {
         infoWindow.imageFailedToLoad()
         let subviews = infoWindow.subviews.map { String(describing: type(of: $0)) }
@@ -47,5 +55,12 @@ class InfoWindowTests: XCTestCase {
 
         XCTAssertFalse(subviews.contains("LoadingBar"))
         XCTAssertEqual(uiLabelCount, 2)
+    }
+}
+
+class MockInfoWindowObserver: InfoWindowObserver {
+    var windowClosedExpectation: XCTestExpectation?
+    func infoWindowDidClose() {
+        windowClosedExpectation?.fulfill()
     }
 }
