@@ -8,4 +8,6 @@
 
 protocol InfoWindowObserver {
     func infoWindowDidClose()
+
+    func moveToWebsite()
 }
