@@ -64,6 +64,16 @@ class MapViewController: UIViewController {
         AccessibilityIdentifierUtil.setIdentifier(view: mask, to: Identifiers.locationMaskIdentifier)
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let websiteViewController = segue.destination as? WebsiteViewController else {
+            return
+        }
+        websiteViewController.url = currentDisplayingInfoWindow?.article.url
+    }
+
+    func moveToWebsite() {
+        performSegue(withIdentifier: "toNewsWebsite", sender: self)
+    }
 }
 
 extension MapViewController: MapNewsSelectorObserver {

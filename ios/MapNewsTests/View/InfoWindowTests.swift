@@ -24,7 +24,7 @@ class InfoWindowTests: XCTestCase {
         XCTAssertTrue(subviews.contains("UIView"))
 
         XCTAssertEqual(infoWindow.countryName, "Hogwarts")
-        XCTAssertEqual(infoWindow.headline, "Harry Potter Goes To School")
+        XCTAssertEqual(infoWindow.headlineString, "Harry Potter Goes To School")
         XCTAssertEqual(
             infoWindow.article,
             ArticleBuilder().withTitle(title: "Harry Potter Goes To School").build()
@@ -56,11 +56,30 @@ class InfoWindowTests: XCTestCase {
         XCTAssertFalse(subviews.contains("LoadingBar"))
         XCTAssertEqual(uiLabelCount, 2)
     }
+
+    func testMoveToWebsite() {
+        let observer = MockInfoWindowObserver()
+        observer.moveToWebsiteExpectation = expectation(description: "move to website")
+        infoWindow.observer = observer
+        infoWindow.imageDidLoad(image: UIImage(named: "news")!)
+
+        guard let imageToTap = infoWindow.newsImage else {
+            XCTFail("Image should not be nil")
+            return
+        }
+        tap(button: imageToTap)
+        waitForExpectations(timeout: 1, handler: nil)
+    }
 }
 
 class MockInfoWindowObserver: InfoWindowObserver {
     var windowClosedExpectation: XCTestExpectation?
+    var moveToWebsiteExpectation: XCTestExpectation?
     func infoWindowDidClose() {
         windowClosedExpectation?.fulfill()
+    }
+
+    func moveToWebsite() {
+        moveToWebsiteExpectation?.fulfill()
     }
 }

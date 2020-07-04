@@ -110,6 +110,7 @@
 		37B9CBDE248DF3880050C82D /* MapViewModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B9CBDD248DF3880050C82D /* MapViewModelObserver.swift */; };
 		37B9CBDF248E0E6E0050C82D /* MapViewModelObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B9CBDD248DF3880050C82D /* MapViewModelObserver.swift */; };
 		37C70F95249F0B0A00AD10BD /* Identifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E11FD249F0A3A00618F41 /* Identifiers.swift */; };
+		37DB5B8F24AF1F2A0035F58D /* WebsiteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37742EA324AC472300433AEF /* WebsiteViewController.swift */; };
 		37EFFBF724985016006F0EA1 /* CLLocationCoordinate2DExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EFFBF624985016006F0EA1 /* CLLocationCoordinate2DExtensionTests.swift */; };
 		37EFFBF924985451006F0EA1 /* CoordinatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37EFFBF824985451006F0EA1 /* CoordinatesTests.swift */; };
 		9F3FD826DC796C2DD8EA3431 /* Pods_MapNews_MapNewsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA990002AD934F464FDBF057 /* Pods_MapNews_MapNewsUITests.framework */; };
@@ -777,6 +778,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				377AB7362488A89B00C0F72E /* CountryCoordinateDTO.swift in Sources */,
+				37DB5B8F24AF1F2A0035F58D /* WebsiteViewController.swift in Sources */,
 				377AB7322488885700C0F72E /* MapConstants.swift in Sources */,
 				37509FE2248BD71D006E4D36 /* SQLDatabaseTests.swift in Sources */,
 				375F5F002499AA2200C89502 /* AccessibilityIdentifierUtil.swift in Sources */,

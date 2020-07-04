@@ -10,7 +10,7 @@ import UIKit
 
 class InfoWindow: UIView {
     internal let countryName: String
-    internal let headline: String
+    internal let headlineString: String
     internal let article: ArticleDTO
     internal let loadingBar: LoadingBar
     internal var observer: InfoWindowObserver?
@@ -20,10 +20,25 @@ class InfoWindow: UIView {
         crossButton.isUserInteractionEnabled = true
         return crossButton
     }()
+    lazy internal var headlineLabel: UILabel = {
+        let headlineLabel = UILabel(frame: InfoWindow.headlineRect)
+        headlineLabel.text = headlineString
+        headlineLabel.font = UIFont.systemFont(ofSize: 14)
+        headlineLabel.numberOfLines = 0
+        headlineLabel.lineBreakMode = .byWordWrapping
+        return headlineLabel
+    }()
+    lazy internal var countryNameLabel: UILabel = {
+        let countryNameLabel = UILabel(frame: InfoWindow.countryLabelRect)
+        countryNameLabel.text = countryName
+        countryNameLabel.font = UIFont.boldSystemFont(ofSize: 28.0)
+        return countryNameLabel
+    }()
+    internal var newsImage: UIButton?
 
     init(countryName: String, article: ArticleDTO) {
         self.countryName = countryName
-        self.headline = article.title
+        self.headlineString = article.title
         self.article = article
         self.loadingBar = LoadingBar(frame: InfoWindow.loadingBarRect)
 
@@ -33,8 +48,8 @@ class InfoWindow: UIView {
         accessibilityLabel = "InfoWindow"
 
         addBackground()
-        addCountryNameLabel()
-        addHeadline()
+        addSubview(countryNameLabel)
+        addSubview(headlineLabel)
         addSubview(crossButton)
         addSubview(loadingBar)
 
@@ -56,22 +71,6 @@ class InfoWindow: UIView {
 
         addSubview(background)
     }
-
-    private func addCountryNameLabel() {
-        let countryNameLabel = UILabel(frame: InfoWindow.countryLabelRect)
-        countryNameLabel.text = countryName
-        countryNameLabel.font = UIFont.boldSystemFont(ofSize: 28.0)
-        addSubview(countryNameLabel)
-    }
-
-    private func addHeadline() {
-        let headlineLabel = UILabel(frame: InfoWindow.headlineRect)
-        headlineLabel.text = headline
-        headlineLabel.font = UIFont.systemFont(ofSize: 14)
-        headlineLabel.numberOfLines = 0
-        headlineLabel.lineBreakMode = .byWordWrapping
-        addSubview(headlineLabel)
-    }
 }
 
 extension InfoWindow {
@@ -89,12 +88,18 @@ extension InfoWindow {
     func imageDidLoad(image: UIImage) {
         loadingBar.removeFromSuperview()
 
-        let headlineImage = UIImageView(frame: InfoWindow.imageRect)
-        headlineImage.image = image
-        headlineImage.alpha = 1
+        let headlineImage = UIButton(frame: InfoWindow.imageRect)
+        headlineImage.setImage(image, for: .normal)
         headlineImage.layer.cornerRadius = 5
         headlineImage.layer.masksToBounds = true
+
+        headlineImage.addTarget(self, action: #selector(moveToWebsite(_:)), for: .touchUpInside)
+        newsImage = headlineImage
         addSubview(headlineImage)
+    }
+
+    @objc func moveToWebsite(_ gesture: UITapGestureRecognizer) {
+        observer?.moveToWebsite()
     }
 }
 
