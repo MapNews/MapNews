@@ -9,9 +9,9 @@
 import UIKit
 import WebKit
 class WebsiteViewController: UIViewController, WKUIDelegate {
-
     var webView: WKWebView!
     var url: String?
+    var countryName: String?
 
     override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
@@ -28,6 +28,10 @@ class WebsiteViewController: UIViewController, WKUIDelegate {
         }
         let myURL = URL(string: urlString)
         let myRequest = URLRequest(url: myURL!)
+        AccessibilityIdentifierUtil.setIdentifierForContainer(
+            view: webView,
+            to: Identifiers.generateWebViewIdentifier(country: countryName ?? "")
+        )
         webView.load(myRequest)
     }
 }

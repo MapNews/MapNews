@@ -69,6 +69,7 @@ class MapViewController: UIViewController {
             return
         }
         websiteViewController.url = currentDisplayingInfoWindow?.article.url
+        websiteViewController.countryName = currentDisplayingInfoWindow?.countryName
     }
 
     func moveToWebsite() {

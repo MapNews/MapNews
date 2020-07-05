@@ -94,6 +94,10 @@ extension InfoWindow {
         headlineImage.layer.masksToBounds = true
 
         headlineImage.addTarget(self, action: #selector(moveToWebsite(_:)), for: .touchUpInside)
+        AccessibilityIdentifierUtil.setIdentifier(
+            view: headlineImage,
+            to: Identifiers.generateInfoWindowImageIdentifier(country: countryName)
+        )
         newsImage = headlineImage
         addSubview(headlineImage)
     }

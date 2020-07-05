@@ -140,29 +140,22 @@ class MapNewsUITests: XCTestCase {
 
     func testClickOnMarker_InfoWindowDisplayed() {
         let sampleCountry = "Singapore"
-        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
-        let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
-        performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
+        tap(onMarker: sampleCountry)
 
         let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
-
         XCTAssertTrue(singaporeInfoWindow.exists)
     }
 
     func testClickOnMarker_textFieldValueUpdated() {
         let sampleCountry = "China"
-        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
-        let chinaMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
-        performActionAndWait(action: {() -> Void in chinaMarker.tap()  }, timeout: 3)
+        tap(onMarker: sampleCountry)
 
         XCTAssertEqual(textField.value as? String, sampleCountry)
     }
 
     func testInfoWindowDisplayed_clickOutside_infoWindowDismissed() {
         let sampleCountry = "Singapore"
-        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
-        let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
-        performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
+        tap(onMarker: sampleCountry)
         let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
 
         performActionAndWait(action: { () -> Void in
@@ -174,10 +167,7 @@ class MapNewsUITests: XCTestCase {
 
     func testInfoWindowDisplayed_clickOnSearchButton_infoWindowDismissed_tableRevealed() {
         let sampleCountry = "Singapore"
-        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
-        let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
-
-        performActionAndWait(action: {() -> Void in singaporeMarker.tap() }, timeout: 3)
+        tap(onMarker: sampleCountry)
         performActionAndWait(action: { () -> Void in searchButton.tap() }, timeout: 3)
 
         let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
@@ -187,14 +177,23 @@ class MapNewsUITests: XCTestCase {
 
     func testInfoWindowDisplayed_clickOnCross_InfoWindowDismissed() {
         let sampleCountry = "Singapore"
-        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
-        let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
-        performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
+        tap(onMarker: sampleCountry)
         let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
         let crossButton = singaporeInfoWindow.buttons[Identifiers.infoWindowCrossButtonIdentifier]
         performActionAndWait(action: { () -> Void in crossButton.tap() }, timeout: 3)
 
         XCTAssertFalse(singaporeInfoWindow.exists)
+    }
+
+    func testInfoWindowDisplayed_clickOnImage_newsWindowDisplayed() {
+        let sampleCountry = "Singapore"
+        tap(onMarker: sampleCountry)
+
+        let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
+        let image = singaporeInfoWindow.buttons[Identifiers.generateInfoWindowImageIdentifier(country: sampleCountry)]
+        performActionAndWait(action: { () -> Void in image.tap() }, timeout: 3)
+
+        XCTAssertTrue(app.webViews[Identifiers.generateWebViewIdentifier(country: sampleCountry)].exists)
     }
 }
 
@@ -224,5 +223,11 @@ extension MapNewsUITests {
     func tap(on element: XCUIElement, offsetX: CGFloat, offsetY: CGFloat) {
         let coordinate = element.coordinate(withNormalizedOffset: CGVector(dx: offsetX, dy: offsetY))
         coordinate.tap()
+    }
+
+    func tap(onMarker sampleCountry: String) {
+        let controller = app.otherElements[Identifiers.mapViewControllerIdentifier]
+        let singaporeMarker = controller.buttons[Identifiers.generateMarkerIdentifer(country: sampleCountry)]
+        performActionAndWait(action: {() -> Void in singaporeMarker.tap()  }, timeout: 3)
     }
 }
