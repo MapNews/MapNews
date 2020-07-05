@@ -34,9 +34,16 @@ class InfoWindow: UIView {
         countryNameLabel.font = UIFont.boldSystemFont(ofSize: 28.0)
         return countryNameLabel
     }()
+    lazy internal var background: UIView = {
+        let background = UIView(frame: CGRect(origin: CGPoint.zero, size: InfoWindow.size))
+        background.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        background.layer.cornerRadius = InfoWindow.borderRadius
+        background.alpha = 0.8
+        return background
+    }()
     internal var newsImage: UIButton?
 
-    init(countryName: String, article: ArticleDTO) {
+    init(countryName: String, article: ArticleDTO, mode: UIUserInterfaceStyle) {
         self.countryName = countryName
         self.headlineString = article.title
         self.article = article
@@ -47,7 +54,7 @@ class InfoWindow: UIView {
         layer.cornerRadius = InfoWindow.borderRadius
         accessibilityLabel = "InfoWindow"
 
-        addBackground()
+        addSubview(background)
         addSubview(countryNameLabel)
         addSubview(headlineLabel)
         addSubview(crossButton)
@@ -57,19 +64,18 @@ class InfoWindow: UIView {
         let identifier = Identifiers.generateInfoWindowIdentifier(country: countryName)
         AccessibilityIdentifierUtil.setIdentifierForContainer(view: self, to: identifier)
         AccessibilityIdentifierUtil.setIdentifier(view: crossButton, to: Identifiers.infoWindowCrossButtonIdentifier)
+        toggle(to: mode)
     }
 
     required init?(coder: NSCoder) {
         nil
     }
 
-    private func addBackground() {
-        let background = UIView(frame: CGRect(origin: CGPoint.zero, size: InfoWindow.size))
-        background.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        background.layer.cornerRadius = InfoWindow.borderRadius
-        background.alpha = 0.8
-
-        addSubview(background)
+    private func toggle(to mode: UIUserInterfaceStyle) {
+        background.backgroundColor = Constants.backgroundColor[mode]
+        countryNameLabel.textColor = Constants.textColor[mode]
+        headlineLabel.textColor = Constants.textColor[mode]
+        crossButton.setImage(Constants.crossIcon[mode] ?? nil, for: .normal)
     }
 }
 

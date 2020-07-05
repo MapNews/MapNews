@@ -21,6 +21,9 @@ class MapViewController: UIViewController {
     }
     var mapNewsMarkers: [CountryCoordinateDTO: MapNewsMarker] = [:]
     var currentDisplayingInfoWindow: InfoWindow?
+    var mode: UIUserInterfaceStyle {
+        UIScreen.main.traitCollection.userInterfaceStyle
+    }
     internal var allCountries: [String] = []
 
     override func viewDidLoad() {
@@ -42,13 +45,25 @@ class MapViewController: UIViewController {
     private func initMap() {
         mapView = MapNewsView(frame: self.view.bounds)
         mapView.delegate = self
+        loadMapStyle(to: mode)
+    }
+
+    private func loadMapStyle(to mode: UIUserInterfaceStyle) {
+        do {
+          // Set the map style by passing the URL of the local file.
+          if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") {
+            mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+            print("setting style")
+          } else {
+            NSLog("Unable to find style.json")
+          }
+        } catch {
+          NSLog("One or more of the map styles failed to load. \(error)")
+        }
     }
 
     private func initLocationSelector() {
-        locationSelector = MapNewsSelector.getSelector(
-            tableData: allCountries,
-            mode: UIScreen.main.traitCollection.userInterfaceStyle
-        )
+        locationSelector = MapNewsSelector.getSelector(tableData: allCountries, mode: mode)
         locationSelector.observer = self
     }
 
@@ -127,7 +142,7 @@ extension MapViewController: MapNewsSelectorObserver {
 
     private func createMarker(at country: CountryCoordinateDTO) -> MapNewsMarker {
         let marker = MapNewsMarker(at: country)
-        marker.icon = UIImage(named: "news")
+        marker.icon = Constants.newsIcon[mode] ?? nil
         marker.title = country.countryName
         marker.map = mapView
         marker.accessibilityLabel = Identifiers.generateMarkerIdentifer(country: country.countryName)
@@ -148,7 +163,7 @@ extension MapViewController: MapViewModelObserver {
         }
         selectedMarker.zIndex = 1
 
-        let infoWindow = InfoWindow(countryName: country.countryName, article: article)
+        let infoWindow = InfoWindow(countryName: country.countryName, article: article, mode: mode)
         infoWindow.observer = self
         view.addSubview(infoWindow)
         currentDisplayingInfoWindow = infoWindow

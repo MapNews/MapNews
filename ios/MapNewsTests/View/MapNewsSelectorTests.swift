@@ -37,18 +37,18 @@ class MapNewsSelectorTests: XCTestCase {
 
     func testLightMode() {
         selector.mode = .light
-        XCTAssertEqual(selector.tableView.backgroundColor, Constants.tableBackgroundColor[.light])
+        XCTAssertEqual(selector.tableView.backgroundColor, Constants.backgroundColor[.light])
         XCTAssertEqual(selector.selectedCountryTextField.textColor, Constants.textColor[.light])
-        XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.labelBackgroundColor[.light])
+        XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.backgroundColor[.light])
         XCTAssertEqual(selector.searchButton.image(for: .normal), Constants.searchIcon[.light])
         XCTAssertEqual(selector.selectedCountryTextField.overrideUserInterfaceStyle, .light)
     }
 
     func testDarkMode() {
         selector.mode = .dark
-        XCTAssertEqual(selector.tableView.backgroundColor, Constants.tableBackgroundColor[.dark])
+        XCTAssertEqual(selector.tableView.backgroundColor, Constants.backgroundColor[.dark])
         XCTAssertEqual(selector.selectedCountryTextField.textColor, Constants.textColor[.dark])
-        XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.labelBackgroundColor[.dark])
+        XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.backgroundColor[.dark])
         XCTAssertEqual(selector.searchButton.image(for: .normal), Constants.searchIcon[.dark])
         XCTAssertEqual(selector.selectedCountryTextField.overrideUserInterfaceStyle, .dark)
     }
@@ -177,16 +177,16 @@ class MapNewsSelectorTests: XCTestCase {
 
     func testSetMode() {
         selector.mode = .light
-        XCTAssertEqual(selector.tableView.backgroundColor, Constants.tableBackgroundColor[.light])
+        XCTAssertEqual(selector.tableView.backgroundColor, Constants.backgroundColor[.light])
         XCTAssertEqual(selector.selectedCountryTextField.textColor, Constants.textColor[.light])
-        XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.labelBackgroundColor[.light])
+        XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.backgroundColor[.light])
         XCTAssertEqual(selector.searchButton.image(for: .normal), Constants.searchIcon[.light])
         XCTAssertEqual(selector.selectedCountryTextField.overrideUserInterfaceStyle, .light)
         
         selector.mode = .dark
-        XCTAssertEqual(selector.tableView.backgroundColor, Constants.tableBackgroundColor[.dark])
+        XCTAssertEqual(selector.tableView.backgroundColor, Constants.backgroundColor[.dark])
         XCTAssertEqual(selector.selectedCountryTextField.textColor, Constants.textColor[.dark])
-        XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.labelBackgroundColor[.dark])
+        XCTAssertEqual(selector.labelBackground.backgroundColor, Constants.backgroundColor[.dark])
         XCTAssertEqual(selector.searchButton.image(for: .normal), Constants.searchIcon[.dark])
         XCTAssertEqual(selector.selectedCountryTextField.overrideUserInterfaceStyle, .dark)
     }

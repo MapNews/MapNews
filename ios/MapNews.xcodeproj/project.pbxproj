@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3704879324B1A6550040783E /* style.json in Resources */ = {isa = PBXBuildFile; fileRef = 3704879224B1A6550040783E /* style.json */; };
 		370F77502483FA4D0043D964 /* CountryCoordinateDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370F774F2483FA4D0043D964 /* CountryCoordinateDTO.swift */; };
 		370F775224848AC80043D964 /* CLLocationCoordinate2DExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370F775124848AC80043D964 /* CLLocationCoordinate2DExtension.swift */; };
 		370F775424848C480043D964 /* MapViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370F775324848C480043D964 /* MapViewModelTests.swift */; };
@@ -137,6 +138,7 @@
 /* Begin PBXFileReference section */
 		1A63A82DAAA82F40AA04CE64 /* Pods-MapNews.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapNews.release.xcconfig"; path = "Target Support Files/Pods-MapNews/Pods-MapNews.release.xcconfig"; sourceTree = "<group>"; };
 		1BC46CE06AFA9DB34AF5AD6E /* Pods_MapNews.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MapNews.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3704879224B1A6550040783E /* style.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = style.json; sourceTree = "<group>"; };
 		370F774F2483FA4D0043D964 /* CountryCoordinateDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCoordinateDTO.swift; sourceTree = "<group>"; };
 		370F775124848AC80043D964 /* CLLocationCoordinate2DExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtension.swift; sourceTree = "<group>"; };
 		370F775324848C480043D964 /* MapViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModelTests.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				371E55F3247215EA00B9F4CB /* AppDelegate.swift */,
 				371E55F5247215EA00B9F4CB /* SceneDelegate.swift */,
 				371CC14F247CBA79008CF924 /* Keys.swift */,
+				3704879224B1A6550040783E /* style.json */,
 				377AB72F2487D96500C0F72E /* Util */,
 				377AB72D2487D93800C0F72E /* Model */,
 				37A8BC5E247CA75B00FFEBC5 /* View */,
@@ -600,6 +603,7 @@
 				37A8BC56247BEE2000FFEBC5 /* coordinates.txt in Resources */,
 				371E5600247215EB00B9F4CB /* LaunchScreen.storyboard in Resources */,
 				371E55FD247215EB00B9F4CB /* Assets.xcassets in Resources */,
+				3704879324B1A6550040783E /* style.json in Resources */,
 				371E55FB247215EA00B9F4CB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

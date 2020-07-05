@@ -13,7 +13,7 @@ class InfoWindowTests: XCTestCase {
 
     override func setUp() {
         let sampleArticle = ArticleBuilder().withTitle(title: "Harry Potter Goes To School").build()
-        infoWindow = InfoWindow(countryName: "Hogwarts", article: sampleArticle)
+        infoWindow = InfoWindow(countryName: "Hogwarts", article: sampleArticle, mode: .light)
     }
 
     func testInit() {

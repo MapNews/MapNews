@@ -80,7 +80,6 @@ class MapNewsSelector: UIView, Selector {
     }
 
     private init(tableData: [String], mode: UIUserInterfaceStyle) {
-
         allCountries = tableData
         filteredCountries = tableData
 
@@ -132,9 +131,9 @@ class MapNewsSelector: UIView, Selector {
     }
 
     private func toggleMode(to mode: UIUserInterfaceStyle) {
-        tableView.backgroundColor = Constants.tableBackgroundColor[mode]
+        tableView.backgroundColor = Constants.backgroundColor[mode]
         selectedCountryTextField.textColor = Constants.textColor[mode]
-        labelBackground.backgroundColor = Constants.labelBackgroundColor[mode]
+        labelBackground.backgroundColor = Constants.backgroundColor[mode]
         searchButton.setImage(Constants.searchIcon[mode] ?? nil, for: .normal)
         selectedCountryTextField.overrideUserInterfaceStyle = mode
     }
