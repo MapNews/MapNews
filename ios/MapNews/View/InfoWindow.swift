@@ -42,6 +42,11 @@ class InfoWindow: UIView {
         return background
     }()
     internal var newsImage: UIButton?
+    var mode: UIUserInterfaceStyle = .light {
+        didSet {
+            toggle(to: mode)
+        }
+    }
 
     init(countryName: String, article: ArticleDTO, mode: UIUserInterfaceStyle) {
         self.countryName = countryName

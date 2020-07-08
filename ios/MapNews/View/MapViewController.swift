@@ -49,16 +49,20 @@ class MapViewController: UIViewController {
     }
 
     private func loadMapStyle(to mode: UIUserInterfaceStyle) {
-        do {
-          // Set the map style by passing the URL of the local file.
-          if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") {
-            mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
-            print("setting style")
-          } else {
-            NSLog("Unable to find style.json")
-          }
-        } catch {
-          NSLog("One or more of the map styles failed to load. \(error)")
+        if mode == .light {
+            mapView.mapStyle = nil
+            return
+        } else if mode == .dark {
+            do {
+              // Set the map style by passing the URL of the local file.
+                if let styleURL = Bundle.main.url(forResource: "style", withExtension: "json") {
+                    mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+                } else {
+                    NSLog("Unable to find style.json")
+                }
+            } catch {
+                NSLog("One or more of the map styles failed to load. \(error)")
+            }
         }
     }
 
