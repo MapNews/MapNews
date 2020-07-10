@@ -10,9 +10,28 @@ import UIKit
 import GoogleMaps
 
 class MapViewController: UIViewController {
-    var mapView: MapNewsView!
-    var locationSelector: MapNewsSelector!
-    var locationSelectorMask: UIView!
+    lazy var mapView: MapNewsView = {
+        let mapView = MapNewsView(frame: self.view.bounds)
+        mapView.delegate = self
+        loadMapStyle(to: mode)
+        return mapView
+    }()
+    lazy var locationSelector: MapNewsSelector = {
+        let locationSelector = MapNewsSelector.getSelector(tableData: allCountries, mode: mode)
+        locationSelector.observer = self
+        return locationSelector
+    }()
+    lazy var locationSelectorMask: UIView = {
+        let mask = UIView(frame: self.view.bounds)
+        mask.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        mask.alpha = 0.7
+        mask.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleMaskTap(recognizer:)))
+        mask.addGestureRecognizer(tap)
+        mask.isHidden = true
+        AccessibilityIdentifierUtil.setIdentifier(view: mask, to: Identifiers.locationMaskIdentifier)
+        return mask
+    }()
     var model: Model! {
         didSet {
             updateMarkers()
@@ -29,23 +48,14 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initMap()
         model = MapViewModel(within: mapView.mapBounds)
         model.addObserver(self)
-        initLocationSelector()
-        initLocationSelectorMask()
 
         view.addSubview(mapView)
         view.addSubview(locationSelectorMask)
         view.addSubview(locationSelector)
 
         AccessibilityIdentifierUtil.setIdentifierForContainer(view: view, to: Identifiers.mapViewControllerIdentifier)
-    }
-
-    private func initMap() {
-        mapView = MapNewsView(frame: self.view.bounds)
-        mapView.delegate = self
-        loadMapStyle(to: mode)
     }
 
     private func loadMapStyle(to mode: UIUserInterfaceStyle) {
@@ -64,23 +74,6 @@ class MapViewController: UIViewController {
                 NSLog("One or more of the map styles failed to load. \(error)")
             }
         }
-    }
-
-    private func initLocationSelector() {
-        locationSelector = MapNewsSelector.getSelector(tableData: allCountries, mode: mode)
-        locationSelector.observer = self
-    }
-
-    private func initLocationSelectorMask() {
-        let mask = UIView(frame: self.view.bounds)
-        mask.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        mask.alpha = 0.7
-        mask.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleMaskTap(recognizer:)))
-        mask.addGestureRecognizer(tap)
-        mask.isHidden = true
-        locationSelectorMask = mask
-        AccessibilityIdentifierUtil.setIdentifier(view: mask, to: Identifiers.locationMaskIdentifier)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -166,11 +159,18 @@ extension MapViewController: MapViewModelObserver {
             return
         }
         selectedMarker.zIndex = 1
+        addInfoWindow(countryName: country.countryName, article: article)
+    }
 
-        let infoWindow = InfoWindow(countryName: country.countryName, article: article, mode: mode)
+    private func addInfoWindow(countryName: String, article: ArticleDTO) {
+        let infoWindow = InfoWindow(countryName: countryName, article: article, mode: mode)
         infoWindow.observer = self
         view.addSubview(infoWindow)
         currentDisplayingInfoWindow = infoWindow
+        loadArticleImageInInfowWindow(infoWindow: infoWindow, article: article)
+    }
+
+    private func loadArticleImageInInfowWindow(infoWindow: InfoWindow, article: ArticleDTO) {
         guard let urlObject = article.urlToImage else {
             infoWindow.imageFailedToLoad()
             return
@@ -211,17 +211,19 @@ extension MapViewController: GMSMapViewDelegate {
         guard let mapNewsMarker = marker as? MapNewsMarker else {
             return
         }
-        if model.currentBounds.contains(mapNewsMarker.position) {
-            mapView.animate(to: GMSCameraPosition(target: mapNewsMarker.position, zoom: mapView.camera.zoom))
-        } else {
-            mapView.location = mapNewsMarker.position
-        }
+        move(to: mapNewsMarker.position)
         moveMarkerUp(marker: mapNewsMarker)
         model.updateNews(country: mapNewsMarker.location)
         locationSelector.selectedValue = mapNewsMarker.location.countryName
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-            self.dimAllMarkers(except: mapNewsMarker)
-        })
+        dimMarkers(except: mapNewsMarker, after: 0.5)
+    }
+
+    private func move(to location: CLLocationCoordinate2D) {
+        if model.currentBounds.contains(location) {
+            mapView.animate(to: GMSCameraPosition(target: location, zoom: mapView.camera.zoom))
+        } else {
+            mapView.location = location
+        }
     }
 
     private func moveMarkerUp(marker: MapNewsMarker) {
@@ -230,6 +232,12 @@ extension MapViewController: GMSMapViewDelegate {
             $0.zIndex = 0
         }
         marker.map = mapView
+    }
+
+    private func dimMarkers(except marker: MapNewsMarker, after delay: Double) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+            self.dimAllMarkers(except: marker)
+        })
     }
 
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {

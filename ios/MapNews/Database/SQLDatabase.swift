@@ -12,7 +12,6 @@ class SQLDatabase {
     static let filename = "coordinates"
     static let fileType = "txt"
 
-
     var database: OpaquePointer?
 
     private let path = Bundle.main.path(forResource: filename, ofType: fileType)
