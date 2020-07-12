@@ -7,45 +7,59 @@
 //
 
 struct Commands {
-    static let createTableString =
+    static let createCoordinatesTableString =
     """
-    CREATE TABLE IF NOT EXISTS COUNTRIES(
+    CREATE TABLE IF NOT EXISTS COORDINATES(
     COUNTRY_CODE STRING,
     LAT DOUBLE,
-    LONG DOUBLE,
+    LONG DOUBLE);
+    """
+
+    static let createNamesTableString =
+    """
+    CREATE TABLE IF NOT EXISTS NAMES(
+    COUNTRY_CODE STRING,
     NAME STRING);
     """
 
     static let queryCountryStatementString =
     """
-    SELECT LAT, LONG FROM COUNTRIES
-    WHERE NAME = ?;
+    SELECT c.LAT, c.LONG FROM COORDINATES c
+    INNER JOIN NAMES n ON n.COUNTRY_CODE = c.COUNTRY_CODE
+    WHERE n.NAME = ?;
     """
 
     static let queryAllCountryCoordinateDTOStatementString =
     """
-    SELECT COUNTRY_CODE, NAME, LAT, LONG FROM COUNTRIES
+    SELECT c.COUNTRY_CODE, n.NAME, c.LAT, c.LONG FROM COORDINATES c
+    INNER JOIN NAMES n ON n.COUNTRY_CODE = c.COUNTRY_CODE
     """
 
-    static let insertStatementString =
+    static let insertCoordinatesStatementString =
     """
-    INSERT INTO COUNTRIES (COUNTRY_CODE, LAT, LONG, NAME) VALUES (?, ?, ?, ?);
+    INSERT INTO COORDINATES (COUNTRY_CODE, LAT, LONG) VALUES (?, ?, ?);
+    """
+
+    static let insertNamesStatementString =
+    """
+    INSERT INTO NAMES (COUNTRY_CODE, NAME) VALUES (?, ?);
     """
 
     static let queryCountriesStatementString =
     """
-    SELECT NAME FROM COUNTRIES
+    SELECT NAME FROM NAMES
     ORDER BY NAME
     """
 
     static let countCommandString =
     """
-    SELECT COUNT(*) FROM COUNTRIES
+    SELECT COUNT(*) FROM COORDINATES
     """
 
     static let queryCountryCoordinateDTOStatementString =
     """
-    SELECT COUNTRY_CODE, LAT, LONG FROM COUNTRIES
-    WHERE NAME = ?;
+    SELECT c.COUNTRY_CODE, c.LAT, c.LONG FROM COORDINATES c
+    INNER JOIN NAMES n ON n.COUNTRY_CODE = c.COUNTRY_CODE
+    WHERE n.NAME = ?;
     """
 }

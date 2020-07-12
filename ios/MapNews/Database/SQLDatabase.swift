@@ -73,7 +73,8 @@ class SQLDatabase {
     }
 
     private func populateTable(countries: [String]) {
-        let command = SQLInsert(command: Commands.insertStatementString, database: database)
+        let insertCoordinatesCommand = SQLInsert(command: Commands.insertCoordinatesStatementString, database: database)
+        let insertNamesCommand = SQLInsert(command: Commands.insertNamesStatementString, database: database)
         for country in countries {
             let countryArray = country.components(separatedBy: ",")
             if countryArray.count != 4 {
@@ -87,20 +88,31 @@ class SQLDatabase {
                 return
             }
             let name = countryArray[3]
-            command.with(argument: SQLString(argument: country_code)!, index: 1)
+            insertCoordinatesCommand.with(argument: SQLString(argument: country_code)!, index: 1)
                 .with(argument: SQLDouble(argument: lat)!, index: 2)
                 .with(argument: SQLDouble(argument: long)!, index: 3)
-                .with(argument: SQLString(argument: name)!, index: 4)
                 .execute()
-            command.reset()
+            insertNamesCommand.with(argument: SQLString(argument: country_code)!, index: 1)
+                .with(argument: SQLString(argument: name)!, index: 2)
+                .execute()
+
+            insertCoordinatesCommand.reset()
+            insertNamesCommand.reset()
         }
-        command.tearDown()
+        insertCoordinatesCommand.tearDown()
+        insertNamesCommand.tearDown()
     }
 
     private func createTable() {
-        let command = SQLCreate(command: Commands.createTableString, database: database)
-        command.execute()
-        command.tearDown()
+        let createCoordinatesTableCommand =
+            SQLCreate(command: Commands.createCoordinatesTableString, database: database)
+        createCoordinatesTableCommand.execute()
+        createCoordinatesTableCommand.tearDown()
+
+        let createNamesTableCommand =
+            SQLCreate(command: Commands.createNamesTableString, database: database)
+        createNamesTableCommand.execute()
+        createNamesTableCommand.tearDown()
     }
 }
 
@@ -197,8 +209,6 @@ extension SQLDatabase: Database {
     }
 
     func clearTable() {
-        let deleteAllCommand = SQLDelete(command: "DELETE FROM COUNTRIES", database: database)
-        deleteAllCommand.execute()
-        deleteAllCommand.tearDown()
+        Seed(database: self).deleteAll()
     }
 }

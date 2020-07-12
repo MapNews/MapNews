@@ -22,15 +22,24 @@ class SQLDatabaseTests: XCTestCase {
     override func setUp() {
         SQLDatabaseTests.database = SQLDatabase()
         Seed(database: SQLDatabaseTests.database).deleteAll()
-        let seedCommandString =
+        let seedCoordinatesCommandString =
             """
-            INSERT INTO COUNTRIES
-                (COUNTRY_CODE, LAT, LONG, NAME)
+            INSERT INTO COORDINATES
+                (COUNTRY_CODE, LAT, LONG)
             VALUES
-                ('HW', 1.1, 102.78, 'Hogwarts'),
-                ('AW', 1.0, 102.98, 'America');
+                ('HW', 1.1, 102.78),
+                ('AW', 1.0, 102.98);
             """
-        Seed(database: SQLDatabaseTests.database).insert(seedCommandString)
+        let seedNamesCommandString =
+        """
+        INSERT INTO NAMES
+            (COUNTRY_CODE, NAME)
+        VALUES
+            ('HW', 'Hogwarts'),
+            ('AW', 'America');
+        """
+        Seed(database: SQLDatabaseTests.database).insert(seedCoordinatesCommandString)
+        Seed(database: SQLDatabaseTests.database).insert(seedNamesCommandString)
     }
 
     func testQueryLatLong_locationNotInDatabase() {
@@ -43,11 +52,7 @@ class SQLDatabaseTests: XCTestCase {
     }
 
     func testQueryAllCountries_twoCountries() {
-        let countCommandString =
-            """
-            SELECT COUNT(*) FROM COUNTRIES
-            """
-        let countCommand = SQLSelect(command: countCommandString, database: SQLDatabaseTests.database.database)
+        let countCommand = SQLSelect(command: Commands.countCommandString, database: SQLDatabaseTests.database.database)
         countCommand.execute()
         let count = SQLInteger.extract(from: countCommand, index: 0)
         XCTAssertEqual(count, 2)

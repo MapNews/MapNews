@@ -13,18 +13,30 @@ struct Seed {
     }
 
     func deleteAll() {
-        let deleteAllCommand = SQLDelete(command: "DELETE FROM COUNTRIES", database: database)
+        let deleteAllCoordinatesCommand = SQLDelete(command: "DELETE FROM COORDINATES", database: database)
+        let deleteAllNamesCommand = SQLDelete(command: "DELETE FROM NAMES", database: database)
         print("Deleting all entries...")
-        deleteAllCommand.execute()
+
+        deleteAllCoordinatesCommand.execute()
+        deleteAllCoordinatesCommand.reset()
+        deleteAllCoordinatesCommand.tearDown()
+
+        deleteAllNamesCommand.execute()
+        deleteAllNamesCommand.reset()
+        deleteAllNamesCommand.tearDown()
     }
 
     func delete(_ command: String) {
         let deleteCommand = SQLDelete(command: command, database: database)
         deleteCommand.execute()
+        deleteCommand.reset()
+        deleteCommand.tearDown()
     }
 
     func insert(_ command: String) {
         let seedCommand = SQLInsert(command: command, database: database)
         seedCommand.execute()
+        seedCommand.reset()
+        seedCommand.tearDown()
     }
 }

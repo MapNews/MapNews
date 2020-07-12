@@ -5,17 +5,11 @@
 //  Created by Hol Yin Ho on 18/5/20.
 //  Copyright © 2020 Hol Yin Ho. All rights reserved.
 //
-
 import UIKit
 import GoogleMaps
 
 class MapViewController: UIViewController {
-    lazy var mapView: MapNewsView = {
-        let mapView = MapNewsView(frame: self.view.bounds)
-        mapView.delegate = self
-        loadMapStyle(to: mode)
-        return mapView
-    }()
+    var mapView: MapNewsView!
     lazy var locationSelector: MapNewsSelector = {
         let locationSelector = MapNewsSelector.getSelector(tableData: allCountries, mode: mode)
         locationSelector.observer = self
@@ -48,6 +42,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        initMap()
         model = MapViewModel(within: mapView.mapBounds)
         model.addObserver(self)
 
@@ -56,6 +51,12 @@ class MapViewController: UIViewController {
         view.addSubview(locationSelector)
 
         AccessibilityIdentifierUtil.setIdentifierForContainer(view: view, to: Identifiers.mapViewControllerIdentifier)
+    }
+
+    private func initMap() {
+        mapView = MapNewsView(frame: self.view.bounds)
+        mapView.delegate = self
+        loadMapStyle(to: mode)
     }
 
     private func loadMapStyle(to mode: UIUserInterfaceStyle) {
