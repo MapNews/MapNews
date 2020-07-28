@@ -19,6 +19,9 @@
 		371E55FD247215EB00B9F4CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 371E55FC247215EB00B9F4CB /* Assets.xcassets */; };
 		371E5600247215EB00B9F4CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371E55FE247215EB00B9F4CB /* LaunchScreen.storyboard */; };
 		371E5616247215EB00B9F4CB /* MapNewsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E5615247215EB00B9F4CB /* MapNewsUITests.swift */; };
+		374526E324CF10B700922689 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374526E224CF10B700922689 /* RequestBuilder.swift */; };
+		374526E524CF139F00922689 /* RequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374526E424CF139F00922689 /* RequestBuilderTests.swift */; };
+		374526E624CF13A500922689 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374526E224CF10B700922689 /* RequestBuilder.swift */; };
 		37463CB1248B7ACF00AA53C5 /* SQLSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37463CB0248B7ACF00AA53C5 /* SQLSelect.swift */; };
 		37463CB3248B7D1100AA53C5 /* SQLType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37463CB2248B7D1100AA53C5 /* SQLType.swift */; };
 		37463CB5248B7DC900AA53C5 /* SQLString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37463CB4248B7DC900AA53C5 /* SQLString.swift */; };
@@ -156,6 +159,8 @@
 		371E5611247215EB00B9F4CB /* MapNewsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapNewsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		371E5615247215EB00B9F4CB /* MapNewsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsUITests.swift; sourceTree = "<group>"; };
 		371E5617247215EB00B9F4CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		374526E224CF10B700922689 /* RequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
+		374526E424CF139F00922689 /* RequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilderTests.swift; sourceTree = "<group>"; };
 		37463CB0248B7ACF00AA53C5 /* SQLSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLSelect.swift; sourceTree = "<group>"; };
 		37463CB2248B7D1100AA53C5 /* SQLType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLType.swift; sourceTree = "<group>"; };
 		37463CB4248B7DC900AA53C5 /* SQLString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLString.swift; sourceTree = "<group>"; };
@@ -380,6 +385,7 @@
 			isa = PBXGroup;
 			children = (
 				375992212476088B00F36806 /* MapNewsClient.swift */,
+				374526E224CF10B700922689 /* RequestBuilder.swift */,
 				3762740424927A3A00149179 /* NewsClient.swift */,
 			);
 			path = Client;
@@ -432,6 +438,7 @@
 			isa = PBXGroup;
 			children = (
 				37B97A7C248CC5A100D0C655 /* MapNewsClientTests.swift */,
+				374526E424CF139F00922689 /* RequestBuilderTests.swift */,
 			);
 			path = NewsClient;
 			sourceTree = "<group>";
@@ -737,6 +744,7 @@
 				3759921F2476029900F36806 /* MapNewsView.swift in Sources */,
 				377E563B248D2D1300ED58F2 /* JSONParser.swift in Sources */,
 				375992222476088B00F36806 /* MapNewsClient.swift in Sources */,
+				374526E324CF10B700922689 /* RequestBuilder.swift in Sources */,
 				370F775224848AC80043D964 /* CLLocationCoordinate2DExtension.swift in Sources */,
 				371E55F4247215EA00B9F4CB /* AppDelegate.swift in Sources */,
 				371CC150247CBA79008CF924 /* Keys.swift in Sources */,
@@ -818,6 +826,7 @@
 				37B97A7D248CC5A100D0C655 /* MapNewsClientTests.swift in Sources */,
 				37EFFBF924985451006F0EA1 /* CoordinatesTests.swift in Sources */,
 				37627408249323BC00149179 /* ArticleBuilderTests.swift in Sources */,
+				374526E624CF13A500922689 /* RequestBuilder.swift in Sources */,
 				377AB7352488A89800C0F72E /* Database.swift in Sources */,
 				37B97A7B248C9FC800D0C655 /* MapNewsMarkerTests.swift in Sources */,
 				3787BC49248CC6510090CE8C /* Keys.swift in Sources */,
@@ -838,6 +847,7 @@
 				37EFFBF724985016006F0EA1 /* CLLocationCoordinate2DExtensionTests.swift in Sources */,
 				37509FE7248BD85F006E4D36 /* SQLDelete.swift in Sources */,
 				37509FE5248BD85B006E4D36 /* SQLInsert.swift in Sources */,
+				374526E524CF139F00922689 /* RequestBuilderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
