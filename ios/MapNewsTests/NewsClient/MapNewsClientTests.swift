@@ -21,6 +21,11 @@ class MapNewsClientTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
     }
 
+    func testQueryData_countryCodeIsInvalid() {
+        newsClient.queryData(countryCode: "HW", callback: noResultsCallback(_:))
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
     func testQueryData_urlIsInvalid() {
         retrieveResultsExpectation.isInverted = true
         newsClient.queryData(countryCode: "://\\\\.,&8", callback: noResultsCallback(_:))

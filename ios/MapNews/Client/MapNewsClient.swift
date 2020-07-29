@@ -9,7 +9,7 @@
 import UIKit
 
 class MapNewsClient: NewsClient {
-    private static let urlString = "https://gnews.io/api/v3/top-news?"
+    private static let urlString = "https://newsapi.org/v2/top-headlines?"
 
     func queryArticles(country: CountryCoordinateDTO,
                               callback: @escaping ([ArticleDTO], CountryCoordinateDTO) -> Void) {
@@ -24,7 +24,8 @@ class MapNewsClient: NewsClient {
     internal func queryData(countryCode: String, callback: @escaping (Data) -> Void) {
         let countryUrlString = RequestBuilder(baseUrl: MapNewsClient.urlString)
             .addParam(param: "country", value: countryCode.lowercased())
-            .addParam(param: "token", value: Keys.newsApiKey)
+            .addParam(param: "pageSize", value: "1")
+            .addParam(param: "apiKey", value: Keys.newsApiKey)
             .build()
         guard let url = URL(string: countryUrlString) else {
             print("Url is invalid")
