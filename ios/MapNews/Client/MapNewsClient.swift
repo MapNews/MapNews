@@ -11,24 +11,45 @@ import UIKit
 class MapNewsClient: NewsClient {
     private static let urlString = "https://newsapi.org/v2/top-headlines?"
 
+    private func queryByCountryCode(countryCode: String) -> String {
+        return RequestBuilder(baseUrl: MapNewsClient.urlString)
+            .addParam(param: "country", value: countryCode.lowercased())
+            .addParam(param: "apiKey", value: Keys.newsApiKey)
+            .build()
+    }
+
+    private func queryByCountryName(countryName: String) -> String {
+        return RequestBuilder(baseUrl: MapNewsClient.urlString)
+            .addParam(param: "q", value: countryName.replacingOccurrences(of: " ", with: ""))
+            .addParam(param: "apiKey", value: Keys.newsApiKey)
+            .build()
+    }
+
     func queryArticles(country: CountryCoordinateDTO,
                               callback: @escaping ([ArticleDTO], CountryCoordinateDTO) -> Void) {
-        queryData(countryCode: country.countryCode) {(data) in
+        let countryCodeUrlString = queryByCountryCode(countryCode: country.countryCode)
+
+        queryData(request: countryCodeUrlString) {(data) in
             guard let articles = self.convertDataToArticles(data) else {
                 return
             }
-            callback(articles, country)
+            if articles.isEmpty {
+                let countryNameUrlString = self.queryByCountryName(countryName: country.countryName)
+                self.queryData(request: countryNameUrlString) {(data) in
+                    guard let articles = self.convertDataToArticles(data) else {
+                        return
+                    }
+                    callback(articles, country)
+                }
+            } else {
+                callback(articles, country)
+            }
         }
     }
 
-    internal func queryData(countryCode: String, callback: @escaping (Data) -> Void) {
-        let countryUrlString = RequestBuilder(baseUrl: MapNewsClient.urlString)
-            .addParam(param: "country", value: countryCode.lowercased())
-            .addParam(param: "pageSize", value: "1")
-            .addParam(param: "apiKey", value: Keys.newsApiKey)
-            .build()
-        guard let url = URL(string: countryUrlString) else {
-            print("Url is invalid")
+    internal func queryData(request: String, callback: @escaping (Data) -> Void) {
+        guard let url = URL(string: request) else {
+            print("Url is invalid: " + request)
             return
         }
         getData(from: url) { (data, response, error) in

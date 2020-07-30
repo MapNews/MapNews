@@ -26,8 +26,10 @@ class WebsiteViewController: UIViewController, WKUIDelegate {
         guard let urlString = url else {
             return
         }
-        let myURL = URL(string: urlString)
-        let myRequest = URLRequest(url: myURL!)
+        guard let myURL = URL(string: urlString) else {
+            return
+        }
+        let myRequest = URLRequest(url: myURL)
         AccessibilityIdentifierUtil.setIdentifierForContainer(
             view: webView,
             to: Identifiers.generateWebViewIdentifier(country: countryName ?? "")

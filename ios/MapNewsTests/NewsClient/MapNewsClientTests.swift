@@ -17,23 +17,39 @@ class MapNewsClientTests: XCTestCase {
     }
 
     func testQueryData_countryCodeIsValid() {
-        newsClient.queryData(countryCode: "SG", callback: fulfillExpectationCallback(_:))
+        let url = "https://newsapi.org/v2/top-headlines?country="
+            + "SG"
+            + "&apiKey="
+            + Keys.newsApiKey
+        newsClient.queryData(request: url, callback: fulfillExpectationCallback(_:))
         waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testQueryData_countryCodeIsInvalid() {
-        newsClient.queryData(countryCode: "HW", callback: noResultsCallback(_:))
+        let url = "https://newsapi.org/v2/top-headlines?country="
+        + "HW"
+        + "&apiKey="
+        + Keys.newsApiKey
+        newsClient.queryData(request: url, callback: noResultsCallback(_:))
         waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testQueryData_urlIsInvalid() {
         retrieveResultsExpectation.isInverted = true
-        newsClient.queryData(countryCode: "://\\\\.,&8", callback: noResultsCallback(_:))
+        let url = "https://newsapi.org/v2/top-headlines?country="
+            + "://\\\\.,&8"
+            + "&apiKey="
+            + Keys.newsApiKey
+        newsClient.queryData(request: url, callback: noResultsCallback(_:))
         waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testQueryData_jsonFormatIsValid() {
-        newsClient.queryData(countryCode: "SG", callback: createArticleDTOCallback(_:))
+        let url = "https://newsapi.org/v2/top-headlines?country="
+            + "SG"
+            + "&apiKey="
+            + Keys.newsApiKey
+        newsClient.queryData(request: url, callback: createArticleDTOCallback(_:))
         waitForExpectations(timeout: 10, handler: nil)
     }
 

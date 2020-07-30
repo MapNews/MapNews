@@ -28,6 +28,10 @@ class InfoWindow: UIView {
         headlineLabel.lineBreakMode = .byWordWrapping
         return headlineLabel
     }()
+    lazy internal var headlineButton: UIButton = {
+        let headlineButton = UIButton(frame: InfoWindow.headlineRect)
+        return headlineButton
+    }()
     lazy internal var countryNameLabel: UILabel = {
         let countryNameLabel = UILabel(frame: InfoWindow.countryLabelRect)
         countryNameLabel.text = countryName
@@ -64,6 +68,7 @@ class InfoWindow: UIView {
         addSubview(headlineLabel)
         addSubview(crossButton)
         addSubview(loadingBar)
+        addSubview(headlineButton)
 
         bindAllGestureRecognizer()
         let identifier = Identifiers.generateInfoWindowIdentifier(country: countryName)
@@ -88,6 +93,7 @@ extension InfoWindow {
     // Image functions
     func imageFailedToLoad() {
         loadingBar.removeFromSuperview()
+        updateHeadlineLink()
 
         let noImageLabel = UILabel(frame: InfoWindow.imageRect)
         noImageLabel.text = "No image :("
@@ -98,6 +104,7 @@ extension InfoWindow {
 
     func imageDidLoad(image: UIImage) {
         loadingBar.removeFromSuperview()
+        updateHeadlineLink()
 
         let headlineImage = UIButton(frame: InfoWindow.imageRect)
         headlineImage.setImage(image, for: .normal)
@@ -111,6 +118,11 @@ extension InfoWindow {
         )
         newsImage = headlineImage
         addSubview(headlineImage)
+    }
+
+    private func updateHeadlineLink() {
+        headlineButton.addTarget(self, action: #selector(moveToWebsite(_:)), for: .touchUpInside)
+        AccessibilityIdentifierUtil.setIdentifier(view: headlineButton, to: Identifiers.headlineButton)
     }
 
     @objc func moveToWebsite(_ gesture: UITapGestureRecognizer) {

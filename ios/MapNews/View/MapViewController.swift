@@ -167,11 +167,12 @@ extension MapViewController: MapViewModelObserver {
         let infoWindow = InfoWindow(countryName: countryName, article: article, mode: mode)
         infoWindow.observer = self
         view.addSubview(infoWindow)
+        infoWindow.headlineButton.isEnabled = article.title != "No articles :("
         currentDisplayingInfoWindow = infoWindow
-        loadArticleImageInInfowWindow(infoWindow: infoWindow, article: article)
+        loadArticleImageInInfoWindow(infoWindow: infoWindow, article: article)
     }
 
-    private func loadArticleImageInInfowWindow(infoWindow: InfoWindow, article: ArticleDTO) {
+    private func loadArticleImageInInfoWindow(infoWindow: InfoWindow, article: ArticleDTO) {
         guard let urlObject = article.urlToImage else {
             infoWindow.imageFailedToLoad()
             return

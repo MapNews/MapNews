@@ -17,6 +17,7 @@ struct Identifiers {
     static let locationMaskIdentifier = "LocationMask"
     static let infoWindowIdentifier = "InfoWindow"
     static let infoWindowCrossButtonIdentifier = "InfoWindowCrossButton"
+    static let headlineButton = "headlineButton"
 
     static func generateCellIdentifier(index: Int) -> String {
         "Cell\(index)"
