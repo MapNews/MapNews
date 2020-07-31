@@ -9,17 +9,18 @@
 import UIKit
 
 class MapNewsClient: NewsClient {
-    private static let urlString = "https://newsapi.org/v2/top-headlines?"
+    private static let topHeadlinesUrl = "https://newsapi.org/v2/top-headlines?"
+    private static let everythingUrl = "https://newsapi.org/v2/everything?"
 
     private func queryByCountryCode(countryCode: String) -> String {
-        return RequestBuilder(baseUrl: MapNewsClient.urlString)
+        return RequestBuilder(baseUrl: MapNewsClient.topHeadlinesUrl)
             .addParam(param: "country", value: countryCode.lowercased())
             .addParam(param: "apiKey", value: Keys.newsApiKey)
             .build()
     }
 
     private func queryByCountryName(countryName: String) -> String {
-        return RequestBuilder(baseUrl: MapNewsClient.urlString)
+        return RequestBuilder(baseUrl: MapNewsClient.everythingUrl)
             .addParam(param: "q", value: countryName.replacingOccurrences(of: " ", with: ""))
             .addParam(param: "apiKey", value: Keys.newsApiKey)
             .build()
@@ -33,15 +34,15 @@ class MapNewsClient: NewsClient {
             guard let articles = self.convertDataToArticles(data) else {
                 return
             }
-            if articles.isEmpty {
-                let countryNameUrlString = self.queryByCountryName(countryName: country.countryName)
-                self.queryData(request: countryNameUrlString) {(data) in
-                    guard let articles = self.convertDataToArticles(data) else {
-                        return
-                    }
-                    callback(articles, country)
+            if !articles.isEmpty {
+                callback(articles, country)
+                return
+            }
+            let countryNameUrlString = self.queryByCountryName(countryName: country.countryName)
+            self.queryData(request: countryNameUrlString) {(data) in
+                guard let articles = self.convertDataToArticles(data) else {
+                    return
                 }
-            } else {
                 callback(articles, country)
             }
         }

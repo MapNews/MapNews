@@ -16,6 +16,16 @@ class MapNewsClientTests: XCTestCase {
         retrieveResultsExpectation = expectation(description: "results retrieved")
     }
 
+    func testQueryArticles_countryCodeIsValid_countryCodeNotFound() {
+        let thailand = CountryCoordinateDTO(
+            name: "Cambodia",
+            countryCode: "KH",
+            coordinates: Coordinates(lat: 0.1, long: 0.2)!
+        )
+        newsClient.queryArticles(country: thailand, callback: returnArticlesCallback(_:_:))
+        waitForExpectations(timeout: 10, handler: nil)
+    }
+
     func testQueryData_countryCodeIsValid() {
         let url = "https://newsapi.org/v2/top-headlines?country="
             + "SG"
@@ -27,7 +37,7 @@ class MapNewsClientTests: XCTestCase {
 
     func testQueryData_countryCodeIsInvalid() {
         let url = "https://newsapi.org/v2/top-headlines?country="
-        + "HW"
+        + "KH"
         + "&apiKey="
         + Keys.newsApiKey
         newsClient.queryData(request: url, callback: noResultsCallback(_:))
