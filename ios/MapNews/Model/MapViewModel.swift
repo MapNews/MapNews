@@ -52,12 +52,29 @@ class MapViewModel: Model {
 extension MapViewModel {
     private func getHeadline(articles: [ArticleDTO], country: CountryCoordinateDTO) {
         var article: ArticleDTO
-        if articles.count == 0 {
+        if articles.isEmpty {
             article = ArticleBuilder().withTitle(title: "No articles :(").build()
         } else {
-            article = articles[0]
+            guard let latestArticle = getLatestNews(articles: articles) else {
+                return
+            }
+            article = latestArticle
         }
         observers.forEach { $0.updateHeadlines(country: country, article: article) }
+    }
+
+    internal func getLatestNews(articles: [ArticleDTO]) -> ArticleDTO? {
+        if articles.isEmpty {
+            return nil
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        let defaultDate = formatter.date(from: "01/01/2099 23:59")!
+        return articles.max {
+            let firstDate = $0.publishedAt ?? defaultDate
+            let secondDate = $1.publishedAt ?? defaultDate
+            return firstDate < secondDate
+        }
     }
 
     func getCountryCoordinateDTO(for country: String) -> CountryCoordinateDTO? {

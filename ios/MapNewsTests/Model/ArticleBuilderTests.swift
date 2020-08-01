@@ -16,7 +16,7 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(emptyArticle.desc, "")
         XCTAssertEqual(emptyArticle.url, "")
         XCTAssertNil(emptyArticle.urlToImage)
-        XCTAssertEqual(emptyArticle.publishedAt, "")
+        XCTAssertEqual(emptyArticle.publishedAtString, "")
         XCTAssertEqual(emptyArticle.content, "")
     }
 
@@ -28,7 +28,7 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(articleWithSource.desc, "")
         XCTAssertEqual(articleWithSource.url, "")
         XCTAssertNil(articleWithSource.urlToImage)
-        XCTAssertEqual(articleWithSource.publishedAt, "")
+        XCTAssertEqual(articleWithSource.publishedAtString, "")
         XCTAssertEqual(articleWithSource.content, "")
     }
 
@@ -40,7 +40,7 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(articleWithAuthor.desc, "")
         XCTAssertEqual(articleWithAuthor.url, "")
         XCTAssertNil(articleWithAuthor.urlToImage)
-        XCTAssertEqual(articleWithAuthor.publishedAt, "")
+        XCTAssertEqual(articleWithAuthor.publishedAtString, "")
         XCTAssertEqual(articleWithAuthor.content, "")
     }
 
@@ -52,7 +52,7 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(articleWithTitle.desc, "")
         XCTAssertEqual(articleWithTitle.url, "")
         XCTAssertNil(articleWithTitle.urlToImage)
-        XCTAssertEqual(articleWithTitle.publishedAt, "")
+        XCTAssertEqual(articleWithTitle.publishedAtString, "")
         XCTAssertEqual(articleWithTitle.content, "")
     }
 
@@ -64,7 +64,7 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(articleWithDesc.desc, "Climb up the chiminey")
         XCTAssertEqual(articleWithDesc.url, "")
         XCTAssertNil(articleWithDesc.urlToImage)
-        XCTAssertEqual(articleWithDesc.publishedAt, "")
+        XCTAssertEqual(articleWithDesc.publishedAtString, "")
         XCTAssertEqual(articleWithDesc.content, "")
     }
 
@@ -76,7 +76,7 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(articleWithUrl.desc, "")
         XCTAssertEqual(articleWithUrl.url, "https://www.google.com")
         XCTAssertNil(articleWithUrl.urlToImage)
-        XCTAssertEqual(articleWithUrl.publishedAt, "")
+        XCTAssertEqual(articleWithUrl.publishedAtString, "")
         XCTAssertEqual(articleWithUrl.content, "")
     }
 
@@ -88,20 +88,20 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(articleWithUrlToImage.desc, "")
         XCTAssertEqual(articleWithUrlToImage.url, "")
         XCTAssertEqual(articleWithUrlToImage.urlToImage, "https://www.google.com/images")
-        XCTAssertEqual(articleWithUrlToImage.publishedAt, "")
+        XCTAssertEqual(articleWithUrlToImage.publishedAtString, "")
         XCTAssertEqual(articleWithUrlToImage.content, "")
     }
 
-    func testBuild_withPublishedAt() {
-        let articleWithPublishedAt = ArticleBuilder().withPublishedTime(time: "30/02/2012 8pm").build()
-        XCTAssertEqual(articleWithPublishedAt.source, "")
-        XCTAssertEqual(articleWithPublishedAt.author, "")
-        XCTAssertEqual(articleWithPublishedAt.title, "")
-        XCTAssertEqual(articleWithPublishedAt.desc, "")
-        XCTAssertEqual(articleWithPublishedAt.url, "")
-        XCTAssertNil(articleWithPublishedAt.urlToImage)
-        XCTAssertEqual(articleWithPublishedAt.publishedAt, "30/02/2012 8pm")
-        XCTAssertEqual(articleWithPublishedAt.content, "")
+    func testBuild_withpublishedAtString() {
+        let articleWithpublishedAtString = ArticleBuilder().withPublishedTime(time: "30/02/2012 8pm").build()
+        XCTAssertEqual(articleWithpublishedAtString.source, "")
+        XCTAssertEqual(articleWithpublishedAtString.author, "")
+        XCTAssertEqual(articleWithpublishedAtString.title, "")
+        XCTAssertEqual(articleWithpublishedAtString.desc, "")
+        XCTAssertEqual(articleWithpublishedAtString.url, "")
+        XCTAssertNil(articleWithpublishedAtString.urlToImage)
+        XCTAssertEqual(articleWithpublishedAtString.publishedAtString, "30/02/2012 8pm")
+        XCTAssertEqual(articleWithpublishedAtString.content, "")
     }
 
     func testBuild_withContent() {
@@ -112,7 +112,7 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(articleWithContent.desc, "")
         XCTAssertEqual(articleWithContent.url, "")
         XCTAssertNil(articleWithContent.urlToImage)
-        XCTAssertEqual(articleWithContent.publishedAt, "")
+        XCTAssertEqual(articleWithContent.publishedAtString, "")
         XCTAssertEqual(articleWithContent.content, "Lorem ipsum climb up the wall")
     }
 
@@ -134,7 +134,7 @@ class ArticleBuilderTests: XCTestCase {
         XCTAssertEqual(article.desc, "Climb up the chiminey")
         XCTAssertEqual(article.url, "https://www.google.com")
         XCTAssertEqual(article.urlToImage, "https://www.google.com/images")
-        XCTAssertEqual(article.publishedAt, "30/02/2012 8pm")
+        XCTAssertEqual(article.publishedAtString, "30/02/2012 8pm")
         XCTAssertEqual(article.content, "Lorem ipsum climb up the wall")
     }
 }

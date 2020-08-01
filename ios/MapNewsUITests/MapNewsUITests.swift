@@ -195,6 +195,18 @@ class MapNewsUITests: XCTestCase {
 
         XCTAssertTrue(app.webViews[Identifiers.generateWebViewIdentifier(country: sampleCountry)].exists)
     }
+
+    func testInfoWindowDisplayed_clickOnHeadline_newsWindowDisplayed() {
+        let sampleCountry = "Singapore"
+        tap(onMarker: sampleCountry)
+
+        let singaporeInfoWindow = app.otherElements[Identifiers.generateInfoWindowIdentifier(country: sampleCountry)]
+        let headline =
+            singaporeInfoWindow.buttons[Identifiers.generateInfoWindowHeadlineIdentifier(country: sampleCountry)]
+        performActionAndWait(action: { () -> Void in headline.tap() }, timeout: 3)
+
+        XCTAssertTrue(app.webViews[Identifiers.generateWebViewIdentifier(country: sampleCountry)].exists)
+    }
 }
 
 extension XCUIElement {

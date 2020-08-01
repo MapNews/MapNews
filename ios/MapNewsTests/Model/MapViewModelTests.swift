@@ -159,6 +159,37 @@ class MapViewModelTests: XCTestCase {
 
         waitForExpectations(timeout: 15, handler: nil)
     }
+
+    func testGetLatestNews_threeArticles() {
+        let article1 = ArticleBuilder().withPublishedTime(time: "2020-01-01T08:00:07Z").build()
+        let article2 = ArticleBuilder().withPublishedTime(time: "2020-01-09T08:00:07Z").build()
+        let article3 = ArticleBuilder().withPublishedTime(time: "2020-01-09T07:59:07Z").build()
+
+        let articles = [article1, article2, article3]
+        guard let latestArticle = model.getLatestNews(articles: articles) else {
+            XCTFail("Should be able to get latest article")
+            return
+        }
+        XCTAssertEqual(article2, latestArticle)
+    }
+
+    func testGetLatestNews_EmptyArray() {
+        let articles: [ArticleDTO] = []
+        XCTAssertNil(model.getLatestNews(articles: articles))
+    }
+
+    func testGetLatestNews_moreThanOneLatestNews_getFirstOccurance() {
+        let article1 = ArticleBuilder().withPublishedTime(time: "2020-01-01T08:00:07Z").build()
+        let article2 = ArticleBuilder().withPublishedTime(time: "2020-01-09T07:59:07Z").build()
+        let article3 = ArticleBuilder().withPublishedTime(time: "2020-01-09T07:59:07Z").build()
+
+        let articles = [article1, article2, article3]
+        guard let latestArticle = model.getLatestNews(articles: articles) else {
+            XCTFail("Should be able to get latest article")
+            return
+        }
+        XCTAssertEqual(article2, latestArticle)
+    }
 }
 
 extension MapViewModelTests {

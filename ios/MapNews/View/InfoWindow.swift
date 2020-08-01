@@ -17,7 +17,7 @@ class InfoWindow: UIView {
     lazy internal var crossButton: UIButton = {
         let crossButton = UIButton(frame: InfoWindow.crossButtonRect)
         crossButton.setImage(UIImage(named: "cross"), for: .normal)
-        crossButton.isUserInteractionEnabled = true
+        AccessibilityIdentifierUtil.setIdentifier(view: crossButton, to: Identifiers.infoWindowCrossButtonIdentifier)
         return crossButton
     }()
     lazy internal var headlineLabel: UILabel = {
@@ -30,6 +30,8 @@ class InfoWindow: UIView {
     }()
     lazy internal var headlineButton: UIButton = {
         let headlineButton = UIButton(frame: InfoWindow.headlineRect)
+        let headlineIdentifier = Identifiers.generateInfoWindowHeadlineIdentifier(country: countryName)
+        AccessibilityIdentifierUtil.setIdentifier(view: headlineButton, to: headlineIdentifier)
         return headlineButton
     }()
     lazy internal var countryNameLabel: UILabel = {
@@ -73,7 +75,6 @@ class InfoWindow: UIView {
         bindAllGestureRecognizer()
         let identifier = Identifiers.generateInfoWindowIdentifier(country: countryName)
         AccessibilityIdentifierUtil.setIdentifierForContainer(view: self, to: identifier)
-        AccessibilityIdentifierUtil.setIdentifier(view: crossButton, to: Identifiers.infoWindowCrossButtonIdentifier)
         toggle(to: mode)
     }
 
@@ -122,7 +123,7 @@ extension InfoWindow {
 
     private func updateHeadlineLink() {
         headlineButton.addTarget(self, action: #selector(moveToWebsite(_:)), for: .touchUpInside)
-        AccessibilityIdentifierUtil.setIdentifier(view: headlineButton, to: Identifiers.headlineButton)
+        AccessibilityIdentifierUtil.setIdentifier(view: headlineButton, to: Identifiers.generateInfoWindowHeadlineIdentifier(country: countryName))
     }
 
     @objc func moveToWebsite(_ gesture: UITapGestureRecognizer) {

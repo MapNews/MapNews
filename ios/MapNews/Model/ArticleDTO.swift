@@ -13,9 +13,11 @@ class ArticleDTO {
     let title: String
     let desc: String
     let url: String
-    let publishedAt: String
+    let publishedAt: Date?
+    let publishedAtString: String
     let content: String
     let urlToImage: String?
+
 
     init?(jsonData: Any) {
         guard let title = JSONParser.getObject(from: jsonData, key: "title") as? String else {
@@ -36,7 +38,7 @@ class ArticleDTO {
             print("Unable to extract url object from " + title)
             return nil
         }
-        guard let publishedAt = JSONParser.getObject(from: jsonData, key: "publishedAt") as? String else {
+        guard let publishedDate = JSONParser.getObject(from: jsonData, key: "publishedAt") as? String else {
             print("Unable to extract publishedAt object from " + title)
             return nil
         }
@@ -48,7 +50,8 @@ class ArticleDTO {
         self.desc = desc
         self.url = url
         self.urlToImage = JSONParser.getObject(from: jsonData, key: "urlToImage") as? String
-        self.publishedAt = publishedAt
+        self.publishedAtString = publishedDate
+        publishedAt = ArticleDTO.toDate(publishedAt: publishedDate)
         self.content = content
     }
 
@@ -63,5 +66,35 @@ extension ArticleDTO: Equatable {
             && lhs.url == rhs.url
             && lhs.publishedAt == rhs.publishedAt
             && lhs.content == rhs.content
+    }
+
+    static func toDate(publishedAt: String) -> Date? {
+        if publishedAt.count != 20 {
+            return nil
+        }
+        let start = publishedAt.startIndex
+        let yearStart = publishedAt.index(start, offsetBy: 0)
+        let yearEnd = publishedAt.index(start, offsetBy: 4)
+        let year = publishedAt[yearStart..<yearEnd]
+
+        let monthStart = publishedAt.index(start, offsetBy: 5)
+        let monthEnd = publishedAt.index(start, offsetBy: 7)
+        let month = publishedAt[monthStart..<monthEnd]
+
+        let dayStart = publishedAt.index(start, offsetBy: 8)
+        let dayEnd = publishedAt.index(start, offsetBy: 10)
+        let day = publishedAt[dayStart..<dayEnd]
+
+        let hourStart = publishedAt.index(start, offsetBy: 11)
+        let hourEnd = publishedAt.index(start, offsetBy: 13)
+        let hour = publishedAt[hourStart..<hourEnd]
+
+        let minuteStart = publishedAt.index(start, offsetBy: 14)
+        let minuteEnd = publishedAt.index(start, offsetBy: 16)
+        let minute = publishedAt[minuteStart..<minuteEnd]
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy HH:mm"
+        return formatter.date(from: "\(day)/\(month)/\(year) \(hour):\(minute)")
     }
 }

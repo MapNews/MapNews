@@ -24,7 +24,7 @@ class ArticleBuilder {
             .withTitle(title: article.title)
             .withDesc(desc: article.desc)
             .withUrl(url: article.url)
-            .withPublishedTime(time: article.publishedAt)
+            .withPublishedTime(time: article.publishedAtString)
             .withContent(content: article.content)
             .withUrlToImage(url: article.urlToImage)
         return articleBuilder
