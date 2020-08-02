@@ -7,7 +7,7 @@
 //
 
 extension String {
-    public func startsWith(substring: String) -> Bool {
+    func startsWith(substring: String) -> Bool {
         if substring.count > self.count {
             return false
         }
@@ -19,7 +19,19 @@ extension String {
         return true
     }
 
-    func charAt(offset: Int) -> Character {
-        self[index(startIndex, offsetBy: offset)]
+    func charAt(offset: Int) -> Character? {
+        if offset < 0 || offset >= count {
+            return nil
+        }
+        return self[index(startIndex, offsetBy: offset)]
+    }
+
+    func substring(_ start: Int, _ end: Int) -> Substring? {
+        if start < 0 || end >= count || start >= end {
+            return nil
+        }
+        let substringStart = self.index(startIndex, offsetBy: start)
+        let substringEnd = self.index(startIndex, offsetBy: end)
+        return self[substringStart..<substringEnd]
     }
 }

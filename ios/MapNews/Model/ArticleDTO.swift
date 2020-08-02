@@ -72,26 +72,21 @@ extension ArticleDTO: Equatable {
         if publishedAt.count != 20 {
             return nil
         }
-        let start = publishedAt.startIndex
-        let yearStart = publishedAt.index(start, offsetBy: 0)
-        let yearEnd = publishedAt.index(start, offsetBy: 4)
-        let year = publishedAt[yearStart..<yearEnd]
-
-        let monthStart = publishedAt.index(start, offsetBy: 5)
-        let monthEnd = publishedAt.index(start, offsetBy: 7)
-        let month = publishedAt[monthStart..<monthEnd]
-
-        let dayStart = publishedAt.index(start, offsetBy: 8)
-        let dayEnd = publishedAt.index(start, offsetBy: 10)
-        let day = publishedAt[dayStart..<dayEnd]
-
-        let hourStart = publishedAt.index(start, offsetBy: 11)
-        let hourEnd = publishedAt.index(start, offsetBy: 13)
-        let hour = publishedAt[hourStart..<hourEnd]
-
-        let minuteStart = publishedAt.index(start, offsetBy: 14)
-        let minuteEnd = publishedAt.index(start, offsetBy: 16)
-        let minute = publishedAt[minuteStart..<minuteEnd]
+        guard let year = publishedAt.substring(0, 4) else {
+            return nil
+        }
+        guard let month = publishedAt.substring(5, 7) else {
+            return nil
+        }
+        guard let day = publishedAt.substring(8, 10) else {
+            return nil
+        }
+        guard let hour = publishedAt.substring(11, 13) else {
+            return nil
+        }
+        guard let minute = publishedAt.substring(14, 16) else {
+            return nil
+        }
 
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy HH:mm"
