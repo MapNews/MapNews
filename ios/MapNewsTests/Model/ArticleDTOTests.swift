@@ -149,7 +149,7 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.publishedAt, ArticleDTO.toDate(publishedAt: ArticleDTOTests.publishedAt))
+        XCTAssertEqual(sampleArticle.publishedAt, TimeUtil.toDate(ArticleDTOTests.publishedAt))
         XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
     }
 
@@ -162,7 +162,7 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.publishedAt, ArticleDTO.toDate(publishedAt: ArticleDTOTests.publishedAt))
+        XCTAssertEqual(sampleArticle.publishedAt, TimeUtil.toDate(ArticleDTOTests.publishedAt))
         XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
     }
 
@@ -175,7 +175,7 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.publishedAt, ArticleDTO.toDate(publishedAt: ArticleDTOTests.publishedAt))
+        XCTAssertEqual(sampleArticle.publishedAt, TimeUtil.toDate(ArticleDTOTests.publishedAt))
         XCTAssertEqual(sampleArticle.content, "No content")
     }
 
@@ -188,7 +188,7 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.publishedAt, ArticleDTO.toDate(publishedAt: ArticleDTOTests.publishedAt))
+        XCTAssertEqual(sampleArticle.publishedAt, TimeUtil.toDate(ArticleDTOTests.publishedAt))
         XCTAssertEqual(sampleArticle.content, "No content")
     }
 
@@ -201,7 +201,7 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, ArticleDTOTests.desc)
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.publishedAt, ArticleDTO.toDate(publishedAt: ArticleDTOTests.publishedAt))
+        XCTAssertEqual(sampleArticle.publishedAt, TimeUtil.toDate(ArticleDTOTests.publishedAt))
         XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
     }
 
@@ -214,7 +214,7 @@ class ArticleDTOTests: XCTestCase {
         XCTAssertEqual(sampleArticle.title, ArticleDTOTests.title)
         XCTAssertEqual(sampleArticle.desc, "No description")
         XCTAssertEqual(sampleArticle.url, ArticleDTOTests.url)
-        XCTAssertEqual(sampleArticle.publishedAt, ArticleDTO.toDate(publishedAt: ArticleDTOTests.publishedAt))
+        XCTAssertEqual(sampleArticle.publishedAt, TimeUtil.toDate(ArticleDTOTests.publishedAt))
         XCTAssertEqual(sampleArticle.content, ArticleDTOTests.content)
     }
 
@@ -234,13 +234,5 @@ class ArticleDTOTests: XCTestCase {
         let article1 = ArticleDTO(jsonData: jsonData1)
         let article2 = ArticleDTO(jsonData: jsonData2)
         XCTAssertEqual(article1, article2)
-    }
-
-    func testToDate() {
-        let dateObject = ArticleDTO.toDate(publishedAt: ArticleDTOTests.publishedAt)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy HH:mm"
-        let expectedDateObject = formatter.date(from: "08/06/2020 00:12")
-        XCTAssertEqual(dateObject, expectedDateObject)
     }
 }

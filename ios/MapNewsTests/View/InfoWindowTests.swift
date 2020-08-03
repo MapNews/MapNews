@@ -10,9 +10,17 @@ import XCTest
 
 class InfoWindowTests: XCTestCase {
     var infoWindow: InfoWindow!
+    var dateString: String!
 
     override func setUp() {
-        let sampleArticle = ArticleBuilder().withTitle(title: "Harry Potter Goes To School").build()
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = TimeUtil.DATE_FORMAT
+        dateString = formatter.string(from: now.advanced(by: -32 * 60))
+        let sampleArticle = ArticleBuilder()
+            .withTitle(title: "Harry Potter Goes To School")
+            .withPublishedTime(time: dateString)
+            .build()
         infoWindow = InfoWindow(countryName: "Hogwarts", article: sampleArticle, mode: .light)
     }
 
@@ -20,15 +28,19 @@ class InfoWindowTests: XCTestCase {
         let subviews = infoWindow.subviews.map { String(describing: type(of: $0)) }
         let uiLabelCount = subviews.filter { $0 == "UILabel" }.count
         XCTAssertTrue(subviews.contains("LoadingBar"))
-        XCTAssertEqual(uiLabelCount, 2)
+        XCTAssertEqual(uiLabelCount, 3)
         XCTAssertTrue(subviews.contains("UIView"))
 
         XCTAssertEqual(infoWindow.countryName, "Hogwarts")
         XCTAssertEqual(infoWindow.headlineString, "Harry Potter Goes To School")
         XCTAssertEqual(
             infoWindow.article,
-            ArticleBuilder().withTitle(title: "Harry Potter Goes To School").build()
+            ArticleBuilder()
+                .withTitle(title: "Harry Potter Goes To School")
+                .withPublishedTime(time: dateString)
+                .build()
         )
+        XCTAssertEqual(infoWindow.dateLabel.text, "32 mins ago")
     }
 
     func testTapCrossIcon() {
@@ -45,7 +57,7 @@ class InfoWindowTests: XCTestCase {
         let uiLabelCount = subviews.filter { $0 == "UILabel" }.count
 
         XCTAssertFalse(subviews.contains("LoadingBar"))
-        XCTAssertEqual(uiLabelCount, 3)
+        XCTAssertEqual(uiLabelCount, 4)
     }
 
     func testImageDidLoad() {
@@ -54,7 +66,7 @@ class InfoWindowTests: XCTestCase {
         let uiLabelCount = subviews.filter { $0 == "UILabel" }.count
 
         XCTAssertFalse(subviews.contains("LoadingBar"))
-        XCTAssertEqual(uiLabelCount, 2)
+        XCTAssertEqual(uiLabelCount, 3)
     }
 
     func testMoveToWebsite() {

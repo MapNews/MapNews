@@ -22,6 +22,7 @@ class MapNewsClient: NewsClient {
     private func queryByCountryName(countryName: String) -> String {
         return RequestBuilder(baseUrl: MapNewsClient.everythingUrl)
             .addParam(param: "q", value: countryName.replacingOccurrences(of: " ", with: ""))
+            .addParam(param: "language", value: "en")
             .addParam(param: "apiKey", value: Keys.newsApiKey)
             .build()
     }

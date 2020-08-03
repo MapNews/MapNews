@@ -19,6 +19,10 @@
 		371E55FD247215EB00B9F4CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 371E55FC247215EB00B9F4CB /* Assets.xcassets */; };
 		371E5600247215EB00B9F4CB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 371E55FE247215EB00B9F4CB /* LaunchScreen.storyboard */; };
 		371E5616247215EB00B9F4CB /* MapNewsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E5615247215EB00B9F4CB /* MapNewsUITests.swift */; };
+		373B208E24D6F4C6008C7036 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373B208D24D6F4C6008C7036 /* TimeUtil.swift */; };
+		373B208F24D6F51E008C7036 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373B208D24D6F4C6008C7036 /* TimeUtil.swift */; };
+		373B209024D6F51F008C7036 /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373B208D24D6F4C6008C7036 /* TimeUtil.swift */; };
+		373B209224D6FAD4008C7036 /* TimeUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373B209124D6FAD4008C7036 /* TimeUtilTests.swift */; };
 		374526E324CF10B700922689 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374526E224CF10B700922689 /* RequestBuilder.swift */; };
 		374526E524CF139F00922689 /* RequestBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374526E424CF139F00922689 /* RequestBuilderTests.swift */; };
 		374526E624CF13A500922689 /* RequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374526E224CF10B700922689 /* RequestBuilder.swift */; };
@@ -159,6 +163,8 @@
 		371E5611247215EB00B9F4CB /* MapNewsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapNewsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		371E5615247215EB00B9F4CB /* MapNewsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapNewsUITests.swift; sourceTree = "<group>"; };
 		371E5617247215EB00B9F4CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		373B208D24D6F4C6008C7036 /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
+		373B209124D6FAD4008C7036 /* TimeUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtilTests.swift; sourceTree = "<group>"; };
 		374526E224CF10B700922689 /* RequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilder.swift; sourceTree = "<group>"; };
 		374526E424CF139F00922689 /* RequestBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBuilderTests.swift; sourceTree = "<group>"; };
 		37463CB0248B7ACF00AA53C5 /* SQLSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLSelect.swift; sourceTree = "<group>"; };
@@ -398,6 +404,7 @@
 				377E563A248D2D1300ED58F2 /* JSONParser.swift */,
 				375F5EFE2499A92D00C89502 /* AccessibilityIdentifierUtil.swift */,
 				375E11FD249F0A3A00618F41 /* Identifiers.swift */,
+				373B208D24D6F4C6008C7036 /* TimeUtil.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -407,6 +414,7 @@
 			children = (
 				376C8488247E0C1C0049D811 /* StringExtensionTests.swift */,
 				37B3025B24A2DC8F0047EF6E /* JsonParserTests.swift */,
+				373B209124D6FAD4008C7036 /* TimeUtilTests.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -741,6 +749,7 @@
 			files = (
 				376273FF24926F4500149179 /* ArticleBuilder.swift in Sources */,
 				371E55F8247215EA00B9F4CB /* MapViewController.swift in Sources */,
+				373B208E24D6F4C6008C7036 /* TimeUtil.swift in Sources */,
 				3759921F2476029900F36806 /* MapNewsView.swift in Sources */,
 				377E563B248D2D1300ED58F2 /* JSONParser.swift in Sources */,
 				375992222476088B00F36806 /* MapNewsClient.swift in Sources */,
@@ -827,8 +836,10 @@
 				37EFFBF924985451006F0EA1 /* CoordinatesTests.swift in Sources */,
 				37627408249323BC00149179 /* ArticleBuilderTests.swift in Sources */,
 				374526E624CF13A500922689 /* RequestBuilder.swift in Sources */,
+				373B208F24D6F51E008C7036 /* TimeUtil.swift in Sources */,
 				377AB7352488A89800C0F72E /* Database.swift in Sources */,
 				37B97A7B248C9FC800D0C655 /* MapNewsMarkerTests.swift in Sources */,
+				373B209224D6FAD4008C7036 /* TimeUtilTests.swift in Sources */,
 				3787BC49248CC6510090CE8C /* Keys.swift in Sources */,
 				37B3025C24A2DC8F0047EF6E /* JsonParserTests.swift in Sources */,
 				37742EA724AD723100433AEF /* InfoWindowObserver.swift in Sources */,
@@ -857,6 +868,7 @@
 			files = (
 				375E11FF249F0A7900618F41 /* Identifiers.swift in Sources */,
 				371E5616247215EB00B9F4CB /* MapNewsUITests.swift in Sources */,
+				373B209024D6F51F008C7036 /* TimeUtil.swift in Sources */,
 				37742EA824AD723400433AEF /* InfoWindowObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

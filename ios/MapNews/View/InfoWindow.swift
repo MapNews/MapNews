@@ -11,6 +11,7 @@ import UIKit
 class InfoWindow: UIView {
     internal let countryName: String
     internal let headlineString: String
+    internal let dateString: String
     internal let article: ArticleDTO
     internal let loadingBar: LoadingBar
     internal var observer: InfoWindowObserver?
@@ -47,6 +48,12 @@ class InfoWindow: UIView {
         background.alpha = 0.8
         return background
     }()
+    lazy internal var dateLabel: UILabel = {
+        let label = UILabel(frame: InfoWindow.dateLabelRect)
+        label.text = dateString
+        label.font = UIFont.systemFont(ofSize: 11)
+        return label
+    }()
     internal var newsImage: UIButton?
     var mode: UIUserInterfaceStyle = .light {
         didSet {
@@ -57,6 +64,7 @@ class InfoWindow: UIView {
     init(countryName: String, article: ArticleDTO, mode: UIUserInterfaceStyle) {
         self.countryName = countryName
         self.headlineString = article.title
+        self.dateString = TimeUtil.dateToTimeDisplayString(date: article.publishedAt)
         self.article = article
         self.loadingBar = LoadingBar(frame: InfoWindow.loadingBarRect)
 
@@ -71,6 +79,7 @@ class InfoWindow: UIView {
         addSubview(crossButton)
         addSubview(loadingBar)
         addSubview(headlineButton)
+        addSubview(dateLabel)
 
         bindAllGestureRecognizer()
         let identifier = Identifiers.generateInfoWindowIdentifier(country: countryName)
@@ -144,11 +153,17 @@ extension InfoWindow {
 extension InfoWindow {
     // Info window constants
     static let width: CGFloat = UIScreen.main.bounds.width - 100
-    static var height: CGFloat = (2 * insets) + countryLabelHeight + headlineHeight + imageHeight
+    static var height: CGFloat =
+        (2 * insets)
+        + countryLabelHeight
+        + headlineHeight
+        + dateLabelHeight
+        + imageHeight
     static let origin = CGPoint(x: 50, y: 125)
     static let size = CGSize(width: width, height: height)
     static let borderRadius: CGFloat = 5
     static let padding: CGFloat = 50
+    static let horizontalPadding: CGFloat = 10
     static let insets: CGFloat = 20
 
     static let countryLabelWidth: CGFloat = width - (2 * insets) - crossButtonWidth
@@ -164,14 +179,20 @@ extension InfoWindow {
     static let crossButtonRect = CGRect(origin: crossButtonOrigin, size: crossButtonSize)
 
     static let headlineWidth: CGFloat = width - (2 * insets)
-    static let headlineHeight: CGFloat = 50
+    static let headlineHeight: CGFloat = 45
     static let headlineOrigin = CGPoint(x: insets, y: countryLabelOrigin.y + countryLabelHeight)
     static let headlineSize = CGSize(width: headlineWidth, height: headlineHeight)
     static let headlineRect = CGRect(origin: headlineOrigin, size: headlineSize)
 
+    static let dateLabelWidth: CGFloat = width - (2 * insets)
+    static var dateLabelHeight: CGFloat = 15
+    static let dateLabelOrigin = CGPoint(x: insets, y: headlineOrigin.y + headlineHeight)
+    static let dateLabelSize = CGSize(width: dateLabelWidth, height: dateLabelHeight)
+    static let dateLabelRect = CGRect(origin: dateLabelOrigin, size: dateLabelSize)
+
     static let imageWidth: CGFloat = width - (2 * insets)
     static var imageHeight: CGFloat = 150
-    static let imageOrigin = CGPoint(x: insets, y: headlineOrigin.y + headlineHeight)
+    static let imageOrigin = CGPoint(x: insets, y: dateLabelOrigin.y + dateLabelHeight + horizontalPadding)
     static let imageSize = CGSize(width: imageWidth, height: imageHeight)
     static let imageRect = CGRect(origin: imageOrigin, size: imageSize)
 

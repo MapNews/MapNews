@@ -51,7 +51,7 @@ class ArticleDTO {
         self.url = url
         self.urlToImage = JSONParser.getObject(from: jsonData, key: "urlToImage") as? String
         self.publishedAtString = publishedDate
-        publishedAt = ArticleDTO.toDate(publishedAt: publishedDate)
+        publishedAt = TimeUtil.toDate(publishedDate)
         self.content = content
     }
 
@@ -66,30 +66,5 @@ extension ArticleDTO: Equatable {
             && lhs.url == rhs.url
             && lhs.publishedAt == rhs.publishedAt
             && lhs.content == rhs.content
-    }
-
-    static func toDate(publishedAt: String) -> Date? {
-        if publishedAt.count != 20 {
-            return nil
-        }
-        guard let year = publishedAt.substring(0, 4) else {
-            return nil
-        }
-        guard let month = publishedAt.substring(5, 7) else {
-            return nil
-        }
-        guard let day = publishedAt.substring(8, 10) else {
-            return nil
-        }
-        guard let hour = publishedAt.substring(11, 13) else {
-            return nil
-        }
-        guard let minute = publishedAt.substring(14, 16) else {
-            return nil
-        }
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy HH:mm"
-        return formatter.date(from: "\(day)/\(month)/\(year) \(hour):\(minute)")
     }
 }
