@@ -27,6 +27,9 @@ class MapViewModel: Model {
     }
     var observers: [MapViewModelObserver] = []
     var newsClient: NewsClient
+    var defaultLocation: String? {
+        return database.queryDefaultLocation()
+    }
 
     convenience init() {
         self.init(within: MapConstants.defaultBounds)
@@ -79,6 +82,10 @@ extension MapViewModel {
 
     func getCountryCoordinateDTO(for country: String) -> CountryCoordinateDTO? {
         return database.queryCountryDTO(name: country)
+    }
+
+    func setDefaultLocation(to country: String) {
+        database.setDefaultLocation(to: country)
     }
 
     func loadImage(url: String, withImageCallback: @escaping (UIImage) -> Void, noImageCallback: () -> Void) {

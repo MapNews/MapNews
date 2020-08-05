@@ -22,6 +22,13 @@ struct Commands {
     NAME STRING);
     """
 
+    static let createConfigTableString =
+    """
+    CREATE TABLE IF NOT EXISTS HOME(
+    NAME STRING
+    )
+    """
+
     static let queryCountryStatementString =
     """
     SELECT c.LAT, c.LONG FROM COORDINATES c
@@ -33,6 +40,11 @@ struct Commands {
     """
     SELECT c.COUNTRY_CODE, n.NAME, c.LAT, c.LONG FROM COORDINATES c
     INNER JOIN NAMES n ON n.COUNTRY_CODE = c.COUNTRY_CODE
+    """
+
+    static let queryDefaultLocationString =
+    """
+    SELECT NAME FROM HOME;
     """
 
     static let insertCoordinatesStatementString =
@@ -61,5 +73,15 @@ struct Commands {
     SELECT c.COUNTRY_CODE, c.LAT, c.LONG FROM COORDINATES c
     INNER JOIN NAMES n ON n.COUNTRY_CODE = c.COUNTRY_CODE
     WHERE n.NAME = ?;
+    """
+
+    static let deleteDefaultLocationString =
+    """
+    DELETE * IN HOME;
+    """
+
+    static let insertDefaultLocationString =
+    """
+    INSERT INTO HOME (NAME) VALUES (?)
     """
 }

@@ -15,6 +15,10 @@ protocol Database {
 
     func queryCountryDTO(name: String) -> CountryCoordinateDTO?
 
+    func queryDefaultLocation() -> String?
+
+    func setDefaultLocation(to name: String)
+
     func populateDatabaseWithCountries()
 
     func clearTable()

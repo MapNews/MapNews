@@ -12,7 +12,7 @@ class MapNewsView: GMSMapView {
     var location: CLLocationCoordinate2D? {
         didSet {
             if let currentLocation = location {
-                camera = GMSCameraPosition.camera(withTarget: currentLocation, zoom: 8)
+                camera = GMSCameraPosition.camera(withTarget: currentLocation, zoom: 5)
             }
         }
     }
@@ -24,8 +24,8 @@ class MapNewsView: GMSMapView {
         return GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
     }
 
-    override init(frame: CGRect) {
-        location = MapConstants.singaporeCoordinates
+    init(frame: CGRect, location: CLLocationCoordinate2D) {
+        self.location = location
         super.init(frame: frame)
         camera = MapConstants.singaporeCamera
         settings.zoomGestures = true

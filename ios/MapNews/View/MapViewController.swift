@@ -45,7 +45,6 @@ class MapViewController: UIViewController {
         initMap()
         model = MapViewModel(within: mapView.mapBounds)
         model.addObserver(self)
-
         view.addSubview(mapView)
         view.addSubview(locationSelectorMask)
         view.addSubview(locationSelector)
@@ -53,8 +52,20 @@ class MapViewController: UIViewController {
         AccessibilityIdentifierUtil.setIdentifierForContainer(view: view, to: Identifiers.mapViewControllerIdentifier)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        if let defaultLocationName = model.defaultLocation {
+            guard let countryDTO = model.getCountryCoordinateDTO(for: defaultLocationName) else {
+                return
+            }
+            mapView.location = CLLocationCoordinate2D.from(countryDTO.coordinates)
+            locationDidUpdate(toLocation: defaultLocationName)
+        } else {
+            moveToPromptDefaultLocation()
+        }
+    }
+
     private func initMap() {
-        mapView = MapNewsView(frame: self.view.bounds)
+        mapView = MapNewsView(frame: self.view.bounds, location: MapConstants.singaporeCoordinates)
         mapView.delegate = self
         loadMapStyle(to: mode)
     }
@@ -78,15 +89,25 @@ class MapViewController: UIViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let websiteViewController = segue.destination as? WebsiteViewController else {
-            return
+        if let websiteViewController = segue.destination as? WebsiteViewController {
+            websiteViewController.url = currentDisplayingInfoWindow?.article.url
+            websiteViewController.countryName = currentDisplayingInfoWindow?.countryName
+        } else if let promptDefaultLocationViewController = segue.destination as? PromptDefaultLocationViewController {
+            promptDefaultLocationViewController.countries = allCountries
         }
-        websiteViewController.url = currentDisplayingInfoWindow?.article.url
-        websiteViewController.countryName = currentDisplayingInfoWindow?.countryName
     }
 
     func moveToWebsite() {
         performSegue(withIdentifier: "toNewsWebsite", sender: self)
+    }
+
+    func moveToPromptDefaultLocation() {
+        performSegue(withIdentifier: "toPromptDefaultLocation", sender: self)
+    }
+
+    func setDefaultLocation(to country: String) {
+        model.setDefaultLocation(to: country)
+        locationDidUpdate(toLocation: country)
     }
 }
 

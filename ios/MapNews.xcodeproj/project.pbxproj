@@ -11,6 +11,7 @@
 		370F77502483FA4D0043D964 /* CountryCoordinateDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370F774F2483FA4D0043D964 /* CountryCoordinateDTO.swift */; };
 		370F775224848AC80043D964 /* CLLocationCoordinate2DExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370F775124848AC80043D964 /* CLLocationCoordinate2DExtension.swift */; };
 		370F775424848C480043D964 /* MapViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370F775324848C480043D964 /* MapViewModelTests.swift */; };
+		3716B0CA24DAF65200879E01 /* PromptDefaultLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3716B0C924DAF65200879E01 /* PromptDefaultLocationViewController.swift */; };
 		371CC150247CBA79008CF924 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371CC14F247CBA79008CF924 /* Keys.swift */; };
 		371E55F4247215EA00B9F4CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E55F3247215EA00B9F4CB /* AppDelegate.swift */; };
 		371E55F6247215EA00B9F4CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371E55F5247215EA00B9F4CB /* SceneDelegate.swift */; };
@@ -149,6 +150,7 @@
 		370F774F2483FA4D0043D964 /* CountryCoordinateDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCoordinateDTO.swift; sourceTree = "<group>"; };
 		370F775124848AC80043D964 /* CLLocationCoordinate2DExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtension.swift; sourceTree = "<group>"; };
 		370F775324848C480043D964 /* MapViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModelTests.swift; sourceTree = "<group>"; };
+		3716B0C924DAF65200879E01 /* PromptDefaultLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptDefaultLocationViewController.swift; sourceTree = "<group>"; };
 		371CC14F247CBA79008CF924 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		371E55F0247215EA00B9F4CB /* MapNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		371E55F3247215EA00B9F4CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -470,6 +472,7 @@
 			isa = PBXGroup;
 			children = (
 				371E55F7247215EA00B9F4CB /* MapViewController.swift */,
+				3716B0C924DAF65200879E01 /* PromptDefaultLocationViewController.swift */,
 				37742EA524AD68AA00433AEF /* InfoWindowObserver.swift */,
 				37742EA324AC472300433AEF /* WebsiteViewController.swift */,
 				37A2D8EA247B8C6D00696F24 /* MapNewsSelector.swift */,
@@ -757,6 +760,7 @@
 				370F775224848AC80043D964 /* CLLocationCoordinate2DExtension.swift in Sources */,
 				371E55F4247215EA00B9F4CB /* AppDelegate.swift in Sources */,
 				371CC150247CBA79008CF924 /* Keys.swift in Sources */,
+				3716B0CA24DAF65200879E01 /* PromptDefaultLocationViewController.swift in Sources */,
 				37742EA424AC472300433AEF /* WebsiteViewController.swift in Sources */,
 				37A2D8EF247B9F4700696F24 /* MapNewsSelectorObserver.swift in Sources */,
 				37463CB9248B873400AA53C5 /* SQLDouble.swift in Sources */,

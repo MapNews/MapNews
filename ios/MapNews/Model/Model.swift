@@ -18,6 +18,10 @@ protocol Model {
 
     var allCountriesInBounds: [CountryCoordinateDTO] { get }
 
+    var defaultLocation: String? { get }
+
+    func setDefaultLocation(to country: String)
+
     func updateNews(country: CountryCoordinateDTO)
 
     func getCountryCoordinateDTO(for country: String) -> CountryCoordinateDTO?

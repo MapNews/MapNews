@@ -188,6 +188,39 @@ extension SQLDatabase: Database {
         return countryCoordinatesDTOs
     }
 
+    func queryDefaultLocation() -> String? {
+        let command = SQLSelect(command: Commands.queryDefaultLocationString, database: database)
+        command.execute()
+        if command.isNullable {
+            return nil
+        }
+        let name = SQLString.extract(from: command, index: 0)
+        command.tearDown()
+        return name
+    }
+
+    func setDefaultLocation(to name: String) {
+        let deleteCommand = SQLDelete(command: Commands.deleteDefaultLocationString, database: database)
+        deleteCommand.execute()
+        if deleteCommand.isNullable {
+            // nothing deleted means table does not exist
+            let createCommand = SQLCreate(command: Commands.createConfigTableString, database: database)
+            createCommand.execute()
+            createCommand.tearDown()
+        }
+        deleteCommand.tearDown()
+        guard let countryDTO = queryCountryDTO(name: name) else {
+            return
+        }
+
+        let insertCommand = SQLInsert(command: Commands.insertDefaultLocationString, database: database)
+        insertCommand.with(argument: SQLString(argument: countryDTO.countryName)!, index: 1)
+            .execute()
+
+        insertCommand.reset()
+        insertCommand.tearDown()
+    }
+
     func populateDatabaseWithCountries() {
         guard let countries = readCsvIntoArray(from: path!) else {
             return
