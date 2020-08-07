@@ -11,7 +11,13 @@ import GoogleMaps
 class MapViewController: UIViewController {
     var mapView: MapNewsView!
     lazy var locationSelector: MapNewsSelector = {
-        let locationSelector = MapNewsSelector.getSelector(tableData: allCountries, mode: mode)
+        let padding = MapNewsSelector.selectorPadding
+        let selectorWidth = UIScreen.main.bounds.width - (2 * padding)
+        let selectorHeight = UIScreen.main.bounds.height * 0.8
+        let selectorOrigin = CGPoint(x: padding, y: padding)
+        let openedRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: selectorHeight))
+        let closedRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: MapNewsSelector.labelHeight))
+        let locationSelector = MapNewsSelector.getSelector(tableData: allCountries, mode: mode, openedFrame: openedRect, closedFrame: closedRect)
         locationSelector.observer = self
         return locationSelector
     }()

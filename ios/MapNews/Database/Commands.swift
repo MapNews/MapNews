@@ -77,7 +77,7 @@ struct Commands {
 
     static let deleteDefaultLocationString =
     """
-    DELETE * IN HOME;
+    DELETE * FROM HOME;
     """
 
     static let insertDefaultLocationString =

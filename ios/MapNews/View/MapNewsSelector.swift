@@ -10,20 +10,23 @@ import UIKit
 
 class MapNewsSelector: UIView, Selector {
     private static var theSelector: MapNewsSelector?
+    var closedFrame: CGRect
+    var openedFrame: CGRect
+
     internal var allCountries: [String]
     internal var filteredCountries: [String] {
         didSet {
             tableView.reloadData()
         }
     }
-    var selectedValue: String = "Singapore" {
+    var selectedValue: String = "" {
         didSet {
             selectedCountryTextField.text = selectedValue
         }
     }
 
     internal lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: MapNewsSelector.tableRect)
+        let tableView = UITableView(frame: tableRect)
         tableView.isHidden = true
         tableView.isUserInteractionEnabled = true
         tableView.layer.cornerRadius = MapNewsSelector.selectorBorderRadius
@@ -33,16 +36,16 @@ class MapNewsSelector: UIView, Selector {
         return tableView
     }()
 
-    internal var selectedCountryTextField: UITextField = {
+    internal lazy var selectedCountryTextField: UITextField = {
         let textField =
-            UITextField(frame: CGRect(origin: MapNewsSelector.textFieldOrigin, size: MapNewsSelector.textFieldSize))
-        textField.text = "Singapore"
+            UITextField(frame: textFieldRect)
+        textField.text = ""
         textField.isUserInteractionEnabled = true
         return textField
     }()
 
     internal lazy var labelBackground: UIView = {
-        let labelBackground = UIView(frame: MapNewsSelector.labelBackgroundRect)
+        let labelBackground = UIView(frame: labelBackgroundRect)
         labelBackground.layer.cornerRadius = 5
         labelBackground.layer.masksToBounds = true;
         return labelBackground
@@ -62,28 +65,38 @@ class MapNewsSelector: UIView, Selector {
         }
     }
 
-    static func getSelector(tableData: [String], mode: UIUserInterfaceStyle) -> MapNewsSelector {
+    static func getSelector(tableData: [String], mode: UIUserInterfaceStyle, openedFrame: CGRect, closedFrame: CGRect) -> MapNewsSelector {
+        print(openedFrame.height / UIScreen.main.bounds.height)
         if let selector = MapNewsSelector.theSelector {
             selector.allCountries = tableData
             selector.filteredCountries = selector.allCountries.filter {
                 $0.startsWith(substring: selector.selectedCountryTextField.text ?? "")
             }
-            selector.selectedCountryTextField.text = "Singapore"
+            selector.selectedCountryTextField.text = ""
             selector.toggleMode(to: mode)
-            selector.frame = closedSelectorRect
+            selector.closedFrame = closedFrame
+            selector.openedFrame = openedFrame
+            selector.frame = selector.closedFrame
             return selector
         } else {
-            let singleton = MapNewsSelector(tableData: tableData, mode: mode)
+            let singleton = MapNewsSelector(
+                tableData: tableData,
+                mode: mode,
+                openedFrame: openedFrame,
+                closedFrame: closedFrame
+            )
             theSelector = singleton
             return singleton
         }
     }
 
-    private init(tableData: [String], mode: UIUserInterfaceStyle) {
+    private init(tableData: [String], mode: UIUserInterfaceStyle, openedFrame: CGRect, closedFrame: CGRect) {
         allCountries = tableData
         filteredCountries = tableData
+        self.openedFrame = openedFrame
+        self.closedFrame = closedFrame
 
-        super.init(frame: MapNewsSelector.selectorRect)
+        super.init(frame: self.openedFrame)
         toggleMode(to: mode)
 
         addSubview(labelBackground)
@@ -91,7 +104,7 @@ class MapNewsSelector: UIView, Selector {
         addSubview(tableView)
         addSubview(searchButton)
 
-        frame = MapNewsSelector.closedSelectorRect
+        frame = self.closedFrame
 
         selectedCountryTextField.delegate = self
         tableView.delegate = self
@@ -113,14 +126,14 @@ class MapNewsSelector: UIView, Selector {
     }
 
     func closeSelector() {
-        frame = MapNewsSelector.closedSelectorRect
+        frame = closedFrame
         tableView.isHidden = true
         selectedCountryTextField.resignFirstResponder()
         observer?.tableDidHide()
     }
 
     func openSelector() {
-        frame = MapNewsSelector.selectorRect
+        frame = openedFrame
         filteredCountries = allCountries.filter { $0.startsWith(substring: selectedValue) }
         tableView.isHidden = false
         observer?.tableDidReveal()
@@ -210,7 +223,7 @@ extension MapNewsSelector: UITextFieldDelegate {
 extension MapNewsSelector {
     // Map Selector Constants
     static let selectorWidth = UIScreen.main.bounds.width - (2 * selectorPadding)
-    static let selectorHeight = UIScreen.main.bounds.height / 3
+    static let selectorHeight = UIScreen.main.bounds.height * 0.7
     static let selectorOrigin = CGPoint(x: selectorPadding, y: selectorPadding)
     static let selectorRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: selectorHeight))
     static let closedSelectorRect =
@@ -228,20 +241,55 @@ extension MapNewsSelector {
     static let selectorBorderRadius: CGFloat = 5
     static let selectorPadding: CGFloat = 50
 
-    static let textFieldWidth = selectorWidth - searchIconWidth
-    static let textFieldHeight = labelHeight - (2 * labelPadding)
-    static let textFieldSize = CGSize(width: textFieldWidth, height: textFieldHeight)
-    static let textFieldOrigin = CGPoint(x: labelPadding, y: labelPadding)
-
-    static let labelBackgroundWidth = selectorWidth
-    static let labelBackgroundHeight = labelHeight
-    static let labelBackgroundSize = CGSize(width: labelBackgroundWidth, height: labelBackgroundHeight)
-    static let labelBackgroundOrigin = CGPoint.zero
-    static let labelBackgroundRect = CGRect(origin: labelBackgroundOrigin, size: labelBackgroundSize)
-
-    static let tableWidth = selectorWidth
-    static let tableHeight = selectorHeight - labelHeight
-    static let tableSize = CGSize(width: tableWidth, height: tableHeight)
-    static let tableOrigin = CGPoint(x: 0, y: labelHeight)
-    static let tableRect = CGRect(origin: tableOrigin, size: CGSize(width: tableWidth, height: tableHeight))
+    var width: CGFloat {
+        openedFrame.width
+    }
+    var height: CGFloat {
+        openedFrame.height
+    }
+    var textFieldWidth: CGFloat {
+        width - MapNewsSelector.searchIconWidth
+    }
+    var textFieldHeight: CGFloat {
+        MapNewsSelector.labelHeight - (2 * MapNewsSelector.labelPadding)
+    }
+    var textFieldSize: CGSize {
+        CGSize(width: textFieldWidth, height: textFieldHeight)
+    }
+    var textFieldOrigin: CGPoint {
+        CGPoint(x: MapNewsSelector.labelPadding, y: MapNewsSelector.labelPadding)
+    }
+    var textFieldRect: CGRect {
+        CGRect(origin: textFieldOrigin, size: textFieldSize)
+    }
+    var labelBackgroundWidth: CGFloat{
+       width
+    }
+    var labelBackgroundHeight: CGFloat {
+        MapNewsSelector.labelHeight
+    }
+    var labelBackgroundSize: CGSize {
+        CGSize(width: labelBackgroundWidth, height: labelBackgroundHeight)
+    }
+    var labelBackgroundOrigin: CGPoint {
+        CGPoint.zero
+    }
+    var labelBackgroundRect: CGRect {
+        CGRect(origin: labelBackgroundOrigin, size: labelBackgroundSize)
+    }
+    var tableWidth: CGFloat {
+        width
+    }
+    var tableHeight: CGFloat {
+        height - MapNewsSelector.labelHeight
+    }
+    var tableSize: CGSize {
+        CGSize(width: tableWidth, height: tableHeight)
+    }
+    var tableOrigin: CGPoint {
+        CGPoint(x: 0, y: MapNewsSelector.labelHeight)
+    }
+    var tableRect: CGRect {
+        CGRect(origin: tableOrigin, size: CGSize(width: tableWidth, height: tableHeight))
+    }
 }
