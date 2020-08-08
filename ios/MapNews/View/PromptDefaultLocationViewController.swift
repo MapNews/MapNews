@@ -17,16 +17,13 @@ class PromptDefaultLocationViewController: UIViewController {
         let selectorOrigin = CGPoint(x: padding, y: padding * 2)
         let openedRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: selectorHeight))
         let closedRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: MapNewsSelector.labelHeight))
-        let selector = MapNewsSelector.getSelector(tableData: countries, mode: mode, openedFrame: openedRect, closedFrame: closedRect)
+        let selector = MapNewsSelector(tableData: countries, mode: mode, openedFrame: openedRect, closedFrame: closedRect)
         selector.observer = self
-        selector.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        selector.layer.borderWidth = 2
-        selector.closeSelector()
-        selector.openSelector()
         return selector
     }()
     override func viewDidLoad() {
         view.addSubview(selector)
+        selector.openSelector()
     }
     var mode: UIUserInterfaceStyle {
         UIScreen.main.traitCollection.userInterfaceStyle
@@ -48,6 +45,16 @@ extension PromptDefaultLocationViewController: MapNewsSelectorObserver {
         }
         presenter.setDefaultLocation(to: newLocation)
         selector.removeFromSuperview()
-        self.dismiss(animated: true, completion: {})
+        self.dismiss(animated: true, completion: {
+            presenter.viewDidLoad()
+        })
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        guard let presenter = presentingViewController as? MapViewController else {
+            return
+        }
+        selector.removeFromSuperview()
+        presenter.viewDidLoad()
     }
 }

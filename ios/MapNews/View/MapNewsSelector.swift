@@ -65,39 +65,14 @@ class MapNewsSelector: UIView, Selector {
         }
     }
 
-    static func getSelector(tableData: [String], mode: UIUserInterfaceStyle, openedFrame: CGRect, closedFrame: CGRect) -> MapNewsSelector {
-        print(openedFrame.height / UIScreen.main.bounds.height)
-        if let selector = MapNewsSelector.theSelector {
-            selector.allCountries = tableData
-            selector.filteredCountries = selector.allCountries.filter {
-                $0.startsWith(substring: selector.selectedCountryTextField.text ?? "")
-            }
-            selector.selectedCountryTextField.text = ""
-            selector.toggleMode(to: mode)
-            selector.closedFrame = closedFrame
-            selector.openedFrame = openedFrame
-            selector.frame = selector.closedFrame
-            return selector
-        } else {
-            let singleton = MapNewsSelector(
-                tableData: tableData,
-                mode: mode,
-                openedFrame: openedFrame,
-                closedFrame: closedFrame
-            )
-            theSelector = singleton
-            return singleton
-        }
-    }
-
-    private init(tableData: [String], mode: UIUserInterfaceStyle, openedFrame: CGRect, closedFrame: CGRect) {
+    init(tableData: [String], mode: UIUserInterfaceStyle, openedFrame: CGRect, closedFrame: CGRect) {
         allCountries = tableData
         filteredCountries = tableData
         self.openedFrame = openedFrame
         self.closedFrame = closedFrame
 
         super.init(frame: self.openedFrame)
-        toggleMode(to: mode)
+        self.mode = mode
 
         addSubview(labelBackground)
         addSubview(selectedCountryTextField)
@@ -109,8 +84,14 @@ class MapNewsSelector: UIView, Selector {
         selectedCountryTextField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+        selectedCountryTextField.placeholder = "Select a country"
 
         filteredCountries = allCountries.filter { $0.startsWith(substring: selectedCountryTextField.text ?? "") }
+        selectedCountryTextField.text = ""
+        toggleMode(to: mode)
+        layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        layer.borderWidth = 2
+        layer.cornerRadius = 5
 
         bindAllGestureRecognizers()
 

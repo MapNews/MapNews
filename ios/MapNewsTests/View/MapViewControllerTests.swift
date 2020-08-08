@@ -109,6 +109,11 @@ class NoCountriesModelStub: Model {
     func addObserver(_ observer: MapViewModelObserver) {
     }
 
+    var defaultLocation: String?
+
+    func setDefaultLocation(to country: String) {
+    }
+
     var allCountryNames: [String]? = nil
 
     var observers: [MapViewModelObserver] = []
@@ -133,6 +138,12 @@ class NoCountriesModelStub: Model {
 
 class ModelStub: Model {
     var observers: [MapViewModelObserver] = []
+    var defaultLocation: String?
+
+    func setDefaultLocation(to country: String) {
+
+    }
+    
     func addObserver(_ observer: MapViewModelObserver) {
         observers.append(observer)
     }

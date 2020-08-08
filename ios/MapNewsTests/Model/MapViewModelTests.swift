@@ -286,6 +286,14 @@ class MockDatabase: Database {
         }
         return nil
     }
+
+    func queryDefaultLocation() -> String? {
+        return nil
+    }
+
+    func setDefaultLocation(to name: String) {
+
+    }
 }
 
 class MockDatabaseOneEntry: Database {
@@ -319,5 +327,13 @@ class MockDatabaseOneEntry: Database {
             return hogwartsDTO
         }
         return nil
+    }
+    
+    func queryDefaultLocation() -> String? {
+        return nil
+    }
+
+    func setDefaultLocation(to name: String) {
+
     }
 }

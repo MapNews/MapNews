@@ -12,7 +12,7 @@ class MapNewsView: GMSMapView {
     var location: CLLocationCoordinate2D? {
         didSet {
             if let currentLocation = location {
-                camera = GMSCameraPosition.camera(withTarget: currentLocation, zoom: 5)
+                camera = GMSCameraPosition.camera(withTarget: currentLocation, zoom: 3)
             }
         }
     }

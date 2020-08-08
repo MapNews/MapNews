@@ -11,7 +11,7 @@ class MapNewsViewTests: XCTestCase {
     var mapView: MapNewsView!
 
     override func setUp() {
-        mapView = MapNewsView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 300, height: 400)))
+        mapView = MapNewsView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 300, height: 400)), location: MapConstants.singaporeCoordinates)
     }
 
     func testInit_defaultValues() {

@@ -13,9 +13,11 @@ class MapNewsSelectorTests: XCTestCase {
     private let tableData = ["Test", "table", "data"]
 
     override func setUp() {
-        selector = MapNewsSelector.getSelector(
+        selector = MapNewsSelector(
             tableData: tableData,
-            mode: .light)
+            mode: .light,
+            openedFrame: MapNewsSelector.selectorRect,
+            closedFrame: MapNewsSelector.closedSelectorRect)
         selector.observer = nil
     }
 
@@ -24,7 +26,7 @@ class MapNewsSelectorTests: XCTestCase {
     }
 
     func testSelectedCountry_defaultValue() {
-        XCTAssertEqual(selector.selectedValue, "Singapore")
+        XCTAssertTrue(selector.selectedValue.isEmpty)
     }
 
     func testModifySelectedCountry() {
@@ -80,8 +82,6 @@ class MapNewsSelectorTests: XCTestCase {
         let tableView = selector.tableView
 
         XCTAssertEqual(tableView.frame.origin, CGPoint(x: 0, y: 50))
-        XCTAssertEqual(tableView.frame.width, MapNewsSelector.tableWidth)
-        XCTAssertEqual(tableView.frame.height, MapNewsSelector.tableHeight)
         XCTAssertTrue(tableView.isHidden)
         XCTAssertTrue(tableView.isUserInteractionEnabled)
         XCTAssertTrue(tableView.layer.masksToBounds)
@@ -97,7 +97,7 @@ class MapNewsSelectorTests: XCTestCase {
             textField.frame.origin,
             CGPoint(x: MapNewsSelector.labelPadding, y: MapNewsSelector.labelPadding)
         )
-        XCTAssertEqual(textField.text, "Singapore")
+        XCTAssertEqual(textField.text, "")
         XCTAssertTrue(textField.isUserInteractionEnabled)
     }
 

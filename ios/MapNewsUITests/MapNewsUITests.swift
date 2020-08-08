@@ -147,6 +147,10 @@ class MapNewsUITests: XCTestCase {
     }
 
     func testClickOnMarker_textFieldValueUpdated() {
+        performActionAndWait(action: { () -> Void in
+            tap(on: mapView, offsetX: UIScreen.main.bounds.width * 0.5, offsetY: UIScreen.main.bounds.height * 0.75)
+        }, timeout: 3)
+        
         let sampleCountry = "China"
         tap(onMarker: sampleCountry)
 
