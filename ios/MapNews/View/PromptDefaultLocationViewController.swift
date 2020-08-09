@@ -18,10 +18,22 @@ class PromptDefaultLocationViewController: UIViewController {
         let openedRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: selectorHeight))
         let closedRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: MapNewsSelector.labelHeight))
         let selector = MapNewsSelector(tableData: countries, mode: mode, openedFrame: openedRect, closedFrame: closedRect)
+        selector.isSearchButtonHidden = true
         selector.observer = self
         return selector
     }()
+    lazy var header: UILabel = {
+        let padding = MapNewsSelector.selectorPadding
+        let headerWidth = UIScreen.main.bounds.width - (2 * padding)
+        let headerHeight = padding
+        let headerOrigin = CGPoint(x: padding, y: padding)
+        let header = UILabel(frame: CGRect(origin: headerOrigin, size: CGSize(width: headerWidth, height: headerHeight)))
+        header.text = "Choose a default location:"
+        header.font = UIFont.boldSystemFont(ofSize: 24)
+        return header
+    }()
     override func viewDidLoad() {
+        view.addSubview(header)
         view.addSubview(selector)
         selector.openSelector()
     }
@@ -44,7 +56,6 @@ extension PromptDefaultLocationViewController: MapNewsSelectorObserver {
             return
         }
         presenter.setDefaultLocation(to: newLocation)
-        selector.removeFromSuperview()
         self.dismiss(animated: true, completion: {
             presenter.viewDidLoad()
         })
@@ -54,7 +65,6 @@ extension PromptDefaultLocationViewController: MapNewsSelectorObserver {
         guard let presenter = presentingViewController as? MapViewController else {
             return
         }
-        selector.removeFromSuperview()
         presenter.viewDidLoad()
     }
 }

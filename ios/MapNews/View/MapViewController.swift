@@ -18,6 +18,7 @@ class MapViewController: UIViewController {
         let openedRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: selectorHeight))
         let closedRect = CGRect(origin: selectorOrigin, size: CGSize(width: selectorWidth, height: MapNewsSelector.labelHeight))
         let locationSelector = MapNewsSelector(tableData: allCountries, mode: mode, openedFrame: openedRect, closedFrame: closedRect)
+        locationSelector.isSearchButtonHidden = false
         locationSelector.observer = self
         return locationSelector
     }()
@@ -31,6 +32,27 @@ class MapViewController: UIViewController {
         mask.isHidden = true
         AccessibilityIdentifierUtil.setIdentifier(view: mask, to: Identifiers.locationMaskIdentifier)
         return mask
+    }()
+    lazy var settingsButton: UIButton = {
+        let padding = MapNewsSelector.selectorPadding
+        let button = UIButton(frame: CGRect(origin: CGPoint(x: 10, y: 10), size: CGSize(width: padding - 20, height: padding - 20)))
+        button.setImage(UIImage(named: "settings"), for: .normal)
+        return button
+    }()
+    lazy var settingsTab: UIView = {
+        let padding = MapNewsSelector.selectorPadding
+        let width = padding + 10
+        let height = padding
+        let origin = CGPoint(x: UIScreen.main.bounds.width - padding, y: padding)
+        let tab = UIView(frame: CGRect(origin: origin, size: CGSize(width: width, height: height)))
+        tab.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        tab.layer.borderWidth = 2
+        tab.layer.cornerRadius = 5
+        tab.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        tab.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.8470588235)
+        tab.layer.masksToBounds = true
+        tab.addSubview(settingsButton)
+        return tab
     }()
     var model: Model! {
         didSet {
@@ -54,8 +76,19 @@ class MapViewController: UIViewController {
         view.addSubview(mapView)
         view.addSubview(locationSelectorMask)
         view.addSubview(locationSelector)
+        view.addSubview(settingsTab)
+
+        bindAllGestureRecognizers()
 
         AccessibilityIdentifierUtil.setIdentifierForContainer(view: view, to: Identifiers.mapViewControllerIdentifier)
+    }
+
+    @objc func handleSettingsTap(sender: UITapGestureRecognizer) {
+        performSegue(withIdentifier: "toSettings", sender: self)
+    }
+
+    private func bindAllGestureRecognizers() {
+        settingsButton.addTarget(self, action: #selector(handleSettingsTap(sender:)), for: .touchUpInside)
     }
 
     override func viewDidAppear(_ animated: Bool) {

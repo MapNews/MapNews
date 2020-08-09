@@ -64,6 +64,11 @@ class MapNewsSelector: UIView, Selector {
             toggleMode(to: mode)
         }
     }
+    var isSearchButtonHidden: Bool = false {
+        didSet {
+            searchButton.isHidden = isSearchButtonHidden
+        }
+    }
 
     init(tableData: [String], mode: UIUserInterfaceStyle, openedFrame: CGRect, closedFrame: CGRect) {
         allCountries = tableData
@@ -84,7 +89,7 @@ class MapNewsSelector: UIView, Selector {
         selectedCountryTextField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
-        selectedCountryTextField.placeholder = "Select a country"
+        selectedCountryTextField.placeholder = "Search..."
 
         filteredCountries = allCountries.filter { $0.startsWith(substring: selectedCountryTextField.text ?? "") }
         selectedCountryTextField.text = ""

@@ -22,6 +22,9 @@
                         <segue destination="62G-7O-8Ve" kind="popoverPresentation" identifier="toPromptDefaultLocation" popoverAnchorView="8bC-Xf-vdC" id="vVx-WM-X4Y">
                             <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                         </segue>
+                        <segue destination="ibH-AO-KdD" kind="popoverPresentation" identifier="toSettings" popoverAnchorView="8bC-Xf-vdC" id="Xbh-yp-QoV">
+                            <popoverArrowDirection key="popoverArrowDirection" left="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -56,7 +59,35 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pzD-5H-ipj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="109" y="850"/>
+            <point key="canvasLocation" x="-351" y="850"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="mZp-t9-3uZ">
+            <objects>
+                <tableViewController id="ibH-AO-KdD" customClass="SettingsViewController" customModule="MapNews" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="dVY-3n-sGv">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="WYc-2z-zbC">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="WYc-2z-zbC" id="oWM-HI-1ps">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="ibH-AO-KdD" id="BG1-4L-t25"/>
+                            <outlet property="delegate" destination="ibH-AO-KdD" id="GeC-mc-2HF"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZyT-HE-7y1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="784" y="840"/>
         </scene>
     </scenes>
 </document>
