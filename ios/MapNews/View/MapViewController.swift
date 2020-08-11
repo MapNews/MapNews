@@ -41,14 +41,13 @@ class MapViewController: UIViewController {
     }()
     lazy var settingsTab: UIView = {
         let padding = MapNewsSelector.selectorPadding
-        let width = padding + 10
+        let width = padding
         let height = padding
         let origin = CGPoint(x: UIScreen.main.bounds.width - padding, y: padding)
         let tab = UIView(frame: CGRect(origin: origin, size: CGSize(width: width, height: height)))
         tab.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         tab.layer.borderWidth = 2
         tab.layer.cornerRadius = 5
-        tab.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         tab.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.8470588235)
         tab.layer.masksToBounds = true
         tab.addSubview(settingsButton)
