@@ -7,22 +7,8 @@
 //
 import UIKit
 
-class SettingsViewController: UITableViewController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
-        cell.textLabel?.text = "Section \(indexPath.section) Row \(indexPath.row)"
-
-        return cell
-    }
+class SettingsViewController: UIViewController {
+    var settings = ["Set Default Location"]
 
     lazy var headerView: UILabel = {
         let width = UIScreen.main.bounds.width
@@ -34,9 +20,33 @@ class SettingsViewController: UITableViewController {
         return headerView
     }()
 
-    override func viewDidLoad() {
+    lazy var tableView: UITableView = {
+        let width = UIScreen.main.bounds.width
+        let height = UIScreen.main.bounds.height
+        let size = CGSize(width: width, height: height)
+        let origin = CGPoint(x: 0, y: 50)
+        let tableView = UITableView(frame: CGRect(origin: origin, size: size))
+        tableView.isUserInteractionEnabled = true
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.tableHeaderView = headerView
+        return tableView
+    }()
+
+    override func viewDidLoad() {
+        view.addSubview(tableView)
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+}
+
+extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel!.text = settings[indexPath.row]
+        return cell
     }
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return settings.count
+    }
 }
