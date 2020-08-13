@@ -19,7 +19,6 @@ class SettingsViewController: UIViewController {
         headerView.font = UIFont.boldSystemFont(ofSize: 20)
         return headerView
     }()
-
     lazy var tableView: UITableView = {
         let width = UIScreen.main.bounds.width
         let height = UIScreen.main.bounds.height
@@ -28,7 +27,7 @@ class SettingsViewController: UIViewController {
         let tableView = UITableView(frame: CGRect(origin: origin, size: size))
         tableView.isUserInteractionEnabled = true
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "SetCell")
         return tableView
     }()
 
@@ -41,7 +40,7 @@ class SettingsViewController: UIViewController {
 
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SetCell", for: indexPath)
         cell.textLabel!.text = settings[indexPath.row]
         return cell
     }

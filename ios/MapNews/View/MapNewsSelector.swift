@@ -41,6 +41,7 @@ class MapNewsSelector: UIView, Selector {
             UITextField(frame: textFieldRect)
         textField.text = ""
         textField.isUserInteractionEnabled = true
+        textField.placeholder = "Search..."
         return textField
     }()
 
@@ -89,7 +90,6 @@ class MapNewsSelector: UIView, Selector {
         selectedCountryTextField.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
-        selectedCountryTextField.placeholder = "Search..."
 
         filteredCountries = allCountries.filter { $0.startsWith(substring: selectedCountryTextField.text ?? "") }
         selectedCountryTextField.text = ""
